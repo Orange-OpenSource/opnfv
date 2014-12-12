@@ -141,8 +141,6 @@ read -p "------ PRESS ANY KEY TO CONTINUE -------" -n 1 -r
 echo
 echo
 
-
-
 mkdir $NAME
 cd $NAME
 
@@ -235,5 +233,6 @@ if [ "Zy" = "Z$CREATEVM" ]; then
     export NAME="$NAME"
     export IP="$IP"
     export PASSWORD="$PASSWORD"
+    export TARGETPOOL="$TARGETPOOL"
     create_vm.sh
 fi
