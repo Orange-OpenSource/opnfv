@@ -8,6 +8,7 @@ NAME="$NAME"
 IP="$IP"
 PASSWORD="$PASSWORD"
 CREATEVM="$CREATEVM"
+TARGETPOOL="$TARGETPOOL"
 
 # Usage 
 function usage() {
@@ -31,6 +32,9 @@ Options:
     --password, -p PASSWORD
         Set the ssh password. Login is ubuntu.
 
+    --targetpool, -t POOL
+        Set the target pool to install the volume
+
     --createvm, -c
         Automatically create the VM after the configuration
         is done.
@@ -42,8 +46,8 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,name:,ip:,password:,createvm"
-SOPT="hn:i:p:c"
+LOPT="help,name:,ip:,password:,targetpool:,createvm"
+SOPT="hn:i:p:t:c"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
@@ -69,6 +73,9 @@ while true; do
                         ;;
     --ip|-i)
                         IP=$2; shift
+                        ;;
+    --targetpool|-t)
+                        TARGETPOOL=$2; shift
                         ;;
     --password|-p)
                         PASSWORD=$2; shift
@@ -99,13 +106,35 @@ if [ -z "$IP" ]; then
     exit 1
 fi
 
+# If not target pool use ceph if available
+if [ -z "$TARGETPOOL" ]; then
+    if virsh pool-list | grep " ceph " > /dev/null; then
+        TARGETPOOL='ceph'
+        TARGETFOLDER='/mnt/cephfs'
+    else
+        TARGETPOOL='default'
+        TARGETFOLDER='/var/lib/libvirt/images'
+    fi
+else
+    if [ "$TARGETPOOL" = "ceph" ] && virsh pool-list | grep " ceph " > /dev/null; then
+        TARGETFOLDER='/mnt/cephfs'
+    elif [ "$TARGETPOOL" = "default" ] && virsh pool-list | grep " default " > /dev/null; then
+        TARGETFOLDER='/var/lib/libvirt/images'
+    else
+        echo "Please provide a valid target pool. Available pools are listed in 'virsh pool-list'"  >&2
+        exit 1
+    fi
+fi
+    
+fi
+
 if [ -z "$PASSWORD" ]; then
     echo "Please provide a valid ssh password. See --help option."  >&2
     exit 1
 fi
 
 
-echo "Creating VM configuration if folder '$NAME' with IP '$IP' and user ubuntu with password '$PASSWORD'"
+echo "Creating VM configuration if folder '$NAME' with IP '$IP' and user ubuntu with password '$PASSWORD' in pool '$TARGETPOOL'"
 if [ "Zy" = "Z$CREATEVM" ]; then
     echo "Will also create the VM."
 fi
@@ -114,6 +143,8 @@ read -p "------ PRESS ANY KEY TO CONTINUE -------" -n 1 -r
 echo
 echo
 
+
+
 mkdir $NAME
 cd $NAME
 
@@ -121,6 +152,7 @@ cat << EOF > config.sh
 export NAME='$NAME'
 export IP='$IP'
 export PASSWORD='$PASSWORD'
+export TARGETPOOL='$TARGETPOOL'
 EOF
 
 cat <<EOF > meta-data
@@ -134,7 +166,7 @@ network-interfaces: |
     network 192.168.1.0
     netmask 255.255.255.0
     broadcast 192.168.1.255
-    gateway 192.168.1.98
+    gateway 192.168.1.1
     dns-nameservers  192.168.1.101 8.8.8.8
     dns-search stack.opensteak.fr
 local-hostname: $NAME
@@ -152,9 +184,9 @@ EOF
 #dsmode: local
 
 genisoimage -output $NAME-configuration.iso -volid cidata -joliet -rock user-data meta-data
-sudo mv $NAME-configuration.iso /var/lib/libvirt/images/
-virsh pool-refresh default
-virsh vol-list default
+sudo mv $NAME-configuration.iso $TARGETFOLDER/
+virsh pool-refresh $TARGETPOOL
+virsh vol-list $TARGETPOOL
 
 
 cat << EOF > $NAME.xml
@@ -164,7 +196,7 @@ cat << EOF > $NAME.xml
   <currentMemory>1048576</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch='x86_64'>hvm</type>
+    <type arch='x86_64'>kvm</type>
     <boot dev='hd'/>
   </os>
   <features>
@@ -178,12 +210,12 @@ cat << EOF > $NAME.xml
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2'/>
-      <source file='/var/lib/libvirt/images/$NAME.img'/>
+      <source file='$TARGETFOLDER/$NAME.img'/>
       <target dev='vda' bus='virtio'/>
     </disk>
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw'/>
-      <source file='/var/lib/libvirt/images/$NAME-configuration.iso'/>
+      <source file='$TARGETFOLDER/$NAME-configuration.iso'/>
       <target dev='vdb' bus='virtio'/>
     </disk>
     <input type='mouse' bus='ps2'/>
