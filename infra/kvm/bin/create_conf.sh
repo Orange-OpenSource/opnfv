@@ -125,8 +125,6 @@ else
         exit 1
     fi
 fi
-    
-fi
 
 if [ -z "$PASSWORD" ]; then
     echo "Please provide a valid ssh password. See --help option."  >&2
@@ -167,7 +165,7 @@ network-interfaces: |
     netmask 255.255.255.0
     broadcast 192.168.1.255
     gateway 192.168.1.1
-    dns-nameservers  192.168.1.101 8.8.8.8
+    dns-nameservers  192.168.1.201 8.8.8.8
     dns-search stack.opensteak.fr
 local-hostname: $NAME
 EOF
@@ -187,7 +185,6 @@ genisoimage -output $NAME-configuration.iso -volid cidata -joliet -rock user-dat
 sudo mv $NAME-configuration.iso $TARGETFOLDER/
 virsh pool-refresh $TARGETPOOL
 virsh vol-list $TARGETPOOL
-
 
 cat << EOF > $NAME.xml
 <domain type='kvm'>
