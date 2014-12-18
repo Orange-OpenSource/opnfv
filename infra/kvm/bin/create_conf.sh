@@ -191,7 +191,7 @@ cat << EOF > $NAME.xml
   <currentMemory>1048576</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch='x86_64'>kvm</type>
+    <type arch='x86_64'>hvm</type>
     <boot dev='hd'/>
   </os>
   <features>
