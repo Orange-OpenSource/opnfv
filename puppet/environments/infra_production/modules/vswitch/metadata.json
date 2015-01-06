@@ -1,0 +1,101 @@
+{
+  "name": "puppetlabs-vswitch",
+  "version": "0.3.0",
+  "source": "https://github.com/stackforge/puppet-vswitch",
+  "author": "Endre Karlson, Dan Bode, Ian Wells, Gilles Dubreuil",
+  "license": "Apache License 2.0",
+  "summary": "Puppet module for OpenVSwitch and other vSwitches",
+  "description": "Puppet module to install and configure the OpenVSwitch and other vSwitches",
+  "project_page": "https://github.com/stackforge/puppet-vswitch",
+  "dependencies": [
+
+  ],
+  "types": [
+    {
+      "name": "vs_bridge",
+      "doc": "A Switch - For example 'br-int' in OpenStack",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        },
+        {
+          "name": "external_ids",
+          "doc": "External IDs for the bridge\n\n"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The bridge to configure\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "ovs",
+          "doc": "* Required binaries: `/sbin/ip`, `/usr/bin/ovs-vsctl`."
+        },
+        {
+          "name": "ovs_redhat",
+          "doc": "Openvswitch bridge manipulation for RedHat family OSs\n\n* Required binaries: `/sbin/ip`, `/usr/bin/ovs-vsctl`.\n* Default for `osfamily` == `redhat`."
+        }
+      ]
+    },
+    {
+      "name": "vs_port",
+      "doc": "A Virtual Switch Port",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        }
+      ],
+      "parameters": [
+        {
+          "name": "interface",
+          "doc": "The interface to attach to the bridge\n\n"
+        },
+        {
+          "name": "bridge",
+          "doc": "What bridge to use\n\n"
+        },
+        {
+          "name": "keep_ip",
+          "doc": "True: keep physical interface's details and assign them to the bridge\n\n"
+        },
+        {
+          "name": "sleep",
+          "doc": "Waiting time, in seconds (0 by default), for network to sync after activating port, used with keep_ip only\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "ovs",
+          "doc": "* Required binaries: `/usr/bin/ovs-vsctl`."
+        },
+        {
+          "name": "ovs_redhat",
+          "doc": "Openvswitch port manipulation for RedHat family OSs\n\n* Required binaries: `/bin/sleep`, `/usr/bin/ovs-vsctl`.\n* Default for `osfamily` == `redhat`."
+        }
+      ]
+    }
+  ],
+  "checksums": {
+    "Gemfile": "40470d094b2270b19b67ae62790de432",
+    "LICENSE": "1dece7821bf3fd70fe1309eaa37d52a2",
+    "Modulefile": "35cbe1a5f57736f947e51f9b8ad15c19",
+    "README.md": "fe0a8bd535eb661146ce2bad471299c6",
+    "Rakefile": "e64db1215b97906c4b9d4b4074a581e6",
+    "lib/puppet/provider/vs_bridge/ovs.rb": "5ff2cc516821bc87cb48ff28b52df653",
+    "lib/puppet/provider/vs_bridge/ovs_redhat.rb": "4f28ce243053342e39839a2a1b75f576",
+    "lib/puppet/provider/vs_port/ovs.rb": "49e87aa5d135567f99460e35f28c1e46",
+    "lib/puppet/provider/vs_port/ovs_redhat.rb": "603738bf4a0fd5aa4df268a7e467a1c8",
+    "lib/puppet/type/vs_bridge.rb": "2c2fe933ef63814b632b7cf190020a8e",
+    "lib/puppet/type/vs_port.rb": "41a64654b76142318465931ccd75c3db",
+    "manifests/init.pp": "91bb614ff5526fb0628ae2578f5413f1",
+    "manifests/ovs.pp": "49b76ee45bd50385371f36774ac69b69",
+    "manifests/params.pp": "db5d7504251b8196cada65ec1b633344",
+    "spec/classes/vswitch_ovs_spec.rb": "49f8c0f41f35592c7e83cdb44fe5b4fa",
+    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc"
+  }
+}

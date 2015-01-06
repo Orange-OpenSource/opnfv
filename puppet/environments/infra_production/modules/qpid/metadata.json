@@ -1,0 +1,67 @@
+{
+  "name": "dprince/qpid",
+  "version": "1.0.2",
+  "source": "git://github.com/dprince/puppet-qpid.git",
+  "author": "Dan Prince <dprince@redhat.com>",
+  "license": "Apache",
+  "summary": "Qpid Puppet Module",
+  "description": "This module manages Qpid.",
+  "project_page": "https://github.com/dprince/puppet-qpid",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 0.0.1"
+    }
+  ],
+  "types": [
+    {
+      "name": "qpid_user",
+      "doc": "Type for managing qpid users",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "  Valid values are `present`, `absent`."
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "Name of user  Values can match `/^\\S+$/`."
+        },
+        {
+          "name": "realm",
+          "doc": "Realm for this user  Values can match `/^\\S+$/`."
+        },
+        {
+          "name": "file",
+          "doc": "Location of the sasl password file  Values can match `/^\\S+$/`."
+        },
+        {
+          "name": "password",
+          "doc": "User password to be set *on creation*"
+        }
+      ],
+      "providers": [
+        {
+          "name": "default",
+          "doc": ""
+        },
+        {
+          "name": "saslpasswd2",
+          "doc": "Required binaries: `saslpasswd2`, `sasldblistusers2`.  Default for `feature` == `posix`."
+        }
+      ]
+    }
+  ],
+  "checksums": {
+    "CHANGELOG": "886717e644c62a756df7b3b7ca457fd4",
+    "LICENSE": "0e5ccf641e613489e66aa98271dbe798",
+    "Modulefile": "8be4e13c5003b8108ff4dfcfb68b33b2",
+    "README": "0fc7835dc5f0d6ff16a5cb28154af353",
+    "lib/puppet/provider/qpid_user/default.rb": "0b0856ef1e1d92f1115a9d3dd833e475",
+    "lib/puppet/provider/qpid_user/saslpasswd2.rb": "28d770fd44b23aaf1bf48afce7222047",
+    "lib/puppet/type/qpid_user.rb": "f104d60fc6f5f3a9f9d3ac26f11e239b",
+    "manifests/server.pp": "e5cd7de5955263df8faca03642534fa8",
+    "templates/qpidd.conf.erb": "05ecde6fff47678eadc4608d646b51df"
+  }
+}

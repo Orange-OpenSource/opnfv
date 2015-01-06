@@ -1,0 +1,393 @@
+{
+  "name": "puppetlabs-nova",
+  "version": "4.1.0",
+  "source": "https://github.com/stackforge/puppet-nova",
+  "author": "Puppet Labs",
+  "license": "Apache License 2.0",
+  "summary": "Puppet Labs Nova Module",
+  "description": "Puppet module to install and configure the OpenStack Nova compute service",
+  "project_page": "https://launchpad.net/puppet-nova",
+  "dependencies": [
+    {
+      "name": "dprince/qpid",
+      "version_requirement": ">= 1.0.0 <2.0.0"
+    },
+    {
+      "name": "duritong/sysctl",
+      "version_requirement": ">=0.0.1 <1.0.0"
+    },
+    {
+      "name": "puppetlabs/cinder",
+      "version_requirement": ">=4.0.0 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/glance",
+      "version_requirement": ">=4.0.0 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/inifile",
+      "version_requirement": ">=1.0.0 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/keystone",
+      "version_requirement": ">=4.0.0 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/mysql",
+      "version_requirement": ">=0.9.0 <3.0.0"
+    },
+    {
+      "name": "puppetlabs/rabbitmq",
+      "version_requirement": ">=2.0.2 <4.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=3.2.0"
+    }
+  ],
+  "types": [
+    {
+      "name": "nova_admin",
+      "doc": "Manage creation/deletion of nova admin users.",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The name of the admins.\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "nova_manage",
+          "doc": "Manage nova admin user\n\n* Required binaries: `nova-manage`."
+        }
+      ]
+    },
+    {
+      "name": "nova_cells",
+      "doc": "Manage creation/deletion of nova cells.",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "Name for the new cell\n\n"
+        },
+        {
+          "name": "cell_type",
+          "doc": "Whether the cell is a parent or child\n\n"
+        },
+        {
+          "name": "rabbit_username",
+          "doc": "Username for the message broker in this cell\n\n"
+        },
+        {
+          "name": "rabbit_password",
+          "doc": "Password for the message broker in this cell\n\n"
+        },
+        {
+          "name": "rabbit_port",
+          "doc": "Port number for the message broker in this cell\n\n"
+        },
+        {
+          "name": "rabbit_hosts",
+          "doc": "Address of the message broker in this cell\n\n"
+        },
+        {
+          "name": "rabbit_virtual_host",
+          "doc": "The virtual host of the message broker in this cell\n\n"
+        },
+        {
+          "name": "weight_offset",
+          "doc": "It might be used by some cell scheduling code in the future\n\n"
+        },
+        {
+          "name": "weight_scale",
+          "doc": "It might be used by some cell scheduling code in the future\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "nova_manage",
+          "doc": "Manage nova cells\n\n* Required binaries: `nova-manage`."
+        }
+      ]
+    },
+    {
+      "name": "nova_config",
+      "doc": "",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        },
+        {
+          "name": "value",
+          "doc": "The value of the setting to be defined.\n\nValues can match `/^[\\S ]*$/`."
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "\n\n"
+        },
+        {
+          "name": "secret",
+          "doc": "Whether to hide the value from Puppet logs. Defaults to `false`.\n\nValid values are `true`, `false`. "
+        }
+      ],
+      "providers": [
+        {
+          "name": "ini_setting",
+          "doc": ""
+        }
+      ]
+    },
+    {
+      "name": "nova_floating",
+      "doc": "Manage creation/deletion of nova floating ip ranges.",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        }
+      ],
+      "parameters": [
+        {
+          "name": "network",
+          "doc": "Network (ie, 192.168.1.0/24 or 192.168.1.128/25 etc.)\n\nValues can match `/^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\/[0-9]{1,2}$/`."
+        }
+      ],
+      "providers": [
+        {
+          "name": "nova_manage",
+          "doc": "Manage nova floating\n\n* Required binaries: `nova-manage`."
+        }
+      ]
+    },
+    {
+      "name": "nova_network",
+      "doc": "Manage creation/deletion of nova networks.  During creation, network\nCIDR and netmask will be calculated automatically",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        }
+      ],
+      "parameters": [
+        {
+          "name": "network",
+          "doc": "IPv4 Network (ie, 192.168.1.0/24)\n\nValues can match `/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(\\d|[1-2]\\d|3[0-2]))$/`."
+        },
+        {
+          "name": "label",
+          "doc": "The Nova network label\n\n"
+        },
+        {
+          "name": "num_networks",
+          "doc": "Number of networks to create\n\n"
+        },
+        {
+          "name": "bridge",
+          "doc": "bridge to use for flat network\n\n"
+        },
+        {
+          "name": "project",
+          "doc": "project that the network is associated with\n\n"
+        },
+        {
+          "name": "gateway",
+          "doc": "\n\n"
+        },
+        {
+          "name": "dns2",
+          "doc": "\n\n"
+        },
+        {
+          "name": "vlan_start",
+          "doc": "\n\n"
+        },
+        {
+          "name": "network_size",
+          "doc": "\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "nova_manage",
+          "doc": "Manage nova network\n\n* Required binaries: `nova-manage`."
+        }
+      ]
+    },
+    {
+      "name": "nova_paste_api_ini",
+      "doc": "",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        },
+        {
+          "name": "value",
+          "doc": "The value of the setting to be defined.\n\n"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "Section/setting name to manage from nova/paste-api.ini\n\nValues can match `/\\S+\\/\\S+/`."
+        },
+        {
+          "name": "secret",
+          "doc": "Whether to hide the value from Puppet logs. Defaults to `false`.\n\nValid values are `true`, `false`. "
+        }
+      ],
+      "providers": [
+        {
+          "name": "ini_setting",
+          "doc": ""
+        }
+      ]
+    },
+    {
+      "name": "nova_project",
+      "doc": "Manage creation/deletion of nova projects.",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The name of the project.\n\n"
+        },
+        {
+          "name": "owner",
+          "doc": "Owner of this project. *This is only set on project creation*\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "nova_manage",
+          "doc": "Manage nova project\n\n* Required binaries: `nova-manage`."
+        }
+      ]
+    }
+  ],
+  "checksums": {
+    "Gemfile": "1202f088383edb0dbb8d9676b6427b6e",
+    "LICENSE": "0e5ccf641e613489e66aa98271dbe798",
+    "Modulefile": "f0b11a12c382965cbc1769c8e572ea7f",
+    "README.md": "fb4142510a1e5cbf4c042a5feaccc4bd",
+    "Rakefile": "e64db1215b97906c4b9d4b4074a581e6",
+    "examples/nova_with_pacemaker.pp": "bd002b354a6c028b706b8a4c32fe8c6b",
+    "lib/puppet/provider/nova_admin/nova_manage.rb": "c0978afcbe3dac5ebd57d4dbb354bde0",
+    "lib/puppet/provider/nova_cells/nova_manage.rb": "f13e6122f9993e8e07d2ecaebb1aeaa7",
+    "lib/puppet/provider/nova_config/ini_setting.rb": "43f0f135b3257e9cdfd99c13f1d0a1be",
+    "lib/puppet/provider/nova_floating/nova_manage.rb": "f4eaf0442243c71da12d9fe87fc56bb2",
+    "lib/puppet/provider/nova_network/nova_manage.rb": "fb618e17c49c392e0f3ef3137c3b03b8",
+    "lib/puppet/provider/nova_paste_api_ini/ini_setting.rb": "126127f9e096b1da9184c1dd617bd766",
+    "lib/puppet/provider/nova_project/nova_manage.rb": "ce8d1b84545b9f9b6c5904b25997a7a0",
+    "lib/puppet/type/nova_admin.rb": "4c9c145848c936a67585f5d42e805f9b",
+    "lib/puppet/type/nova_cells.rb": "5a1faf29b22aec1a0956900616f713c6",
+    "lib/puppet/type/nova_config.rb": "d3d89b981d07807acc0bb58c9eb257e1",
+    "lib/puppet/type/nova_floating.rb": "e591744974507adc4daac641cf4ebf19",
+    "lib/puppet/type/nova_network.rb": "55336d8b66c3757353a9239199a7afdb",
+    "lib/puppet/type/nova_paste_api_ini.rb": "6e14d1afcaf1000624459e9654c51937",
+    "lib/puppet/type/nova_project.rb": "e75354751a78bf2a395529eb10a8835f",
+    "manifests/api.pp": "efcc0a64c785dd428aaedddb5861fbbe",
+    "manifests/cells.pp": "7c41a9dd748449124b995760d03dc57f",
+    "manifests/cert.pp": "6a2c00959867d249a3f7533234d66960",
+    "manifests/client.pp": "9da436921a34ff7c51b89546ee7827bc",
+    "manifests/compute/libvirt.pp": "5f8cb51aced8b2974b97e988584776e8",
+    "manifests/compute/neutron.pp": "ee997645b6f76a6c57e8b1c22acfd4a9",
+    "manifests/compute/rbd.pp": "d354131270b3e632427effb6d0e104ee",
+    "manifests/compute/spice.pp": "acbd57e2b8c5f40b33a9f3908bde59b5",
+    "manifests/compute/vmware.pp": "ae6765771b6905879b8be734e48672e3",
+    "manifests/compute/xenserver.pp": "e29a9f556799b20fbde9c5f19fdaa549",
+    "manifests/compute.pp": "7c5318bf6031eb962db3c2ee0dc3917e",
+    "manifests/conductor.pp": "0a87de1d72a9707bd6bea7b387409a54",
+    "manifests/config.pp": "46f3b0492f1c1844aaef8155cc41d2cf",
+    "manifests/consoleauth.pp": "e5cbbc15daa43cf84b0867d75ff8c883",
+    "manifests/db/mysql/host_access.pp": "0357828b866a1327315febe0ea4e0642",
+    "manifests/db/mysql.pp": "02ebab73879f9a51e166ff92047fa0ef",
+    "manifests/db/postgresql.pp": "f81497c8baefd1f51359b067f39b5f81",
+    "manifests/generic_service.pp": "c3b437c39129351b23fe711f2ff04996",
+    "manifests/init.pp": "b8f0d865228e4c14b3fdd57a1689f0a9",
+    "manifests/keystone/auth.pp": "2bbaaff41d14773e2f8b47356a3b9278",
+    "manifests/manage/cells.pp": "d08662fd0a54f5ee37487bb534f13222",
+    "manifests/manage/floating.pp": "b7b477a087a0e98f5c47729159f19af3",
+    "manifests/manage/network.pp": "221da8a02e1e0cad769da42731e6c6aa",
+    "manifests/migration/libvirt.pp": "39ed91ed3dd51ab2af0dd783a3d7153f",
+    "manifests/network/bridge.pp": "55f2fa5c658a4c0f11b88434972fc7f8",
+    "manifests/network/flat.pp": "38d3c53d0cc7cc56b949cf6f5703ea1f",
+    "manifests/network/flatdhcp.pp": "65ccf050719fe3e6c02a5019c9328706",
+    "manifests/network/neutron.pp": "46e78c7f80d9e52731eef8d342e8a75c",
+    "manifests/network/vlan.pp": "b3f7d3e25d6db5eac469d78a5ff98080",
+    "manifests/network.pp": "e039e70118326444974afec8d41b8b27",
+    "manifests/objectstore.pp": "f17b3a6a2b779de01e1f8cc9a01262f5",
+    "manifests/params.pp": "b3f41bb48e723db23ed981c2e6856ebd",
+    "manifests/qpid.pp": "04e9e8b65ac6028be6e4c2b16dba56a0",
+    "manifests/quota.pp": "8c3e1159f081ed5c3031dd9f9cfde609",
+    "manifests/rabbitmq.pp": "4e691a52b428c7af23dca81c393093d4",
+    "manifests/scheduler/filter.pp": "84e99fade72b8fd1ebc7f3abaff8ff24",
+    "manifests/scheduler.pp": "a0208397c4cb6785299027829d34384b",
+    "manifests/spicehtml5proxy.pp": "f76827ae2c523d5d47c60ce2c592d397",
+    "manifests/utilities.pp": "3013aba97b4d7b3ddf003446b54e7613",
+    "manifests/vncproxy.pp": "760d7ea3d823af3fae578bf931157edd",
+    "spec/classes/nova_api_spec.rb": "8076237490a636f1099d5529b79b6e29",
+    "spec/classes/nova_cells_spec.rb": "1dee305160f04086f02f27b9d9aa5f4d",
+    "spec/classes/nova_cert_spec.rb": "1ba485e28f18dfebc3646ed9cec361dd",
+    "spec/classes/nova_client_spec.rb": "8a2c7481d82db162a1f20a6d49d9cec8",
+    "spec/classes/nova_compute_libvirt_spec.rb": "899bf511d02b620d724b93072f548a89",
+    "spec/classes/nova_compute_neutron_spec.rb": "10000879b3149387595e5b469c21959f",
+    "spec/classes/nova_compute_rbd_spec.rb": "7ff457b96b3801ced13fbd6b1cd74c30",
+    "spec/classes/nova_compute_spec.rb": "a6379bc83f92cc4456cfb7b8d0a86015",
+    "spec/classes/nova_compute_spice_spec.rb": "ad75cf60a3846a7d84300c3e07f36d92",
+    "spec/classes/nova_compute_vmware_spec.rb": "b410f91b33f0e9c5cbd7724d1899e98c",
+    "spec/classes/nova_compute_xenserver_spec.rb": "67bb9f28fdf68342817252b99356aad4",
+    "spec/classes/nova_conductor_spec.rb": "0cd274e571aaf4c130d8861d8f44ac25",
+    "spec/classes/nova_config_spec.rb": "a2f2bf1410abd5e6ef95d8b71296ae88",
+    "spec/classes/nova_consoleauth_spec.rb": "3504ec1c1645eb58ac7029d4ed02258e",
+    "spec/classes/nova_db_mysql_spec.rb": "6392689243927bb8d0fdfe6f1e964c09",
+    "spec/classes/nova_db_postgresql_spec.rb": "cd675cba47b392909822b8c85095a32f",
+    "spec/classes/nova_init_spec.rb": "e7207657001fdcb2a5f2b6608046d2f6",
+    "spec/classes/nova_keystone_endpoint_spec.rb": "6084d4f25d2fa4aef7e363ff9dcfa3d9",
+    "spec/classes/nova_migration_libvirt_spec.rb": "b00828381677b56b55b96ab9f8b77c02",
+    "spec/classes/nova_network_flat_spec.rb": "d11d3f5b7bc37c4dd84996fe3fa1f1c7",
+    "spec/classes/nova_network_flatdhcp_spec.rb": "256108ee1246f1670519f020899641e3",
+    "spec/classes/nova_network_neutron_spec.rb": "e1158c1af5f2c0bce4de4cc8012241bc",
+    "spec/classes/nova_network_spec.rb": "42308e8f655ac902357482c90190497d",
+    "spec/classes/nova_network_vlan_spec.rb": "6a00e700aec28b87b18669e95affef34",
+    "spec/classes/nova_objectstore_spec.rb": "f2a901630c9428a6c5db2e0412a15c86",
+    "spec/classes/nova_qpid_spec.rb": "ce8c0194c3407d04cb62cca293b457a3",
+    "spec/classes/nova_quota_spec.rb": "4febb908e0961ca6939d187016b991ad",
+    "spec/classes/nova_rabbitmq_spec.rb": "7a3cbb62a6a9fd58fad44b5e2446dc66",
+    "spec/classes/nova_scheduler_filter_spec.rb": "03586bfcb54a3481d27792db532c2410",
+    "spec/classes/nova_scheduler_spec.rb": "ee665e814c672d588d4c8554d2a17c6d",
+    "spec/classes/nova_spicehtml5_proxy_spec.rb": "a916190ce3a16b18acd2343fcd9d6be5",
+    "spec/classes/nova_utilities_spec.rb": "8d7cf85391c883551f84d91b3d4779b5",
+    "spec/classes/nova_vnc_proxy_spec.rb": "35991649cdbef9802021f1579b45a2d9",
+    "spec/defines/nova_generic_service_spec.rb": "0006c4e1ad2b7ec97e26c97951ed12ba",
+    "spec/defines/nova_manage_networks_spec.rb": "0987f213d16bfd924d79e112fb285dec",
+    "spec/fixtures/manifests/site.pp": "4a5324f0a1c271a43c2e0a6251853012",
+    "spec/hosts/test-001_spec.rb": "a3621f1f165b91cbd84f5c26341971d7",
+    "spec/shared_examples.rb": "c2b4d866edafefde6a26af79fb4a0bc3",
+    "spec/spec_helper.rb": "41d71ed92d01bb23d52397572e9b24bb",
+    "spec/unit/provider/nova_config/ini_setting_spec.rb": "5b1b30930662f3eb9dd876f73f0111ba",
+    "spec/unit/type/nova_config_spec.rb": "84f5e36f3e68a9e60807f8867c52a552",
+    "spec/unit/type/nova_network_spec.rb": "655aaeb25fd65c8a94bbe8b5a56637d5",
+    "templates/secret.xml-compute.erb": "b36b866969c86c182c67ab85feec1755"
+  }
+}

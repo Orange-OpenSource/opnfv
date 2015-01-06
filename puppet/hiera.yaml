@@ -1,0 +1,13 @@
+---
+:backends:
+  - yaml
+  - json
+:yaml:
+  :datadir: /etc/puppet/hieradata
+:json:
+  :datadir: /etc/puppet/hieradata
+:hierarchy:
+  - defaults
+  - environments/%{::environment}
+  - nodes/%{::fqdn}
+  - common

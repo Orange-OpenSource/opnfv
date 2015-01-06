@@ -1,0 +1,11 @@
+description "tgt daemon"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+expect fork
+respawn
+
+exec tgtd --iscsi portal=<%= tgt_listen_ip %>
+
+post-start exec /usr/sbin/tgt-admin -e

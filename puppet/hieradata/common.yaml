@@ -1,0 +1,6 @@
+test:
+ key1: 'aaa'
+ key2: 'bbb'
+test2:
+ - val1
+ - val2

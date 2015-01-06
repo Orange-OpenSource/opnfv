@@ -1,0 +1,15 @@
+{
+  "Gemfile": "309cfb97d73b75547b5f1fd9036820cb",
+  "README.md": "b5335702ab6b120493cf88faaf9be346",
+  "Rakefile": "f39450f89f23380c06f6d6a36d0ec017",
+  "lib/puppet/provider/sysctl/parsed.rb": "f1ad6c1cd610b6fe33fcd245759c09d1",
+  "lib/puppet/provider/sysctl_runtime/sysctl_runtime.rb": "9a74d7a168c798c1f108da3b35f12a57",
+  "lib/puppet/type/sysctl.rb": "d6ec1e76ef718ce110dfa43140435a32",
+  "lib/puppet/type/sysctl_runtime.rb": "0b6f7cc9b83b2ce2fbac6b6c23b063d1",
+  "manifests/base.pp": "c2259e51cb4f118dfd6626d4e49671e7",
+  "manifests/value.pp": "5277733ec7d3a98fd998be933caaa88b",
+  "metadata.json": "25c9956ea66b079e18a272750a1bc099",
+  "spec/defines/value_spec.rb": "100789853b773257849687829887102a",
+  "spec/fixtures/manifests/site.pp": "d41d8cd98f00b204e9800998ecf8427e",
+  "spec/spec_helper.rb": "792eeb7aa7edafb93e2bc1d27c5e75c5"
+}

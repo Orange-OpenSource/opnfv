@@ -1,0 +1,1 @@
+glance::file-store-dir: '/var/lib/glance/images/'
