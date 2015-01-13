@@ -36,4 +36,4 @@ filetype plugin indent on
 EOF
 sudo apt-get -y install git >/dev/null
 cd ~/.vim/bundle
-git clone https://github.com/rodjek/vim-puppet.git
+git clone https://github.com/rodjek/vim-puppet.git > /dev/null
