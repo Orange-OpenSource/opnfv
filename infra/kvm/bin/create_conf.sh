@@ -181,8 +181,8 @@ EOF
 
 genisoimage -output $NAME-configuration.iso -volid cidata -joliet -rock user-data meta-data
 sudo mv $NAME-configuration.iso $TARGETFOLDER/
-virsh pool-refresh $TARGETPOOL
-virsh vol-list $TARGETPOOL
+virsh pool-refresh $TARGETPOOL 2>/dev/null
+# virsh vol-list $TARGETPOOL
 
 cat << EOF > $NAME.xml
 <domain type='kvm'>
