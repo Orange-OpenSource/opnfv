@@ -1,0 +1,10 @@
+---
+:backends:
+  # Use yaml to store data
+  - yaml
+:yaml:
+  # Per environment data
+  :datadir: /etc/puppet/hieradata/%{environment}/
+:hierarchy:
+  - nodes/%{::fqdn}
+  - common
