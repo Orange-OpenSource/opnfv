@@ -5,7 +5,7 @@ echo "* Install puppet master"
 wget -q https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 sudo dpkg -i puppetlabs-release-trusty.deb >/dev/null
 sudo apt-get update >/dev/null
-sudo apt-get -y install puppetmaster >/dev/null
+sudo apt-get -y install puppetmaster git >/dev/null
 
 # Get Puppet Conf
 echo "* Push puppet conf"
@@ -23,7 +23,7 @@ sudo gem install -q r10k > /dev/null
 sudo wget -q -O /etc/r10k.yaml https://raw.githubusercontent.com/davidblaisonneau-orange/opensteak/master/infra/puppet_master/r10k.yaml
 
 echo "* Deploy R10k"
-sudo r10k deploy environment -pv
+sudo r10k deploy environment -pv > /dev/null
 
 # Install VIM puppet
 echo "* Install VIM puppet"
@@ -34,6 +34,5 @@ execute pathogen#infect()
 syntax on
 filetype plugin indent on
 EOF
-sudo apt-get -y install git >/dev/null
 cd ~/.vim/bundle
 git clone https://github.com/rodjek/vim-puppet.git > /dev/null
