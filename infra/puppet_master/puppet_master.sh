@@ -1,5 +1,6 @@
-# Install puppet master
+#!/bin/bash
 
+# Install puppet master
 echo * Install puppet master
 wget -q https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 sudo dpkg -i puppetlabs-release-trusty.deb >/dev/null
