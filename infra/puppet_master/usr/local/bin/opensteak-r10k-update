@@ -1,0 +1,11 @@
+#!/bin/bash
+PRGNAME=$(basename $0)
+
+# Check if we are root
+if [ "Z$USER" != "Zroot" ] ; then
+  echo "You need to execute this script as root:"
+  echo "sudo $PRGNAME"
+  exit 1
+fi
+
+r10k deploy environment -pv
