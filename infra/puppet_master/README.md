@@ -1,6 +1,7 @@
 # Puppet Master
 
 ## Installation
+
     cd
     git clone https://github.com/davidblaisonneau-orange/opensteak.git
     cd opensteak/infra/puppet_master
@@ -14,10 +15,12 @@ This will
 
 ## Update modules
 r10k will use modules from a **Puppetfile**. This file is manage through a github account on:
+
     https://github.com/arnaudmorinol/opensteak-r10k/tree/production
 
 (the main branch is **production**)
 
 If the Puppetfile is updated, you can update your puppet-master by running:
+
     opensteak-r10k-update
 
