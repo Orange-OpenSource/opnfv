@@ -17,7 +17,7 @@ apt-get update >/dev/null
 apt-get -y install puppetmaster git >/dev/null
 
 # Get Puppet Conf
-echo "* Push puppet conf into /etc/puppet"
+echo "* Push puppet conf into /etc/puppet/"
 if [ -e /etc/puppet/puppet.conf ] ; then
   # Make a backup
   mv /etc/puppet/puppet.conf /etc/puppet/puppet.conf.$DATEE
@@ -48,7 +48,7 @@ cp etc/r10k.yaml /etc/r10k.yaml
 # Install opensteak-r10k-update script
 echo "* Install opensteak-r10k-update script into /usr/local/bin"
 cp usr/local/bin/opensteak-r10k-update /usr/local/bin/opensteak-r10k-update
-sed -i -r "s/__PATCHESFOLDER__/$(pwd)\/patches/" /usr/local/bin/opensteak-r10k-update
+sed -i -r "s|__PATCHESFOLDER__|$(pwd)/patches|" /usr/local/bin/opensteak-r10k-update
 chmod +x /usr/local/bin/opensteak-r10k-update
 
 echo "* Run R10k. You can re-run r10k by calling:"

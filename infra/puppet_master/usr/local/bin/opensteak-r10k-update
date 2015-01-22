@@ -13,6 +13,9 @@ fi
 r10k deploy environment -pv
 
 # Apply the patches
+echo " * Applying some patches"
+
 # add_require_json_openstack.rb.patch
+echo "  -> add_require_json_openstack.rb.patch"
 cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
 patch < $PATCHES/add_require_json_openstack.rb.patch
