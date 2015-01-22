@@ -1,5 +1,6 @@
 #!/bin/bash
 PRGNAME=$(basename $0)
+PATCHES="__PATCHESFOLDER__"
 
 # Check if we are root
 if [ "Z$USER" != "Zroot" ] ; then
@@ -8,4 +9,10 @@ if [ "Z$USER" != "Zroot" ] ; then
   exit 1
 fi
 
+# Run r10k
 r10k deploy environment -pv
+
+# Apply the patches
+# add_require_json_openstack.rb.patch
+cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
+patch < $PATCHES/add_require_json_openstack.rb.patch
