@@ -1,13 +1,6 @@
 #!/bin/bash
-
 ##--------------------------------------------------------
-# Module Name : emerginov_services
-# Version : 1.0.0
-# 
-# Software Name : Emerginov
-# Version : 1.0
-#
-# Copyright © 2012 – 2013 France Télécom                                                                
+# Copyright 2014 - 2015 Orange
 #
 # Licensed under the Apache License, Version 2.0 (the License);
 # you may not use this file except in compliance with the License.
@@ -22,20 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#--------------------------------------------------------
-# File Name   : emerginov_services/files/mgmt_scripts/functions.inc.sh
-#
-# Created     : Mon, 01 Oct 2012 13:38:00 +0200
 # Authors     : Arnaud Morin <arnaud1.morin@orange.com>
-#
-# Description :
-#   This file contains functions needed for bash scripts
+#               David Blaisonneau <david.blaisonneau@orange.com>
 #
 #--------------------------------------------------------
-# History     :
+# History
 #
-# 1.0.0 - 2012-10-01 : Release of the file
-# 1.0.1 - 2013-09-09 : Add colored echo
+# 1.0.0 - 2015-01-27 : Release of the file
 ##
 
 #
