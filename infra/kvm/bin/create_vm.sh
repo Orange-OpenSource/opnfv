@@ -17,4 +17,5 @@ if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/template.img > /dev/
 else
     virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
 fi
+
 virsh create $NAME.xml --console

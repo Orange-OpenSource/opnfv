@@ -1,0 +1,73 @@
+# config.yaml
+---
+
+###
+## DNS
+###
+domain: opensteak.fr
+dns::external:
+ - 8.8.8.8
+ - 8.8.4.4
+dns::internal: "%{hiera('infra::dns')}"
+
+###
+##  OpenStack passwords
+###
+admin::password: 'strongpassword'           
+mysql::service-password: "strongpassword"
+rabbitmq::password: "strongpassword"
+glance::password: "strongpassword"
+nova::password: "strongpassword"
+neutron::shared-secret: "strongpassword"
+neutron::password: "strongpassword"
+cinder::password: "strongpassword"
+
+###
+## Admin stuff
+###
+admin::mail: "admin@%{hiera('domain')}"
+admin::tenant: 'admin'
+
+###
+## Log Levels & misc
+####
+verbose: 'False'
+debug: 'False'
+region: 'Orange'
+
+###
+## Infrastructure : servers out of openstack
+###
+infra::network: 192.168.1.0
+infra::reverse_zone: 1.168.192.in-addr.arpa
+infra::dns: 192.168.1.201 
+infra::nodes:
+ compute96: 192.168.1.96
+ compute97: 192.168.1.97
+ compute98: 192.168.1.98
+ network99: 192.168.1.99
+infra::vm:
+ puppet: 192.168.1.202
+ dns: 192.168.1.201
+infra::iscsi-storage: 192.168.1.98
+infra::nas: 192.168.0.2
+
+###
+## Stack : servers for openstack (vm.stack.DOMAIN)
+###
+stack::domain: "stack.%{hiera('domain')}"
+stack::vm:
+ rabbitmq: 192.168.1.203
+ keystone: 192.168.1.204
+ mysql: 192.168.1.205
+ glance: 192.168.1.208
+ glance-storage: 192.168.0.208
+ nova: 192.168.1.206
+ neutron: 192.168.1.207
+
+###
+## OpenStack stuff
+###
+horizon::fqdn: "www.%{hiera('domain')}"
+cinder::tgt-listen-ip: "%{hiera('infra::iscsi-storage')}"
+cinder::vg-name: 'cinder-volumes'

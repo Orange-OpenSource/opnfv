@@ -1,0 +1,9 @@
+---
+:backends:
+  - yaml
+:hierarchy:
+  - defaults
+  - infra
+
+:yaml:
+  :datadir: /usr/local/opensteak/infra/config

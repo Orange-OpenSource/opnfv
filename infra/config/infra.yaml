@@ -1,0 +1,27 @@
+---
+# KVM password for user ubuntu for OpenSteak infra VM
+kvm::password: 'strongpassword'
+
+# Ceph Password
+ceph::password: 'strongpassword'
+ceph::mount: '/mnt/cephfs'
+ceph::pool: 'ceph'
+
+# Network complementary info
+infra::network_mask: 255.255.255.0
+infra::network_broadcast: 192.168.1.255
+infra::network_gw: 192.168.1.1
+storage::network: 192.168.2.0
+storage::network_mask: 255.255.255.0
+storage::network_broadcast: 192.168.2.255
+
+# Default KVM sizing
+kvm::default::cpu: 2
+kvm::default::ram: 1048576
+kvm::default::pool::name: 'default'
+kvm::default::pool::mount: '/var/lib/libvirt/images'
+kvm::default::init: 'kvm/templates/cloud-init/basic'
+kvm::default::net: 'kvm/templates/meta-data/basic'
+kvm::default::net_storage: 'kvm/templates/meta-data/storage'
+kvm::default::conf: 'kvm/templates/kvm_config/basic'
+kvm::default::conf_storage: 'kvm/templates/kvm_config/storage'

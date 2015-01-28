@@ -1,0 +1,20 @@
+instance-id: __NAME__;
+network-interfaces: |
+  auto lo
+  iface lo inet loopback
+  auto eth0
+  iface eth0 inet static
+    address __IP__
+    network __NETWORK__
+    netmask __MASK__
+    broadcast __BC__
+    gateway __GW__
+    dns-nameservers __DNS__
+    dns-search __DNSSEARCH__
+  auto eth1
+  iface eth1 inet static
+    address __IP_S__
+    network __NETWORK_S__
+    netmask __MASK_S__
+    broadcast __BC_S__
+local-hostname: __NAME__

@@ -1,0 +1,23 @@
+#cloud-config
+#############################################
+# OPENSTEAK VM '__NAME__'
+#############################################
+password: __PASSWORD__
+chpasswd: { expire: False }
+ssh_pwauth: True
+dsmode: net
+#############################################
+# FIRST BOOT COMMAND
+# - reload main interface
+# - install puppet from puppetlabs
+# - remove cloud-init
+#############################################
+runcmd:
+ - [ sh, -c, "ifdown eth0 && ifup eth0"]
+ - [ sh, -c, "wget -q https://raw.githubusercontent.com/davidblaisonneau-orange/opensteak/master/infra/puppet_master/puppet_master.sh"]
+ - [ sh, -c, "bash puppet_master.sh"]
+ - [ sh, -c, "aptitude remove cloud-init -y"]
+#############################################
+# FINAL MESSAGE AT END OF BOOT
+#############################################
+final_message: "The system '__NAME__' is finally up, after $UPTIME seconds"

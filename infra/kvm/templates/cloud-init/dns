@@ -1,0 +1,30 @@
+#cloud-config
+#############################################
+# OPENSTEAK VM '__NAME__'
+#############################################
+password: __PASSWORD__
+chpasswd: { expire: False }
+ssh_pwauth: True
+dsmode: net
+#############################################
+# FIRST BOOT COMMAND
+# - reload main interface
+# - install puppet from puppetlabs
+# - remove cloud-init
+#############################################
+bootcmd:
+ - [ sh, -c, "echo '192.168.1.100 puppet' >> /etc/hosts"]
+ - [ sh, -c, "echo '192.168.1.101 dns' >> /etc/hosts"]
+runcmd:
+ - [ sh, -c, "ifdown eth0 && ifup eth0"]
+ - [ sh, -c, "wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb"]
+ - [ sh, -c, "dpkg -i puppetlabs-release-trusty.deb"]
+ - [ sh, -c, "apt-get update"]
+ - [ sh, -c, "apt-get -y install puppet"]
+ - [ sh, -c, "puppet agent --enable"]
+ - [ sh, -c, "puppet agent -t"]
+ - [ sh, -c, "aptitude remove cloud-init -y"]
+#############################################
+# FINAL MESSAGE AT END OF BOOT
+#############################################
+final_message: "The system '__NAME__' is finally up, after $UPTIME seconds"
