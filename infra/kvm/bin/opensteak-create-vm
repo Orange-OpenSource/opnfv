@@ -198,7 +198,7 @@ if [ -z "$CLOUDINITTEMPLATE" ]; then
 fi
 
 # Check or get cloud-init file
-if [ -z "$KVMCONFIGFOLDER/$KVMCONFIGTEMPLATE" ]; then
+if [ -z "$KVMCONFIGTEMPLATE" ]; then
     if [ "Zy" = "Z$NETSTORAGE" ]; then
         KVMCONFIGTEMPLATE=$(hiera_get kvm::default::conf::storage)
     else
@@ -338,7 +338,7 @@ virsh pool-refresh $TARGETPOOL 2>/dev/null
 # Generate Config file
 #################################################
 
-KVMCONFIGFOLDER=$(hiera_get kvm::default::config::folder)
+KVMCONFIGFOLDER=$(hiera_get kvm::default::conf::folder)
 cp "$ROOT/$KVMCONFIGFOLDER/$KVMCONFIGTEMPLATE" $NAME.xml
 perl -i -pe "s/__CPU__/$CPU/" $NAME.xml
 perl -i -pe "s/__MEM__/$MEM/" $NAME.xml
