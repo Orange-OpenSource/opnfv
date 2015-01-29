@@ -2,7 +2,7 @@
 :backends:
   - yaml
 :hierarchy:
-  - defaults
+  - common
   - infra
 
 :yaml:
