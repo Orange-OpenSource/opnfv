@@ -89,41 +89,24 @@ else
     echo_green '[YES]'
 fi
 
-echo -n "Check if veth-storage0 and veth-storage1 exists... "
-PORT=$(ip link show veth-storage0)
+echo -n "Check if patch0 exists in br-adm... "
+PORT=$(ovs-vsctl list-ports br-adm|egrep "^patch0$")
 if [ $? -ne 0 ]; then
-    echo_yellow '[NO] - add it'
-    ip link add name veth-storage0 type veth peer name veth-storage1
-    ovs-vsctl add-port br-storage veth-storage0
-    ovs-vsctl add-port br-adm veth-storage1 tag=600
+    echo_yellow '[NO] - create it'
+    ovs-vsctl \
+        -- add-port br-adm patch0 tag=600 \
+        -- set interface patch0 type=patch options:peer=patch1
 else
     echo_green '[YES]'
 fi
 
-echo -n "Check if veth-storage0 and veth-storage1 are up... "
-PORT=$(ip link show veth-storage0 up |egrep "^veth-storage0$")
+echo -n "Check if patch1 exists in br-storage... "
+PORT=$(ovs-vsctl list-ports br-storage|egrep "^patch1$")
 if [ $? -ne 0 ]; then
-    echo_yellow '[NO] - do it'
-    ip link set veth-storage0 up
-    ip link set veth-storage1 up
-else
-    echo_green '[YES]'
-fi
-
-echo -n "Check if veth-storage0 is in br-storage... "
-PORT=$(ovs-vsctl list-ports br-storage |egrep "^veth-storage0$")
-if [ $? -ne 0 ]; then
-    echo_yellow '[NO] - add it'
-    ovs-vsctl add-port br-storage veth-storage0
-else
-    echo_green '[YES]'
-fi
-
-echo -n "Check if veth-storage1 is in br-adm... "
-PORT=$(ovs-vsctl list-ports br-adm |egrep "^veth-storage1$")
-if [ $? -ne 0 ]; then
-    echo_yellow '[NO] - add it'
-    ovs-vsctl add-port br-adm veth-storage1 tag=600
+    echo_yellow '[NO] - create it'
+    ovs-vsctl \
+        -- add-port br-storage patch1 \
+        -- set interface patch1 type=patch options:peer=patch0
 else
     echo_green '[YES]'
 fi
