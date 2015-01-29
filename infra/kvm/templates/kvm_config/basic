@@ -1,8 +1,8 @@
 <domain type='kvm'>
   <name>__NAME__</name>
-  <memory>__CPU__</memory>
+  <memory>__MEM__</memory>
   <currentMemory>__MEM__</currentMemory>
-  <vcpu>2</vcpu>
+  <vcpu>__CPU__</vcpu>
   <os>
     <type arch='x86_64'>hvm</type>
     <boot dev='hd'/>

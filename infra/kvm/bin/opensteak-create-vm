@@ -339,7 +339,7 @@ virsh pool-refresh $TARGETPOOL 2>/dev/null
 KVMCONFIGFOLDER=$(hiera_get kvm::default::conf::folder)
 cp "$ROOT/$KVMCONFIGFOLDER/$KVMCONFIGTEMPLATE" $NAME.xml
 perl -i -pe "s/__CPU__/$CPU/" $NAME.xml
-perl -i -pe "s/__MEM__/$MEM/" $NAME.xml
+perl -i -pe "s/__MEM__/$RAM/" $NAME.xml
 perl -i -pe "s!__TARGETFOLDER__!$TARGETFOLDER!" $NAME.xml
 perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 
