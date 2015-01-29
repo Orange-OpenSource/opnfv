@@ -280,10 +280,12 @@ $RESUME
 if [ "Zy" = "Z$CREATEVM" ]; then
     echo "Will also create the VM."
 fi
-echo 
-read -p "------ PRESS ANY KEY TO CONTINUE -------" -n 1 -r
-echo
-echo
+echo "Continue? [Y/n] "
+read RET 
+
+if [ "Z${RET}" != "Z" -a "Z${RET}" != "ZY" -a "Z${RET}" != "Zy" ] ; then
+    exit 0
+fi
 
 mkdir -p "$ROOT/kvm/vm_configs/$NAME"
 cd "$ROOT/kvm/vm_configs/$NAME"
