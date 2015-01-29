@@ -81,13 +81,13 @@ kvm::default::pool::name: 'default'
 kvm::default::pool::mount: '/var/lib/libvirt/images'
 
 # Default configs
-kvm::default::init::folder: 'kvm/templates/cloud-init/basic'
+kvm::default::init::folder: 'kvm/templates/cloud-init'
 kvm::default::init::name: 'basic'
-kvm::default::net::folder: 'kvm/templates/meta-data/basic'
+kvm::default::net::folder: 'kvm/templates/meta-data'
 kvm::default::net::name: 'basic'
 kvm::default::net::storage: 'storage'
-kvm::default::conf::folder: 'kvm/templates/kvm_config/basic'
-kvm::default::conf::name: 'kvm/templates/kvm_config/basic'
+kvm::default::conf::folder: 'kvm/templates/kvm_config'
+kvm::default::conf::name: 'config'
 kvm::default::conf::storage: 'storage'
 
 ###
