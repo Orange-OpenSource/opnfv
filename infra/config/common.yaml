@@ -58,7 +58,7 @@ infra::nodes:
  compute97: 192.168.1.97
  compute98: 192.168.1.98
  network99: 192.168.1.99
-infra::iscsi-storage: 192.168.1.98
+infra::ceph_admin: 192.168.1.200
 infra::nas: 192.168.0.2
 
 # Ceph Password
@@ -100,6 +100,3 @@ stack::vm:
 ## OpenStack stuff
 ###
 horizon::fqdn: "www.%{hiera('domain')}"
-#TODO: voir si necessaire encore
-cinder::tgt-listen-ip: "%{hiera('infra::iscsi-storage')}"
-cinder::vg-name: 'cinder-volumes'
