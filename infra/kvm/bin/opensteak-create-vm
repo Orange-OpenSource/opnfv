@@ -345,7 +345,10 @@ perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 exit 
 # Create the VM
 if [ "Zy" = "Z$CREATEVM" ]; then
-    export NAME="$NAME"
-    export TARGETPOOL="$TARGETPOOL"
-    create_vm.sh
+    if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/$NAME.img > /dev/null; then
+        virsh vol-delete $TARGETFOLDER/$NAME.img
+    fi
+    virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
+
+    virsh create $NAME.xml --console
 fi
