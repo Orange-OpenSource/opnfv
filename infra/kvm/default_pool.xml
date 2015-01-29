@@ -1,5 +1,5 @@
 <pool type="dir">
-<name>cepĥ</name>
+<name>default</name>
        <target>
                <path>/var/lib/libvirt/images</path>
        </target>
