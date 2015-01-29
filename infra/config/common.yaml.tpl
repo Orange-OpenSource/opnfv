@@ -13,7 +13,7 @@ dns::internal: "%{hiera('infra::dns')}"
 ###
 ##  OpenStack passwords
 ###
-admin::password: 'strongpassword'           
+admin::password: "strongpassword"
 mysql::service-password: "strongpassword"
 rabbitmq::password: "strongpassword"
 glance::password: "strongpassword"
