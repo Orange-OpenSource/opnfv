@@ -41,14 +41,12 @@ region: 'Orange'
 infra::network: 192.168.1.0
 infra::reverse_zone: 1.168.192.in-addr.arpa
 infra::dns: 192.168.1.201 
+infra::puppet: 192.168.1.202
 infra::nodes:
  compute96: 192.168.1.96
  compute97: 192.168.1.97
  compute98: 192.168.1.98
  network99: 192.168.1.99
-infra::vm:
- puppet: 192.168.1.202
- dns: 192.168.1.201
 infra::iscsi-storage: 192.168.1.98
 infra::nas: 192.168.0.2
 
@@ -69,5 +67,6 @@ stack::vm:
 ## OpenStack stuff
 ###
 horizon::fqdn: "www.%{hiera('domain')}"
+#TODO: voir si necessaire encore
 cinder::tgt-listen-ip: "%{hiera('infra::iscsi-storage')}"
 cinder::vg-name: 'cinder-volumes'
