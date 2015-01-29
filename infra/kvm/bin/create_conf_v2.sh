@@ -156,8 +156,8 @@ fi
 
 # if no IP fetch default one in the config
 if [ -z "$IP" ]; then
-    if [ "$NAME" = 'dns' ] || [ "$NAME" = 'puppet' ]; then
-        IP=$(hiera_get_hash_value infra::vm $NAME)
+    if [ "$NAME" = 'dns' ] || [ "$NAME" = 'puppet' ] || [ "$NAME" = 'ceph_admin' ]; then
+        IP=$(hiera_get infra::$NAME)
     else
         IP=$(hiera_get_hash_value stack::vm $NAME)
     fi
