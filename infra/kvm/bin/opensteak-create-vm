@@ -348,7 +348,6 @@ perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 #################################################
 # Generate Config file
 #################################################
-exit 
 # Create the VM
 if [ "Zy" = "Z$CREATEVM" ]; then
     if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/$NAME.img > /dev/null; then
