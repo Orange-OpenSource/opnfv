@@ -75,13 +75,20 @@ kvm::password: 'strongpassword'
 # Default KVM sizing
 kvm::default::cpu: 2
 kvm::default::ram: 1048576
+
+# Default Pool
 kvm::default::pool::name: 'default'
 kvm::default::pool::mount: '/var/lib/libvirt/images'
-kvm::default::init: 'kvm/templates/cloud-init/basic'
-kvm::default::net: 'kvm/templates/meta-data/basic'
-kvm::default::net_storage: 'kvm/templates/meta-data/storage'
-kvm::default::conf: 'kvm/templates/kvm_config/basic'
-kvm::default::conf_storage: 'kvm/templates/kvm_config/storage'
+
+# Default configs
+kvm::default::init::folder: 'kvm/templates/cloud-init/basic'
+kvm::default::init::name: 'basic'
+kvm::default::net::folder: 'kvm/templates/meta-data/basic'
+kvm::default::net::name: 'basic'
+kvm::default::net::storage: 'storage'
+kvm::default::conf::folder: 'kvm/templates/kvm_config/basic'
+kvm::default::conf::name: 'kvm/templates/kvm_config/basic'
+kvm::default::conf::storage: 'storage'
 
 ###
 ## Stack : servers for openstack (vm.stack.DOMAIN)
