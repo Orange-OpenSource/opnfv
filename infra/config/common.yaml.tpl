@@ -13,6 +13,7 @@ dns::internal: "%{hiera('infra::dns')}"
 ###
 ##  OpenStack passwords
 ###
+ceph::password: "strongpassword"
 admin::password: "strongpassword"
 mysql::service-password: "strongpassword"
 rabbitmq::password: "strongpassword"
@@ -58,11 +59,10 @@ infra::nodes:
  compute97: 192.168.1.97
  compute98: 192.168.1.98
  network99: 192.168.1.99
-infra::ceph_admin: 192.168.1.200
+infra::ceph-admin: 192.168.1.200
 infra::nas: 192.168.0.2
 
-# Ceph Password
-ceph::password: 'strongpassword'
+# Ceph Config
 ceph::mount: '/mnt/cephfs'
 ceph::pool: 'ceph'
 
