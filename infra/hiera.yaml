@@ -3,7 +3,6 @@
   - yaml
 :hierarchy:
   - common
-  - infra
 
 :yaml:
   :datadir: /usr/local/opensteak/infra/config
