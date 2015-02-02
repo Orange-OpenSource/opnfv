@@ -362,6 +362,7 @@ if [ "Zy" = "Z$CREATEVM" ]; then
         virsh vol-delete $TARGETFOLDER/$NAME.img
     fi
     virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
-
-    virsh create $NAME.xml --console
+    virsh define $NAME.xml
+    virsh autostart $NAME
+    virsh start $NAME 
 fi
