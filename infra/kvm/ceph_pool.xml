@@ -1,5 +1,5 @@
 <pool type="dir">
-<name>default</name>
+<name>ceph</name>
        <target>
                <path>/mnt/cephfs</path>
        </target>
