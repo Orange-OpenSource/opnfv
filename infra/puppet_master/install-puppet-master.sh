@@ -16,6 +16,12 @@ dpkg -i puppetlabs-release-trusty.deb
 apt-get update >/dev/null
 apt-get -y install puppetmaster git >/dev/null
 
+# Get files
+echo "* Get Github files"
+cd /usr/local
+git clone https://github.com/davidblaisonneau-orange/opensteak.git
+cd opensteak/infra/puppet_master/
+
 # Get Puppet Conf
 echo "* Push puppet conf into /etc/puppet/"
 if [ -e /etc/puppet/puppet.conf ] ; then
