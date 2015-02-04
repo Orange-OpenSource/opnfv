@@ -331,9 +331,15 @@ fi
 #################################################
 
 CLOUDINITFOLDER=$(hiera_get kvm::default::init::folder)
+DNS_IP=$(hiera_get infra::dns)
+PUPPET_IP=$(hiera_get infra::puppet)
+
 cp "$ROOT/$CLOUDINITFOLDER/$CLOUDINITTEMPLATE" user-data
 perl -i -pe "s/__PASSWORD__/$PASSWORD/" user-data
 perl -i -pe "s/__NAME__/$NAME/" user-data
+perl -i -pe "s/__DNS_IP__/$DNS_IP/" user-data
+perl -i -pe "s/__PUPPET_IP__/$PUPPET_IP/" user-data
+
 
 #################################################
 # Generate ISO

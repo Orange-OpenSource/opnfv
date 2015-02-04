@@ -13,8 +13,8 @@ dsmode: net
 # - remove cloud-init
 #############################################
 bootcmd:
- - [ sh, -c, "echo '192.168.1.100 puppet' >> /etc/hosts"]
- - [ sh, -c, "echo '192.168.1.101 dns' >> /etc/hosts"]
+ - [ sh, -c, "echo '__PUPPET_IP__ puppet' >> /etc/hosts"]
+ - [ sh, -c, "echo '__DNS_IP__ dns' >> /etc/hosts"]
 runcmd:
  - [ sh, -c, "ifdown eth0 && ifup eth0"]
  - [ sh, -c, "wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb"]
