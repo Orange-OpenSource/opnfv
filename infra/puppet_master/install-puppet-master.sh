@@ -1,5 +1,6 @@
 #!/bin/bash
 PRGNAME=$(basename $0)
+DOMAIN=$1
 DATEE=$(date +%F-%Hh%M)
 
 # Check if we are root
@@ -29,6 +30,7 @@ if [ -e /etc/puppet/puppet.conf ] ; then
   mv /etc/puppet/puppet.conf /etc/puppet/puppet.conf.$DATEE
 fi
 cp etc/puppet/puppet.conf /etc/puppet/puppet.conf
+echo "*.$DOMAIN" > /etc/puppet/autosign.conf
 
 # Get Hiera Conf
 echo "* Push Hiera conf into /etc/puppet/"
