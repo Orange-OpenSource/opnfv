@@ -14,7 +14,7 @@ dsmode: net
 ############################################
 write_files:
 -   content: |
-        __HIERADATA__
+__HIERADATA__
     path: /tmp/hieradata
     permissions: '0500'
     owner: root:root

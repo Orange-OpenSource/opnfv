@@ -375,5 +375,5 @@ if [ "Zy" = "Z$CREATEVM" ]; then
     virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
     virsh define $NAME.xml
     virsh autostart $NAME
-    virsh start $NAME 
+    virsh start $NAME --console
 fi
