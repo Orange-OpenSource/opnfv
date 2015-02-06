@@ -43,6 +43,8 @@ if [ -e /etc/hiera.yaml ] ; then
   rm /etc/hiera.yaml
 fi
 ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
+mkdir /etc/puppet/hieradata/
+mv /tmp/hieradata /etc/puppet/hieradata/common.yaml
 
 # Install and config r10k
 echo "* Install R10k into /etc/r10k.yaml"

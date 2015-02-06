@@ -340,7 +340,10 @@ perl -i -pe "s/__NAME__/$NAME/" user-data
 perl -i -pe "s/__DOMAIN__/$IP_DNSSEARCH/" user-data
 perl -i -pe "s/__DNS_IP__/$DNS_IP/" user-data
 perl -i -pe "s/__PUPPET_IP__/$PUPPET_IP/" user-data
-
+if [ "$NAME" = 'puppet' ]; then
+	HIERADATA=$(cat /usr/local/opensteak/infra/config/common.yaml | perl -pe 's/^/        /')
+	perl -i -pe "s!__HIERADATA__!$HIERADATA!" user-data
+fi
 
 #################################################
 # Generate ISO
