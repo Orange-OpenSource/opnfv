@@ -3,6 +3,10 @@ PRGNAME=$(basename $0)
 DOMAIN=$1
 DATEE=$(date +%F-%Hh%M)
 
+OPENSTEAKFOLDER="opensteak"
+OPENSTEAKROOT="/usr/local"
+OPENSTEAKPATH="$OPENSTEAKROOT/$OPENSTEAKFOLDER"
+
 # Check if we are root
 if [ "Z$USER" != "Zroot" ] ; then
   echo "You need to execute this script as root:"
@@ -19,9 +23,9 @@ apt-get -y install puppetmaster git >/dev/null
 
 # Get files
 echo "* Get Github files"
-cd /usr/local
+cd $OPENSTEAKROOT
 git clone https://github.com/davidblaisonneau-orange/opensteak.git
-cd opensteak/infra/puppet_master/
+cd $OPENSTEAKPATH/infra/puppet_master/
 
 # Get Puppet Conf
 echo "* Push puppet conf into /etc/puppet/"
@@ -43,8 +47,13 @@ if [ -e /etc/hiera.yaml ] ; then
   rm /etc/hiera.yaml
 fi
 ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
-mkdir /etc/puppet/hieradata/
+cp -rf etc/puppet/hieradata /etc/puppet/
+cd /etc/puppet/hieradata/nodes/
+rename s/DOMAIN/$DOMAIN/ *
+cd $OPENSTEAKPATH/infra/puppet_master/
+cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp 
 mv /tmp/hieradata /etc/puppet/hieradata/common.yaml
+
 
 # Install and config r10k
 echo "* Install R10k into /etc/r10k.yaml"
@@ -64,6 +73,11 @@ chmod +x /usr/local/bin/opensteak-r10k-update
 echo "* Run R10k. You can re-run r10k by calling:"
 echo "   opensteak-r10k-update"
 opensteak-r10k-update
+
+
+# Restart puppetmaster
+echo "* Restart puppetmaster"
+service puppetmaster restart           
 
 # Install VIM puppet
 echo "* Install VIM puppet"
