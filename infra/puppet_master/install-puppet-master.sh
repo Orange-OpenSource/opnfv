@@ -24,7 +24,7 @@ apt-get -y install puppetmaster git >/dev/null
 # Get files
 echo "* Get Github files"
 cd $OPENSTEAKROOT
-git clone https://github.com/davidblaisonneau-orange/opensteak.git
+git clone https://github.com/Orange-OpenSource/opnfv.git $OPENSTEAKFOLDER
 cd $OPENSTEAKPATH/infra/puppet_master/
 
 # Get Puppet Conf
@@ -51,7 +51,7 @@ cp -rf etc/puppet/hieradata /etc/puppet/
 cd /etc/puppet/hieradata/nodes/
 rename s/DOMAIN/$DOMAIN/ *.yaml
 cd $OPENSTEAKPATH/infra/puppet_master/
-cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp 
+cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
 mv /tmp/hieradata /etc/puppet/hieradata/production/common.yaml
 
 # Install and config r10k
