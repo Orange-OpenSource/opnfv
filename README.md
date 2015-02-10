@@ -61,10 +61,12 @@ The work is still in progress, but we plan to use HAProxy in front of nodes, wit
 
 TODO
 
-### Base infra install
+### Steps
 Follow these steps when you have at least 3 ubuntu 14.04 servers up and running.
 
-Optional: install [Ceph](/infra/ceph)
+* Install [base infra](/docs/BASE.md) to support KVM
+* Configure [network](/docs/NETWORK.md) correctly
+* Optional: install [Ceph](/docs/CEPH.md)
 
 
 
