@@ -48,9 +48,7 @@ if [ -e /etc/hiera.yaml ] ; then
 fi
 ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
 cp -rf etc/puppet/hieradata /etc/puppet/
-cd /etc/puppet/hieradata/nodes/
-rename s/DOMAIN/$DOMAIN/ *.yaml
-cd $OPENSTEAKPATH/infra/puppet_master/
+rename s/DOMAIN/$DOMAIN/ /etc/puppet/hieradata/production/nodes/*.yaml
 cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
 mv /tmp/hieradata /etc/puppet/hieradata/production/common.yaml
 chgrp puppet /etc/puppet/hieradata/production/common.yaml
