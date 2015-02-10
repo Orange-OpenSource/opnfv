@@ -53,6 +53,7 @@ rename s/DOMAIN/$DOMAIN/ *.yaml
 cd $OPENSTEAKPATH/infra/puppet_master/
 cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
 mv /tmp/hieradata /etc/puppet/hieradata/production/common.yaml
+chgrp puppet /etc/puppet/hieradata/production/common.yaml
 
 # Install and config r10k
 echo "* Install R10k into /etc/r10k.yaml"

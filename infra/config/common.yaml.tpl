@@ -9,6 +9,8 @@ dns::external:
  - 8.8.8.8
  - 8.8.4.4
 dns::internal: "%{hiera('infra::dns')}"
+dns::contact: "contact@%{hiera('domain')}"
+
 
 ###
 ##  OpenStack passwords

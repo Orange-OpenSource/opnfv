@@ -17,7 +17,7 @@ write_files:
 __HIERADATA__
     path: /tmp/hieradata
     permissions: '0640'
-    owner: root:puppet
+    owner: root:root
 runcmd:
  - [ sh, -c, "ifdown eth0 && ifup eth0"]
  - [ sh, -c, "wget https://raw.githubusercontent.com/davidblaisonneau-orange/opensteak/master/infra/puppet_master/install-puppet-master.sh"]
