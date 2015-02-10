@@ -23,10 +23,12 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
 
 ## Architecture
 ### Basic setup
-TODO: add schema with servers and networks (Arnaud)
+
+![Image of Basic setup](https://github.com/Orange-OpenSource/opnfv/raw/master/docs/archi_reseau.png)
+
 ### How do we provide HA
 Each controller part of Openstack is created separatly in a KVM machine. So that it can easily be updated or redeploy.
 
 Each KVM machine is automatically created by a script (opensteak-create-vm) and basic configuration comes through Cloud-init. Openstack related configuration is handled by puppet.
 
-TODO: add David schema
+![Image of HA](https://raw.githubusercontent.com/Orange-OpenSource/opnfv/master/docs/opensteak_ha.png)
