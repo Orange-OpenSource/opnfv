@@ -11,6 +11,7 @@ cd /usr/local/
 git clone https://github.com/Orange-OpenSource/opnfv.git opensteak
 cd opensteak/infra/puppet_master
 bash install-puppet-master.sh
+cp ../config/common.yaml.tpl /etc/puppet/hieradata/production/common.yaml
 ```
 
 This will:
@@ -19,6 +20,7 @@ This will:
 * configure your puppet master to use **environments**, **r10k** and **hiera**
 * run r10k to populate your modules folder (check /etc/puppet/environments/)
 * install vim syntax color for puppet modules
+* add the common.yaml file from template file
 
 ## Update modules
 r10k will use modules from a **Puppetfile**. This file is manage through a github account on:
