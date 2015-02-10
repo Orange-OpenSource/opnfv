@@ -64,7 +64,7 @@ TODO
 ### Base infra install
 Follow these steps when you have at least 3 ubuntu 14.04 servers up and running.
 
-Optional: install [Ceph](/opnfv/tree/master/infra/ceph)
+Optional: install [Ceph](/infra/ceph)
 
 
 
