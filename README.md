@@ -66,8 +66,8 @@ Follow these steps when you have at least 3 ubuntu 14.04 servers up and running.
 
 * Install [base infra](/docs/BASE.md) to support KVM
 * Configure [network](/docs/NETWORK.md) correctly
-* Optional: install [Ceph](/docs/CEPH.md)
-
+* Optional: install [Ceph](/docs/CEPH.md) as a backend storage
+* Install [Controller VM](/docs/CONTROLLERS.md)
 
 
 

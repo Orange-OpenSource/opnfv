@@ -41,3 +41,16 @@ Then you should replace **XXX** with the ip address of your server. Here is an e
 ```bash
 perl -i -pe 's/XXX/92/g' /etc/network/interfaces.d/*
 ```
+
+## Restart
+
+Warning: this might kill your SSH connection:
+
+```bash
+ifdown eth0 && ifup eth0
+ifdown eth1 && ifup eth1
+ifdown br-adm && ifup br-adm
+ifdown br-vm && ifup br-vm
+ifdown br-storage && ifup br-storage
+service openvswitch-switch restart
+```

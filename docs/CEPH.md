@@ -211,6 +211,60 @@ ssh opensteak9x "echo '192.168.1.92:6789:/ /mnt/cephfs ceph name=admin,secretfil
 
 This will add a line in fstab so the file system will automatically be mounted on boot.
 
+## Customize for OpenStack
+### Add a ceph pool in libvirt
+
+```bash
+ceph osd pool create volumes 128
+ceph osd pool create images 128
+ceph osd pool create backups 128
+ceph osd pool create vms 128
+```
+### Configure OpenStack Ceph Clients
+
+```bash
+ceph auth get-or-create client.cinder mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=volumes, allow rwx pool=vms, allow rx pool=images'
+ceph auth get-or-create client.glance mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=images'
+ceph auth get-or-create client.cinder-backup mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=backups'
+```
+
+### 
+
+```bash
+cd /usr/local/opensteak/infra/kvm/
+virsh pool-define ceph_pool.xml 
+virsh pool-start ceph
+virsh pool-autostart ceph
+virsh pool-autostart default
+virsh pool-refresh default
+virsh pool-refresh ceph
+virsh vol-list ceph
+```
+
+## Purge conf if needed
+Do this only to restart from scratch
+
+Erase disks
+
+```bash
+ceph-deploy --username ceph disk zap opensteak92:sdb
+ceph-deploy --username ceph disk zap opensteak93:sdb
+ceph-deploy --username ceph disk zap opensteak94:sdb
+```
+
+Purge
+
+```bash
+ceph-deploy --username ceph purge opensteak92
+ceph-deploy --username ceph purgedata opensteak92
+ceph-deploy --username ceph purge opensteak93
+ceph-deploy --username ceph purgedata opensteak93
+ceph-deploy --username ceph purge opensteak94
+ceph-deploy --username ceph purgedata opensteak94
+```
+
+
+
 ## TODO
 
 * create a python/bash script that will install & check that the cluster is well configured (do all of this automatically)
