@@ -24,13 +24,13 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
 ## Architecture
 ### Basic setup
 
-We have at least 3 physical servers.
+In a lab configuration, to avoid waste of resources:
  
-* All of them will be used as compute server
-* One will also be used as a network server
-* The controller parts of OpenStack will be installed in KVM based virtual machines. These KVM virtual machines can be positioned on any of the compute server.
+* All nodes are *compute* and *storage*: they all contains nova-compute, neutron-compute and ceph OSD
+* 2 nodes are also *controllers* containing KVM VMs for Openstack bricks, a DNS node and HAproxy
+* 1 node is a network gateway to external networks
 
-On each server, we have at least four networks:
+On each server, we have at least 4 networks:
 
 * **br-int** : Integration bridge. Tag/untag VLAN for VM. veth for VM will be in this bridge.
 * **br-vm** : Distributed bridge between compute nodes. Used to transport VM flows. On our case, we use the physical interface name **em5** as support for this bridge.
@@ -39,14 +39,33 @@ On each server, we have at least four networks:
 
 The network server will also have one other bridge:
 
-* **br-ex** : Bridge to communicate with external networks.
+* **br-ex** : Bridge to communicate with external networks. In our case, we use the physical interface name **em2** as support for this bridge.
 
 
 ![Image of Basic setup](https://github.com/Orange-OpenSource/opnfv/raw/master/docs/archi_reseau.png)
 
-### How do we provide HA
+
+### How do we handle OpenStack functions
 Each controller part of Openstack is created separatly in a KVM machine. So that it can easily be updated or redeploy.
 
-Each KVM machine is automatically created by a script (opensteak-create-vm) and basic configuration comes through Cloud-init. Openstack related configuration is handled by puppet.
+Each KVM machine is automatically created by a script and basic configuration comes through cloud-init. Openstack related configuration is handled by puppet.
+
+### How do we provide HA
+The work is still in progress, but we plan to use HAProxy in front of nodes, with VRRP IPs and weighted routes.
 
 ![Image of HA](https://raw.githubusercontent.com/Orange-OpenSource/opnfv/master/docs/opensteak_ha.png)
+
+
+## Installation
+### PXE boot for server
+
+TODO
+
+### Base infra install
+Follow these steps when you have at least 3 ubuntu 14.04 servers up and running.
+
+Optional: install [Ceph](/opnfv/tree/master/infra/ceph)
+
+
+
+
