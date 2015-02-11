@@ -38,8 +38,28 @@ opensteak-create-vm --name rabbitmq -c
 opensteak-create-vm --name mysql -c
 ```
 
+Check that it listen on 0.0.0.0:3306 port correctly:
+
+```bash
+netstat -laputen |grep 3306
+```
+
+You can connect over mysql with: (password is defined in your common.yaml file)
+
+```bash
+mysql -u root -p
+```
+
 ## Keystone
 
 ```bash
 opensteak-create-vm --name keystone -c
+```
+
+Test if it works well with (ssh on VM before):
+
+```bash
+cd /root
+source os-creds
+keystone service-list
 ```
