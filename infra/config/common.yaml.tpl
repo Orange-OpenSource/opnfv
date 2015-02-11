@@ -66,6 +66,24 @@ infra::nodes:
 infra::ceph-admin: 192.168.1.200
 infra::nas: 192.168.0.2
 
+###
+## Stack : servers for openstack (vm.stack.DOMAIN)
+###
+stack::domain: "stack.%{hiera('domain')}"
+stack::vm:
+ rabbitmq: 192.168.1.203
+ keystone: 192.168.1.204
+ mysql: 192.168.1.205
+ glance: 192.168.1.208
+ glance-storage: 192.168.0.208
+ nova: 192.168.1.206
+ neutron: 192.168.1.207
+
+###
+## OpenStack stuff
+###
+horizon::fqdn: "www.%{hiera('domain')}"
+
 # Ceph Config
 ceph::mount: '/mnt/cephfs'
 ceph::pool: 'ceph'
@@ -93,21 +111,3 @@ kvm::default::net::storage: 'storage'
 kvm::default::conf::folder: 'kvm/templates/kvm_config'
 kvm::default::conf::name: 'config'
 kvm::default::conf::storage: 'storage'
-
-###
-## Stack : servers for openstack (vm.stack.DOMAIN)
-###
-stack::domain: "stack.%{hiera('domain')}"
-stack::vm:
- rabbitmq: 192.168.1.203
- keystone: 192.168.1.204
- mysql: 192.168.1.205
- glance: 192.168.1.208
- glance-storage: 192.168.0.208
- nova: 192.168.1.206
- neutron: 192.168.1.207
-
-###
-## OpenStack stuff
-###
-horizon::fqdn: "www.%{hiera('domain')}"
