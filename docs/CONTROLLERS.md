@@ -60,7 +60,7 @@ Test if it works well with (ssh on VM before):
 
 ```bash
 cd /root
-source os-creds
+source os-creds-admin
 keystone service-list
 ```
 
@@ -78,3 +78,4 @@ You should have:
 | 1ca23d8f2d2c44ce8f96a66cb384d19b |  novav3  | computev3 | Openstack Compute Service v3 |
 +----------------------------------+----------+-----------+------------------------------+
 ```
+
