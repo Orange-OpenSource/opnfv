@@ -18,12 +18,14 @@ dns::contact: "contact@%{hiera('domain')}"
 ceph::password: "strongpassword"
 admin::password: "strongpassword"
 mysql::service-password: "strongpassword"
+mysql::root-password: "strongpassword"
 rabbitmq::password: "strongpassword"
 glance::password: "strongpassword"
 nova::password: "strongpassword"
 neutron::shared-secret: "strongpassword"
 neutron::password: "strongpassword"
 cinder::password: "strongpassword"
+keystone::admin-token: "strongpassword"
 
 ###
 ## Admin stuff
