@@ -63,3 +63,18 @@ cd /root
 source os-creds
 keystone service-list
 ```
+
+You should have:
+
+```bash
++----------------------------------+----------+-----------+------------------------------+
+|                id                |   name   |    type   |         description          |
++----------------------------------+----------+-----------+------------------------------+
+| aff808b962074b989a9ccc61c4aa6acb |  glance  |   image   |   Openstack Image Service    |
+| 4c535dbd4d134c829ba1c1710c1c148e | keystone |  identity |  OpenStack Identity Service  |
+| 05f8d1c690bf4894b761e95ef1ba9ce8 | neutron  |  network  |  Neutron Networking Service  |
+| 1cb4f7b5d6e34e5f90d86d7a59f636aa |   nova   |  compute  |  Openstack Compute Service   |
+| 578a642af4a74e3cac03e58a579691e0 | nova_ec2 |    ec2    |         EC2 Service          |
+| 1ca23d8f2d2c44ce8f96a66cb384d19b |  novav3  | computev3 | Openstack Compute Service v3 |
++----------------------------------+----------+-----------+------------------------------+
+```
