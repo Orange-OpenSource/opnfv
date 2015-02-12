@@ -60,7 +60,7 @@ Test if it works well with (ssh on VM before):
 
 ```bash
 cd /root
-source os-creds
+source os-creds-admin
 keystone service-list
 ```
 
@@ -78,3 +78,13 @@ You should have:
 | 1ca23d8f2d2c44ce8f96a66cb384d19b |  novav3  | computev3 | Openstack Compute Service v3 |
 +----------------------------------+----------+-----------+------------------------------+
 ```
+
+## Glance
+
+```bash
+opensteak-create-vm --name glance --storage -c
+```
+
+In our lab, this machine needs a specific connection to the storage network in order to mount an NFS folder in /var/lib/images (to store the glance images).
+
+If you don't need that, you won't need the *--storage* option. You will also have to comment out some NFS related block in the manifest file corresponding to glance (https://github.com/Orange-OpenSource/opnfv-puppet/blob/production/manifests/glance.pp)
