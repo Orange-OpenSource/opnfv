@@ -91,7 +91,43 @@ If you don't need that, you won't need the *--storage* option. You will also hav
 
 from keystone node:
 ```bash
-cd /root
-source os-creds-admin
-glance image-list
+root@keystone:~# cd /root
+root@keystone:/root# source os-creds-admin
+root@keystone:/root# glance image-list
++--------------------------------------+--------------+-------------+------------------+----------+--------+
+| ID                                   | Name         | Disk Format | Container Format | Size     | Status |
++--------------------------------------+--------------+-------------+------------------+----------+--------+
++--------------------------------------+--------------+-------------+------------------+----------+--------+
+root@keystone:/root# wget http://cdn.download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img
+root@keystone:/root# mkdir images && cd images
+root@keystone:/root/images# file cirros-0.3.1-x86_64-disk.img
+cirros-0.3.1-x86_64-disk.img: QEMU QCOW Image (v2), 41126400 bytes
+root@keystone:/root# glance image-create --name="CirrOS 0.3.1" --disk-format=qcow2 --container-format=bare --is-public=true < cirros-0.3.1-x86_64-disk.img
++------------------+--------------------------------------+
+| Property         | Value                                |
++------------------+--------------------------------------+
+| checksum         | d972013792949d0d3ba628fbe8685bce     |
+| container_format | bare                                 |
+| created_at       | 2015-02-12T17:09:53                  |
+| deleted          | False                                |
+| deleted_at       | None                                 |
+| disk_format      | qcow2                                |
+| id               | 5d01c794-d63a-43e2-a356-3d0912b6b046 |
+| is_public        | True                                 |
+| min_disk         | 0                                    |
+| min_ram          | 0                                    |
+| name             | CirrOS 0.3.1                         |
+| owner            | ef3803bf8cb64a47a452b70b959189a3     |
+| protected        | False                                |
+| size             | 13147648                             |
+| status           | active                               |
+| updated_at       | 2015-02-12T17:09:53                  |
+| virtual_size     | None                                 |
++------------------+--------------------------------------+
+root@keystone:/root# glance image-list
++--------------------------------------+--------------+-------------+------------------+----------+--------+
+| ID                                   | Name         | Disk Format | Container Format | Size     | Status |
++--------------------------------------+--------------+-------------+------------------+----------+--------+
+| 5d01c794-d63a-43e2-a356-3d0912b6b046 | CirrOS 0.3.1 | qcow2       | bare             | 13147648 | active |
++--------------------------------------+--------------+-------------+------------------+----------+--------+
 ```
