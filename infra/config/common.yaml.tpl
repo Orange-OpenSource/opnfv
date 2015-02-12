@@ -83,6 +83,9 @@ stack::vm:
 ## OpenStack stuff
 ###
 horizon::fqdn: "www.%{hiera('domain')}"
+glance::nas-store-dir: 'images'
+glance::file-store-dir: "/var/lib/images"
+
 
 # Ceph Config
 ceph::mount: '/mnt/cephfs'

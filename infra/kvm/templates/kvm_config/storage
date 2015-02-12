@@ -33,17 +33,13 @@
       <source bridge='br-adm'/>
       <virtualport type='openvswitch'>
       </virtualport>
-      <target dev='vnet0'/>
       <model type='virtio'/>
-      <alias name='net0'/>
     </interface>
     <interface type='bridge'>
       <source bridge='br-storage'/>
       <virtualport type='openvswitch'>
       </virtualport>
-      <target dev='vnet1'/>
       <model type='virtio'/>
-      <alias name='net1'/>
     </interface>
   </devices>
 </domain>
