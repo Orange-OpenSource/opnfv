@@ -82,6 +82,9 @@ You should have:
 ## Glance
 
 ```bash
-opensteak-create-vm --name keystone -c
+opensteak-create-vm --name glance --storage -c
 ```
 
+In our lab, this machine needs a specific connection to the storage network in order to mount an NFS folder in /var/lib/images (to store the glance images).
+
+If you don't need that, you won't need the *--storage* option. You will also have to comment out some NFS related block in the manifest file corresponding to glance (https://github.com/Orange-OpenSource/opnfv-puppet/blob/production/manifests/glance.pp)
