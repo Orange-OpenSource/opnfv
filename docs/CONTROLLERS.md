@@ -163,3 +163,12 @@ openstack
 +-----------+-------------+----------+
 
 ```
+
+
+## Neutron (controller part)
+
+```bash
+opensteak-create-vm --name neutron -c
+```
+
+Test if it works well from keystone:
