@@ -99,17 +99,27 @@ root@keystone:/root# glance image-list
 +--------------------------------------+--------------+-------------+------------------+----------+--------+
 +--------------------------------------+--------------+-------------+------------------+----------+--------+
 root@keystone:/root# mkdir images && cd images
-root@keystone:/root/images# wget http://cdn.download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img
-root@keystone:/root/images# file cirros-0.3.1-x86_64-disk.img
-cirros-0.3.1-x86_64-disk.img: QEMU QCOW Image (v2), 41126400 bytes
-root@keystone:/root/images# glance image-create --name="CirrOS 0.3.1" --disk-format=qcow2 --container-format=bare --is-public=true < cirros-0.3.1-x86_64-disk.img
+root@keystone:/root/images# wget http://cdn.download.cirros-cloud.net/0.3.3/cirros-0.3.3-x86_64-disk.img
+root@keystone:/root/images# glance image-create \
+ --name "cirros-0.3.3-x86_64" \
+ --file cirros-0.3.3-x86_64-disk.img \
+--disk-format qcow2 \
+--container-format bare \
+--is-public True \
+--progress
 +------------------+--------------------------------------+
 | Property         | Value                                |
 +------------------+--------------------------------------+
 [...]
 root@keystone:/root/images# glance image-list
 root@keystone:/root/images# wget https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
-root@keystone:/root/images# glance image-create --name="Ubuntu 14.04.1 LTS" --disk-format=qcow2   --container-format=bare --is-public=true < utopic-server-cloudimg-amd64-disk1.img
+root@keystone:/root/images# glance image-create \
+ --name "Ubuntu 14.04.1 LTS" \
+ --file trusty-server-cloudimg-amd64-disk1.img \
+--disk-format qcow2 \
+--container-format bare \
+--is-public True \
+--progress
 root@keystone:/root/images# glance image-list
 +--------------------------------------+--------------------+-------------+------------------+-----------+--------+
 | ID                                   | Name               | Disk Format | Container Format | Size      | Status |
