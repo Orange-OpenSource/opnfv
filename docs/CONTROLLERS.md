@@ -130,3 +130,36 @@ root@keystone:/root/images# glance image-list
 
 
 ```
+
+## Nova (controller part)
+
+```bash
+opensteak-create-vm --name nova -c
+```
+
+Test if it works well from keystone:
+
+```bash
+cd /root
+source os-creds-admin
+openstack 
+(openstack) compute service list
++------------------+------+----------+---------+-------+----------------------------+
+| Binary           | Host | Zone     | Status  | State | Updated At                 |
++------------------+------+----------+---------+-------+----------------------------+
+| nova-consoleauth | nova | internal | enabled | up    | 2015-02-20T09:21:18.000000 |
+| nova-scheduler   | nova | internal | enabled | up    | 2015-02-20T09:17:44.000000 |
+| nova-conductor   | nova | internal | enabled | up    | 2015-02-20T09:18:28.000000 |
+| nova-cert        | nova | internal | enabled | up    | 2015-02-20T09:21:18.000000 |
++------------------+------+----------+---------+-------+----------------------------+
+(openstack) host list
++-----------+-------------+----------+
+| Host Name | Service     | Zone     |
++-----------+-------------+----------+
+| nova      | consoleauth | internal |
+| nova      | scheduler   | internal |
+| nova      | conductor   | internal |
+| nova      | cert        | internal |
++-----------+-------------+----------+
+
+```
