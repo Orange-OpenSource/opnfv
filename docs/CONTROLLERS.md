@@ -172,3 +172,29 @@ opensteak-create-vm --name neutron -c
 ```
 
 Test if it works well from keystone:
+
+```bash
+cd /root
+source os-creds-admin
+openstack 
+(openstack) extension list --network -c Name -c Alias
++-----------------------------------------------+-----------------------+
+| Name                                          | Alias                 |
++-----------------------------------------------+-----------------------+
+| security-group                                | security-group        |
+| L3 Agent Scheduler                            | l3_agent_scheduler    |
+| Neutron L3 Configurable external gateway mode | ext-gw-mode           |
+| Port Binding                                  | binding               |
+| Provider Network                              | provider              |
+| agent                                         | agent                 |
+| Quota management support                      | quotas                |
+| DHCP Agent Scheduler                          | dhcp_agent_scheduler  |
+| Multi Provider Network                        | multi-provider        |
+| Neutron external network                      | external-net          |
+| Neutron L3 Router                             | router                |
+| Allowed Address Pairs                         | allowed-address-pairs |
+| Neutron Extra DHCP opts                       | extra_dhcp_opt        |
+| Neutron Extra Route                           | extraroute            |
++-----------------------------------------------+-----------------------+
+```
+
