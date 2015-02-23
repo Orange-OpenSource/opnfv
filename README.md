@@ -19,6 +19,7 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
 ## Status
 * Puppet modules: Mysql, Rabbit, Keystone, Glance, Nova are OK. Neutron is still in WiP (Work in Progress)
 * Bare metal provisioning: WiP
+* OpenDayLight: WiP
 * High Availability: WiP
 
 ## Architecture
