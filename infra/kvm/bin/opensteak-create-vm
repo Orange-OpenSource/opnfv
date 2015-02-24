@@ -365,9 +365,20 @@ perl -i -pe "s!__TARGETFOLDER__!$TARGETFOLDER!" $NAME.xml
 perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 
 #################################################
-# Generate Config file
+# Remove old Puppet cert if needed
+#################################################
+
+if ( ping puppet -c 1 1>&2> /dev/null ); then
+    PUPPETCERTSTATUSURL='https://puppet:8140/production/certificate_status'
+    curl -i -k -X DELETE -H "Accept: pson" $PUPPETCERTSTATUSURL/$NAME.$IP_DNSSEARCH
+    echo
+    echo "Old Puppet certificate delete"
+fi
+
 #################################################
 # Create the VM
+#################################################
+
 if [ "Zy" = "Z$CREATEVM" ]; then
     if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/$NAME.img > /dev/null; then
         virsh vol-delete $TARGETFOLDER/$NAME.img

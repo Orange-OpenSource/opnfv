@@ -35,6 +35,7 @@ if [ -e /etc/puppet/puppet.conf ] ; then
 fi
 cp etc/puppet/puppet.conf /etc/puppet/puppet.conf
 echo "*.$DOMAIN" > /etc/puppet/autosign.conf
+cp etc/puppet/auth.conf /etc/puppet/auth.conf
 
 # Get Hiera Conf
 echo "* Push Hiera conf into /etc/puppet/"
@@ -71,6 +72,12 @@ chmod +x /usr/local/bin/opensteak-r10k-update
 echo "* Run R10k. You can re-run r10k by calling:"
 echo "   opensteak-r10k-update"
 opensteak-r10k-update
+
+# Modify auth.conf template
+NET=$(hiera infra::network environment=production)
+MASK=$(hiera infra::network_mask environment=production)
+perl -i -pe "s/__NET__/$NET/" /etc/puppet/auth.conf
+perl -i -pe "s/__MASK__/$MASK/" /etc/puppet/auth.conf
 
 # Restart puppetmaster
 echo "* Restart puppetmaster"

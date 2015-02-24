@@ -45,7 +45,7 @@ region: 'Orange'
 ###
 # Network
 infra::network: 192.168.1.0
-infra::network_mask: 255.255.255.0
+infra::network_mask: 24
 infra::network_broadcast: 192.168.1.255
 infra::network_gw: 192.168.1.1
 storage::network: 192.168.2.0
@@ -78,6 +78,7 @@ stack::vm:
  glance-storage: 192.168.0.208
  nova: 192.168.1.206
  neutron: 192.168.1.207
+ ha: 192.168.1.209
 
 ###
 ## OpenStack stuff
