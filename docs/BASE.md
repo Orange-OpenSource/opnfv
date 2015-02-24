@@ -1,5 +1,5 @@
 # Base infra install
-Being here, we suppose that you already have an ubuntu 14.04 server up and running.
+Being here, we suppose that you already have an Ubuntu 14.04 server up and running.
 
 ## Dependencies
 

@@ -1,5 +1,5 @@
 # Network configuration
-Before proceeding, be sure to have already complete the [base](docs/BASE.md) install
+Before proceeding, be sure to have already completed the [base](docs/BASE.md) install
 
 Info on network config for OpenStack:
 
@@ -9,12 +9,12 @@ Info on network config for OpenStack:
 
 ## Installation
 
-We provide two bash script to automate the configuration.
+We provide two bash scripts to automate the configuration.
 
 * 1 script for servers with 4 interfaces (which is the default)
 * 1 script for servers with 2 interfaces (with trunk access on eth0 to allow both br-adm & br-storage to share the interface)
 
-### 4 interfaces configuration 
+### 4 interfaces configuration
 
 ```bash
 cd /usr/local/opensteak/
