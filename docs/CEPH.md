@@ -45,7 +45,7 @@ echo "ceph ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ceph
 sudo chmod 0440 /etc/sudoers.d/ceph
 ```
 
-* *Note: if you think this can be a security treat, remove the ceph user from sudoers after installation is complete*
+* *Note: if you think this can be a security threat, remove the ceph user from sudoers after the installation is complete*
 
 * *Note 2: the ceph documentation ask for this user: http://ceph.com/docs/master/rados/deployment/preflight-checklist/?highlight=sudoers*
 
@@ -232,7 +232,7 @@ ceph auth get-or-create client.cinder-backup mon 'allow r' osd 'allow class-read
 
 ```bash
 cd /usr/local/opensteak/infra/kvm/
-virsh pool-define ceph_pool.xml 
+virsh pool-define ceph_pool.xml
 virsh pool-start ceph
 virsh pool-autostart ceph
 virsh pool-autostart default

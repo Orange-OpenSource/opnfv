@@ -10,7 +10,7 @@ cd /usr/local/opensteak/infra/kvm/vm_configs
 
 This is the first machine that we install, as it contains all the configuration for others machines.
 
-To create the machine, run: 
+To create the machine, run:
 
 ```bash
 opensteak-create-vm --name puppet --cloud-init puppet-master -c
@@ -142,7 +142,7 @@ Test if it works well from keystone:
 ```bash
 cd /root
 source os-creds-admin
-openstack 
+openstack
 (openstack) compute service list
 +------------------+------+----------+---------+-------+----------------------------+
 | Binary           | Host | Zone     | Status  | State | Updated At                 |
@@ -176,7 +176,7 @@ Test if it works well from keystone:
 ```bash
 cd /root
 source os-creds-admin
-openstack 
+openstack
 (openstack) extension list --network -c Name -c Alias
 +-----------------------------------------------+-----------------------+
 | Name                                          | Alias                 |
