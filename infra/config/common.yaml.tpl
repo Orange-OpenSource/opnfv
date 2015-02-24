@@ -59,10 +59,10 @@ infra::dns: 192.168.1.201
 # Machines
 infra::puppet: 192.168.1.202
 infra::nodes:
- compute96: 192.168.1.96
- compute97: 192.168.1.97
- compute98: 192.168.1.98
- network99: 192.168.1.99
+ opensteak93: 192.168.1.93
+ opensteak94: 192.168.1.94
+ opensteak95: 192.168.1.95
+ opensteak96: 192.168.1.96
 infra::ceph-admin: 192.168.1.200
 infra::nas: 192.168.0.2
 
