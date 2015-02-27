@@ -11,6 +11,10 @@ dns::external:
 dns::internal: "%{hiera('infra::dns')}"
 dns::contact: "contact@%{hiera('domain')}"
 
+###
+## HA
+###
+stack::ha::enabled: true
 
 ###
 ##  OpenStack passwords
@@ -54,16 +58,20 @@ storage::network_broadcast: 192.168.2.255
 
 # DNS
 infra::reverse_zone: 1.168.192.in-addr.arpa
-infra::dns: 192.168.1.201 
+infra::dns: 192.168.1.249
 
-# Machines
-infra::puppet: 192.168.1.202
+# Phyiscal Machines
 infra::nodes:
  opensteak93: 192.168.1.93
  opensteak94: 192.168.1.94
  opensteak95: 192.168.1.95
  opensteak96: 192.168.1.96
-infra::ceph-admin: 192.168.1.200
+ 
+# Infra tools
+infra::puppet: 192.168.1.241
+infra::ceph-admin: 192.168.1.240
+
+# External NFS storage for glance images and backup
 infra::nas: 192.168.0.2
 
 ###
@@ -71,21 +79,30 @@ infra::nas: 192.168.0.2
 ###
 stack::domain: "stack.%{hiera('domain')}"
 stack::vm:
- rabbitmq: 192.168.1.203
- keystone: 192.168.1.204
- mysql: 192.168.1.205
- glance: 192.168.1.208
- glance-storage: 192.168.0.208
- nova: 192.168.1.206
- neutron: 192.168.1.207
- ha: 192.168.1.209
+ ha1: 192.168.1.200
+ rabbitmq1: 192.168.1.201
+ mysql1: 192.168.1.202
+ keystone1: 192.168.1.203
+ glance1: 192.168.1.204
+ glance-storage1: 192.168.0.204
+ nova1: 192.168.1.205
+ neutron1: 192.168.1.206
+ ha2: 192.168.1.220
+ rabbitmq2: 192.168.1.221
+ mysql2: 192.168.1.222
+ keystone2: 192.168.1.223
+ glance2: 192.168.1.224
+ glance-storage2: 192.168.0.224
+ nova2: 192.168.1.225
+ neutron2: 192.168.1.226
+stack::ha::vip: 192.168.1.250
 
 ###
 ## OpenStack stuff
 ###
 horizon::fqdn: "www.%{hiera('domain')}"
 glance::nas-store-dir: 'images'
-glance::file-store-dir: "/var/lib/images"
+glance::file-store-dir: "/var/lib/glance/images"
 
 
 # Ceph Config
