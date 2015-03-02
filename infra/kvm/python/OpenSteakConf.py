@@ -8,7 +8,7 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-class OpensteakConfig:
+class OpenSteakConfig:
     """OpenSteak config class
     Use this object as a dict
     """
@@ -46,6 +46,6 @@ class OpensteakConfig:
             self.save()
 
 if __name__ == "__main__":
-    c = OpensteakConfig()
+    c = OpenSteakConfig()
     print(c.dump())
 
