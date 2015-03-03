@@ -6,6 +6,7 @@ import json
 import collections
 
 def hiera(key, ordered=False):
+    """Ugly way to access hiera data with the hiera config file"""
     obj_pair_hook=collections.OrderedDict if ordered else None
     args = ['/usr/bin/hiera', key, '-c', '/usr/local/opensteak/infra/hiera.yaml']
     o = check_output(args,universal_newlines=True)).rstrip()
