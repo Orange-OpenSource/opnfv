@@ -1,2 +1,4 @@
 classes:
         - opensteak::nova-compute
+        - opensteak::neutron-compute
+        - opensteak::cinder-compute
