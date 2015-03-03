@@ -87,6 +87,7 @@ stack::vm:
  glance-storage1: 192.168.0.204
  nova1: 192.168.1.205
  neutron1: 192.168.1.206
+ cinder1: 192.168.1.207
  ha2: 192.168.1.220
  rabbitmq2: 192.168.1.221
  mysql2: 192.168.1.222
@@ -95,6 +96,7 @@ stack::vm:
  glance-storage2: 192.168.0.224
  nova2: 192.168.1.225
  neutron2: 192.168.1.226
+ cinder2: 192.168.1.227
 stack::ha::vip: 192.168.1.250
 
 ###
