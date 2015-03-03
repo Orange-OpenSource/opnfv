@@ -228,7 +228,7 @@ ceph auth get-or-create client.glance mon 'allow r' osd 'allow class-read object
 ceph auth get-or-create client.cinder-backup mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=backups'
 ```
 
-### 
+### Create Ceph Pool in libvirt so that controller machines can be integrated in it
 
 ```bash
 cd /usr/local/opensteak/infra/kvm/

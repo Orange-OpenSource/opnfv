@@ -51,5 +51,13 @@ From keystone (openstack client):
 ssh-keygen
 keypair create --public-key /root/.ssh/id_rsa.pub demo-key
 server create --flavor m1.tiny --image cirros-0.3.3-x86_64 --nic net-id=a16c9e85-f96d-43d0-af11-ee230e98f6a6 --security-group default --key-name demo-key demo-instance1
+
+```
+
+Then add a floating IP:
+
+```bash
+neutron floatingip-create Externe
+nova floating-ip-associate demo-instance1 161.105.252.107
 ```
 
