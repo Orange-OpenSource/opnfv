@@ -198,3 +198,12 @@ openstack
 +-----------------------------------------------+-----------------------+
 ```
 
+
+## Cinder
+
+
+```bash
+opensteak-create-vm --name cinder -c
+```
+
+Test if it works well from keystone:
