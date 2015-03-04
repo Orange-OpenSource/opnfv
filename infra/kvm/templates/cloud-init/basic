@@ -21,6 +21,8 @@ runcmd:
  - [ sh, -c, "puppet agent --enable"]
  - [ sh, -c, "puppet agent -t"]
  - [ sh, -c, "aptitude remove cloud-init -y"]
+ssh_authorized_keys:
+__SSHAUTHKEYS__
 #############################################
 # FINAL MESSAGE AT END OF BOOT
 #############################################

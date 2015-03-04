@@ -23,6 +23,8 @@ runcmd:
  - [ sh, -c, "wget https://raw.githubusercontent.com/davidblaisonneau-orange/opensteak/master/infra/puppet_master/install-puppet-master.sh"]
  - [ sh, -c, "sudo bash install-puppet-master.sh __DOMAIN__"]
  - [ sh, -c, "aptitude remove cloud-init -y"]
+ssh_authorized_keys:
+__SSHAUTHKEYS__
 #############################################
 # FINAL MESSAGE AT END OF BOOT
 #############################################

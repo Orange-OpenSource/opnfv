@@ -333,6 +333,7 @@ fi
 CLOUDINITFOLDER=$(hiera_get kvm::default::init::folder)
 DNS_IP=$(hiera_get infra::dns)
 PUPPET_IP=$(hiera_get infra::puppet)
+SSHAUTHKEYS=$(hiera_get kvm::default::ssh-auth-keys| perl -pe 's/^\[/ /;s/",//;s/"//g;s/\]$//;s/^ */  - /')
 
 cp "$ROOT/$CLOUDINITFOLDER/$CLOUDINITTEMPLATE" user-data
 perl -i -pe "s/__PASSWORD__/$PASSWORD/" user-data
@@ -340,6 +341,7 @@ perl -i -pe "s/__NAME__/$NAME/" user-data
 perl -i -pe "s/__DOMAIN__/$IP_DNSSEARCH/" user-data
 perl -i -pe "s/__DNS_IP__/$DNS_IP/" user-data
 perl -i -pe "s/__PUPPET_IP__/$PUPPET_IP/" user-data
+perl -i -pe "s!__SSHAUTHKEYS__!$SSHAUTHKEYS!" user-data
 if [ "$NAME" = 'puppet' ]; then
 	HIERADATA=$(cat /usr/local/opensteak/infra/config/common.yaml | perl -pe 's/^/        /'| perl -pe 's!/!__SLASH__!g')
 	perl -i -pe "s/__HIERADATA__/$HIERADATA/" user-data
@@ -364,26 +366,31 @@ perl -i -pe "s/__MEM__/$RAM/" $NAME.xml
 perl -i -pe "s!__TARGETFOLDER__!$TARGETFOLDER!" $NAME.xml
 perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 
-#################################################
-# Remove old Puppet cert if needed
-#################################################
 
-if ( ping puppet -c 1 1>&2> /dev/null ); then
-    PUPPETCERTSTATUSURL='https://puppet:8140/production/certificate_status'
-    curl -i -k -X DELETE -H "Accept: pson" $PUPPETCERTSTATUSURL/$NAME.$IP_DNSSEARCH
-    echo
-    echo "Old Puppet certificate delete"
-fi
 
 #################################################
 # Create the VM
 #################################################
 
 if [ "Zy" = "Z$CREATEVM" ]; then
+
+    # Remove old Puppet cert if needed
+    if ( ping puppet -c 1 1>&2> /dev/null ); then
+        PUPPETCERTSTATUSURL='https://puppet:8140/production/certificate_status'
+        curl -i -k -X DELETE -H "Accept: pson" $PUPPETCERTSTATUSURL/$NAME.$IP_DNSSEARCH
+        echo
+        echo "Old Puppet certificate delete"
+    fi
+    
+    # Delete old volume if needed
     if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/$NAME.img > /dev/null; then
         virsh vol-delete $TARGETFOLDER/$NAME.img
     fi
+    
+    # Create a new volume
     virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
+    
+    # Create the VM
     virsh define $NAME.xml
     virsh autostart $NAME
     virsh start $NAME --console

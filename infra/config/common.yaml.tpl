@@ -141,3 +141,8 @@ kvm::default::net::storage: 'storage'
 kvm::default::conf::folder: 'kvm/templates/kvm_config'
 kvm::default::conf::name: 'config'
 kvm::default::conf::storage: 'storage'
+
+# Default SSH authorizd keys for user ubuntu
+kvm::default::ssh-auth-keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0g+ZTxC7weoIJLUafOgrm+h...
+ - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0g+ZTxC7weoIJLUafOgrm+h...
