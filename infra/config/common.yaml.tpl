@@ -78,9 +78,6 @@ infra::nodes:
 infra::puppet: 192.168.1.241
 infra::ceph-admin: 192.168.1.240
 
-# External NFS storage for glance images and backup
-infra::nas: 192.168.0.2
-
 ###
 ## Stack : servers for openstack (vm.stack.DOMAIN)
 ###
@@ -112,9 +109,6 @@ stack::ha::vip: 192.168.1.250
 ## OpenStack stuff
 ###
 horizon::publicfqdn: "www.%{hiera('domain')}"
-glance::nas-store-dir: 'images'
-glance::file-store-dir: "/var/lib/glance/images"
-
 
 # Ceph Config
 ceph::mount: '/mnt/cephfs'
