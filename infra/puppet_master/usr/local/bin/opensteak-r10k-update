@@ -19,3 +19,8 @@ echo " * Applying some patches"
 echo "  -> add_require_json_openstack.rb.patch"
 cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
 patch < $PATCHES/add_require_json_openstack.rb.patch
+
+# nova libvirt secret
+echo "  -> Check virsh secret using secret-get-value for RBD"
+cd /etc/puppet/environments/production/modules/nova/
+git fetch https://review.openstack.org/stackforge/puppet-nova refs/changes/22/161122/1 && git checkout FETCH_HEAD
