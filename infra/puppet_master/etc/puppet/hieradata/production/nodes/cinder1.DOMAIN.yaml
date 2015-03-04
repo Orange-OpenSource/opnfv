@@ -1,2 +1,2 @@
 classes:
-  - opensteak::horizon
+  - opensteak::cinder
