@@ -16,6 +16,11 @@ dns::contact: "contact@%{hiera('domain')}"
 ###
 stack::ha::enabled: true
 
+##
+# KVM password for user ubuntu for OpenSteak infra VM
+##
+kvm::password: 'strongpassword'
+
 ###
 ##  OpenStack passwords
 ###
@@ -30,6 +35,8 @@ neutron::shared-secret: "strongpassword"
 neutron::password: "strongpassword"
 cinder::password: "strongpassword"
 keystone::admin-token: "strongpassword"
+horizon::secret_key: "12345"
+rbd_secret_uuid: '457eb676-33da-42ec-9a8c-9293d545c337'
 
 ###
 ## Admin stuff
@@ -88,6 +95,7 @@ stack::vm:
  nova1: 192.168.1.205
  neutron1: 192.168.1.206
  cinder1: 192.168.1.207
+ horizon1: 192.168.1.208
  ha2: 192.168.1.220
  rabbitmq2: 192.168.1.221
  mysql2: 192.168.1.222
@@ -97,6 +105,7 @@ stack::vm:
  nova2: 192.168.1.225
  neutron2: 192.168.1.226
  cinder2: 192.168.1.227
+ horizon2: 192.168.1.228
 stack::ha::vip: 192.168.1.250
 
 ###
@@ -114,8 +123,6 @@ ceph::pool: 'ceph'
 ###
 ## KVM
 ###
-# KVM password for user ubuntu for OpenSteak infra VM
-kvm::password: 'strongpassword'
 
 # Default KVM sizing
 kvm::default::cpu: 2
