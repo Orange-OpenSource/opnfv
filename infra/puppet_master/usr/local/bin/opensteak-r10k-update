@@ -23,4 +23,4 @@ patch < $PATCHES/add_require_json_openstack.rb.patch
 # check_virsh_secret_using_secret_get_value.patch
 echo "  -> check_virsh_secret_using_secret_get_value.patch"
 cd /etc/puppet/environments/production/modules/nova/
-patch < $PATCHES/check_virsh_secret_using_secret_get_value.patch
+patch -p1 < $PATCHES/check_virsh_secret_using_secret_get_value.patch
