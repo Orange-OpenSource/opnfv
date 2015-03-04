@@ -111,7 +111,7 @@ stack::ha::vip: 192.168.1.250
 ###
 ## OpenStack stuff
 ###
-horizon::fqdn: "www.%{hiera('domain')}"
+horizon::publicfqdn: "www.%{hiera('domain')}"
 glance::nas-store-dir: 'images'
 glance::file-store-dir: "/var/lib/glance/images"
 
