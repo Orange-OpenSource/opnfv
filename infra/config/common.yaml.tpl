@@ -58,9 +58,9 @@ infra::network: 192.168.1.0
 infra::network_mask: 24
 infra::network_broadcast: 192.168.1.255
 infra::network_gw: 192.168.1.1
-storage::network: 192.168.2.0
-storage::network_mask: 255.255.255.0
-storage::network_broadcast: 192.168.2.255
+storage::network: 192.168.0.0
+storage::network_mask: 24
+storage::network_broadcast: 192.168.0.255
 
 # DNS
 infra::reverse_zone: 1.168.192.in-addr.arpa
@@ -68,10 +68,14 @@ infra::dns: 192.168.1.249
 
 # Phyiscal Machines
 infra::nodes:
+ opensteak92: 192.168.1.92
  opensteak93: 192.168.1.93
  opensteak94: 192.168.1.94
  opensteak95: 192.168.1.95
  opensteak96: 192.168.1.96
+
+infra::controllers:
+ opensteak92: 192.168.1.92
  
 # Infra tools
 infra::puppet: 192.168.1.241
@@ -114,7 +118,15 @@ horizon::publicfqdn: "www.%{hiera('domain')}"
 ###
 cephfs::mount: '/mnt/cephfs'
 cephfs::pool: 'ceph'
-rbd_secret_uuid: '457eb676-33da-42ec-9a8c-9293d545c337'
+ceph-conf::fsid: '77a16382-8b32-476d-89b8-5ac5381209b7'
+ceph-conf::libvirt-rbd-secret: '457eb676-33da-42ec-9a8c-9293d545c337'
+ceph-conf::client-cinder-key: 'AQAPns9UUBRDEhAAX3UhTWUw6OXTjw/TPv6wdw=='
+ceph-conf::client-glance-key: 'AQB6ns9UWJCEBhAAz1632+o+zxgMLGrXlp3rHQ=='
+ceph-conf::client-bootstrap-osd-key: 'AQBvW8tUyOFPKRAA9OC5DmhyLLmHuE5f+qKbgQ=='
+ceph-conf::client-bootstrap-mds-key: 'AQBwW8tU4LdvAhAA2VO8W9/M0TQFf4xl14tUBA=='
+ceph-conf::client-admin-key: 'AQBvW8tUMKg7FBAABuiYm434KAYTilIaESJaAQ=='
+ceph-conf::mon-key: 'AQAJcMpUAAAAABAAXUZk1mOusq5pyOmnhBfElg=='
+ceph-conf::disk: '/dev/sdb'
 
 ###
 ## KVM
