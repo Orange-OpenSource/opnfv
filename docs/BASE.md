@@ -11,7 +11,7 @@ dpkg -i puppetlabs-release-trusty.deb
 apt-get update
 apt-get upgrade
 apt-get dist-upgrade
-apt-get install vim git hiera ntp virtinst genisoimage curl qemu-system-x86 qemu-system-common qemu-keymaps ipxe-qemu openvswitch-switch
+apt-get install vim git hiera ntp virtinst genisoimage curl qemu-system-x86 qemu-system-common qemu-keymaps ipxe-qemu openvswitch-switch puppet
 service ntp restart
 service libvirt-bin restart
 ```
