@@ -179,19 +179,19 @@ if [ -z "$IP" ]; then
     IP_DNSSEARCH=$(hiera_get stack::domain)
 fi
 # If not target pool use ceph if available
-CEPH_POOL_NAME=$(hiera_get ceph::pool)
+CEPH_POOL_NAME=$(hiera_get cephfs::pool)
 DEFAULT_POOL_NAME=$(hiera_get kvm::default::pool::name)
 if [ -z "$TARGETPOOL" ]; then
     if virsh pool-list | grep " $CEPH_POOL_NAME " > /dev/null; then
         TARGETPOOL=$CEPH_POOL_NAME
-        TARGETFOLDER=$(hiera_get ceph::mount)
+        TARGETFOLDER=$(hiera_get cephfs::mount)
     else
         TARGETPOOL=$DEFAULT_POOL_NAME
         TARGETFOLDER=$(hiera_get kvm::default::pool::mount)
     fi
 else
     if [ "$TARGETPOOL" = $CEPH_POOL_NAME ] && virsh pool-list | grep " $CEPH_POOL_NAME " > /dev/null; then
-        TARGETFOLDER=$(hiera_get ceph::mount)
+        TARGETFOLDER=$(hiera_get cephfs::mount)
     elif [ "$TARGETPOOL" = "default" ] && virsh pool-list | grep " default " > /dev/null; then
         TARGETFOLDER=$(hiera_get kvm::default::pool::mount)
     else

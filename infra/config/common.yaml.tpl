@@ -36,7 +36,6 @@ neutron::password: "strongpassword"
 cinder::password: "strongpassword"
 keystone::admin-token: "strongpassword"
 horizon::secret_key: "12345"
-rbd_secret_uuid: '457eb676-33da-42ec-9a8c-9293d545c337'
 
 ###
 ## Admin stuff
@@ -110,9 +109,12 @@ stack::ha::vip: 192.168.1.250
 ###
 horizon::publicfqdn: "www.%{hiera('domain')}"
 
-# Ceph Config
-ceph::mount: '/mnt/cephfs'
-ceph::pool: 'ceph'
+###
+## Ceph stuff
+###
+cephfs::mount: '/mnt/cephfs'
+cephfs::pool: 'ceph'
+rbd_secret_uuid: '457eb676-33da-42ec-9a8c-9293d545c337'
 
 ###
 ## KVM
