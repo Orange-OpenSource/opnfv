@@ -73,6 +73,9 @@ infra::nodes:
  opensteak94: 192.168.1.94
  opensteak95: 192.168.1.95
  opensteak96: 192.168.1.96
+ opensteak97: 192.168.1.97
+ opensteak98: 192.168.1.98
+ opensteak99: 192.168.1.99
 
 infra::controllers:
  opensteak92: 192.168.1.92
@@ -147,7 +150,7 @@ kvm::default::net::folder: 'kvm/templates/meta-data'
 kvm::default::net::name: 'basic'
 kvm::default::net::storage: 'storage'
 kvm::default::conf::folder: 'kvm/templates/kvm_config'
-kvm::default::conf::name: 'config'
+kvm::default::conf::name: 'basic'
 kvm::default::conf::storage: 'storage'
 
 # Default SSH authorizd keys for user ubuntu
