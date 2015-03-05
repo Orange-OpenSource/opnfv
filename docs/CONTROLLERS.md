@@ -207,3 +207,18 @@ opensteak-create-vm --name cinder -c
 ```
 
 Test if it works well from keystone:
+
+```bash
+cd /root
+source os-creds-admin
+cinder service-list
++------------------+--------+------+---------+-------+----------------------------+-----------------+
+|      Binary      |  Host  | Zone |  Status | State |         Updated_at         | Disabled Reason |
++------------------+--------+------+---------+-------+----------------------------+-----------------+
+| cinder-scheduler | cinder | nova | enabled |   up  | 2015-03-04T14:35:10.000000 |       None      |
+|  cinder-volume   | cinder | nova | enabled |   up  | 2015-03-04T14:35:11.000000 |       None      |
++------------------+--------+------+---------+-------+----------------------------+-----------------+
+
+```
+
+

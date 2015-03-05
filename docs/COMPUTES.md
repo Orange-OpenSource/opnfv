@@ -34,10 +34,6 @@ openstack
 | nova-scheduler   | nova        | internal | enabled  | up    | 2015-02-26T14:09:03.000000 |
 | nova-conductor   | nova        | internal | enabled  | up    | 2015-02-26T14:09:04.000000 |
 | nova-cert        | nova        | internal | enabled  | up    | 2015-02-26T14:09:04.000000 |
-| nova-scheduler   | nova2       | internal | disabled | down  | 2015-02-26T13:53:32.000000 |
-| nova-consoleauth | nova2       | internal | disabled | down  | 2015-02-26T13:53:46.000000 |
-| nova-conductor   | nova2       | internal | disabled | down  | 2015-02-26T13:53:05.000000 |
-| nova-cert        | nova2       | internal | disabled | down  | 2015-02-26T13:53:52.000000 |
 | nova-compute     | opensteak93 | nova     | enabled  | up    | 2015-02-26T14:08:57.000000 |
 +------------------+-------------+----------+----------+-------+----------------------------+
 (openstack) host list
@@ -63,5 +59,59 @@ root@keystone:~/images# neutron agent-list
 +--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
 | f7447c91-6cf5-49b1-a83d-4defc330e6eb | Open vSwitch agent | opensteak93 | :-)   | True           | neutron-openvswitch-agent |
 +--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
+```
+
+
+### Create a volume
+When your compute node will be ready, you will be able to test if the volume is well created in ceph with:
+
+From keystone, create a volume:
+
+
+```bash
+cd /root
+source os-creds-admin
+
+cinder create --display-name demo-volume1 1
++---------------------+--------------------------------------+
+|       Property      |                Value                 |
++---------------------+--------------------------------------+
+|     attachments     |                  []                  |
+|  availability_zone  |                 nova                 |
+|       bootable      |                false                 |
+|      created_at     |      2015-03-04T14:36:12.422919      |
+| display_description |                 None                 |
+|     display_name    |             demo-volume1             |
+|      encrypted      |                False                 |
+|          id         | 6d343dde-1525-488f-85a3-1985614551ea |
+|       metadata      |                  {}                  |
+|         size        |                  1                   |
+|     snapshot_id     |                 None                 |
+|     source_volid    |                 None                 |
+|        status       |               creating               |
+|     volume_type     |                 None                 |
++---------------------+--------------------------------------+
+
+cinder list
++--------------------------------------+-----------+--------------+------+-------------+----------+-------------+
+|                  ID                  |   Status  | Display Name | Size | Volume Type | Bootable | Attached to |
++--------------------------------------+-----------+--------------+------+-------------+----------+-------------+
+| 6d343dde-1525-488f-85a3-1985614551ea | available | demo-volume1 |  1   |     None    |  false   |             |
++--------------------------------------+-----------+--------------+------+-------------+----------+-------------+
+
+
+```
+
+From a compute node, try: 
+
+```bash
+rbd -p vms ls
+
+```
+
+Should return a line with the volume id, like:
+
+```bash
+volume-6d343dde-1525-488f-85a3-1985614551ea
 ```
 
