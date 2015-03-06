@@ -129,6 +129,7 @@ ceph-conf::client-glance-key: 'AQB6ns9UWJCEBhAAz1632+o+zxgMLGrXlp3rHQ=='
 ceph-conf::client-bootstrap-osd-key: 'AQBvW8tUyOFPKRAA9OC5DmhyLLmHuE5f+qKbgQ=='
 ceph-conf::client-bootstrap-mds-key: 'AQBwW8tU4LdvAhAA2VO8W9/M0TQFf4xl14tUBA=='
 ceph-conf::client-admin-key: 'AQBvW8tUMKg7FBAABuiYm434KAYTilIaESJaAQ=='
+ceph-conf::mds-key: 'AQC0g8tUGCzgAxAAbiynJ/yvu463DcMESVVbXw=='
 ceph-conf::mon-key: 'AQAJcMpUAAAAABAAXUZk1mOusq5pyOmnhBfElg=='
 ceph-conf::disk: '/dev/sdb'
 
