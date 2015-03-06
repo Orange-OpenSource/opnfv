@@ -1,3 +1,6 @@
 classes:
         - opensteak::nova-compute
         - opensteak::neutron-compute
+        - opensteak::ceph-mon
+        - opensteak::ceph-osd
+        - opensteak::ceph-client-cinder
