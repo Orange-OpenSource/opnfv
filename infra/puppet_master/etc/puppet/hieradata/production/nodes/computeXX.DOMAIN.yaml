@@ -1,6 +1,9 @@
+bridge_uplinks:
+        - "br-vm:em5"
 classes:
         - opensteak::nova-compute
         - opensteak::neutron-compute
         - opensteak::ceph-mon
+        - opensteak::ceph-mds
         - opensteak::ceph-osd
         - opensteak::ceph-client-cinder
