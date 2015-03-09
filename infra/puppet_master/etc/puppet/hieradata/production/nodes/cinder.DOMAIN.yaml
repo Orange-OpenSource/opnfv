@@ -1,2 +1,3 @@
 classes:
+  - opensteak::ceph-client-cinder
   - opensteak::cinder
