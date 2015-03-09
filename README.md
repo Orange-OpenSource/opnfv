@@ -1,13 +1,13 @@
 # Openstack Get Starting Installation
 
-Openstack install and config by Orange Labs.
+Openstack installation and configuration by Orange Labs.
 
 ## Introduction
-This repo contain tools and scripts to install a full Openstack Juno over Ubuntu 14.04 with OpenDayLight as SDN manager.
+This repo contains the tools and the scripts to install a full Openstack Juno over Ubuntu 14.04 with OpenDayLight Helium as SDN controller.
 
 It aims to propose an **High Availability** deployment with **Bare Metal** provisioning.
 
-The configuration is automatically done with **Puppet**, based on specific modules that rely on the stackforge ones (see https://github.com/stackforge/?query=puppet).
+The configuration is automatically done with **Puppet**, based on specific modules that rely on stackforge modules (see https://github.com/stackforge/?query=puppet).
 
 To keep the module dependencies up to date (and to download modules automatically), we use **r10k**.
 
@@ -35,7 +35,7 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
 ## Architecture
 ### Basic setup
 
-In a lab configuration, to avoid waste of resources:
+In a lab configuration, to optimize resource usage:
 
 * All nodes are *compute* and *storage*: they all contains nova-compute, neutron-compute and ceph OSD
 * 2 nodes are also *controllers* containing KVM VMs for Openstack bricks, a DNS node and HAproxy
