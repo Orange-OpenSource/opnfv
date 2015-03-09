@@ -22,11 +22,11 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
  * Rabbit: OK, 
  * Keystone: OK, 
  * Glance: OK,
-  * with ceph: OK,
+   * with ceph: OK,
  * Cinder: OK,
-  * with ceph: OK,
+   * with ceph: OK,
  * Nova: OK,
-  * with ceph: OK,
+   * with ceph: OK,
  * Neutron: OK,
 * Bare metal provisioning: WiP (Work in Progress / MAAS)
 * OpenDayLight: WiP
