@@ -18,12 +18,16 @@ service libvirt-bin restart
 
 ## Clone this repo
 
+We expect you to clone this repo in /usr/local/ folder as most of the time, the script will try to find necessary files from this folder.
+
 ```bash
 cd /usr/local
 git clone https://github.com/Orange-OpenSource/opnfv.git opensteak
 ```
 
 ## Create config file from template
+
+The common.yaml file is the only file that you should tweak in order to setup your OpenSteak installation.
 
 ```bash
 cp /usr/local/opensteak/infra/config/common.yaml.tpl /usr/local/opensteak/infra/config/common.yaml
@@ -45,3 +49,5 @@ To help deploy future controller VM:
 cp bin/* /usr/local/bin/
 chmod +x /usr/local/bin/opensteak*
 ```
+
+This will create at least the opensteak-create-vm script. This script will help you create automatically OpenSteak VM.

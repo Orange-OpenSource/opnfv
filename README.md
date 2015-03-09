@@ -41,6 +41,10 @@ In a lab configuration, to avoid waste of resources:
 * 2 nodes are also *controllers* containing KVM VMs for Openstack bricks, a DNS node and HAproxy
 * 1 node is a network gateway to external networks
 
+![Image of Bridging topology - Controller and compute](https://github.com/Orange-OpenSource/opnfv/raw/master/docs/bridge_topology_controller_compute.jpg)
+
+![Image of Bridging topology - Network](https://github.com/Orange-OpenSource/opnfv/raw/master/docs/bridge_topology_network.jpg)
+
 On each server, we have at least 4 networks:
 
 * **br-int** : Integration bridge. Tag/untag VLAN for VM. veth for VM will be in this bridge.
