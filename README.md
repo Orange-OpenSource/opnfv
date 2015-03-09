@@ -2,7 +2,7 @@
 
 Openstack install and config by Orange Labs.
 
-## Introduction
+## Introduction
 This repo contain tools and scripts to install a full Openstack Juno over Ubuntu 14.04 with OpenDayLight as SDN manager.
 
 It aims to propose an **High Availability** deployment with **Bare Metal** provisioning.
@@ -17,13 +17,23 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
 
 
 ## Status
-* Puppet modules: Mysql, Rabbit, Keystone, Glance, Nova are OK. Neutron is still WiP (Work in Progress)
-* Bare metal provisioning: WiP
+* Puppet modules:
+ * Mysql: OK, 
+ * Rabbit: OK, 
+ * Keystone: OK, 
+ * Glance: OK,
+  * with ceph: OK,
+ * Cinder: OK,
+  * with ceph: OK,
+ * Nova: OK,
+  * with ceph: OK,
+ * Neutron: OK,
+* Bare metal provisioning: WiP (Work in Progress / MAAS)
 * OpenDayLight: WiP
 * High Availability: WiP
 
 ## Architecture
-### Basic setup
+### Basic setup
 
 In a lab configuration, to avoid waste of resources:
 
@@ -46,26 +56,28 @@ The network server will also have one other bridge:
 ![Image of Basic setup](https://github.com/Orange-OpenSource/opnfv/raw/master/docs/archi_reseau.png)
 
 
-### How do we handle OpenStack functions
+### How do we handle OpenStack functions
 Each controller part of Openstack is created separatly in a KVM machine. So that it can easily be updated or redeployed.
 
-Each KVM machine is automatically created by a script and basic configuration comes through cloud-init. Openstack related configuration is handled by puppet.
+Each KVM machine is automatically created by a script (opensteak-create-vm) and basic configuration comes through cloud-init. Openstack related configuration is handled by puppet.
 
-### How do we provide HA
+### How do we provide HA
 The work is still in progress, but we plan to use HAProxy in front of nodes, with VRRP IPs and weighted routes.
 
 ![Image of HA](https://raw.githubusercontent.com/Orange-OpenSource/opnfv/master/docs/opensteak_ha.png)
 
 
 ## Installation
-### PXE boot for server
+### PXE boot for server
 
-TODO
+We are currently installing a MAAS server to handle PXE boot with IPMI command. 
 
-### Steps
+### Steps
 Follow these steps when you have at least 3 ubuntu 14.04 servers up and running.
 
 * Install [base infra](/docs/BASE.md) to support KVM
-* Configure [network](/docs/NETWORK.md) correctly
-* Optional: install [Ceph](/docs/CEPH.md) as a backend storage
-* Install [Controller VM](/docs/CONTROLLERS.md)
+* Configure [network](/docs/BASE-NETWORKING.md) correctly
+* Optional: install [Ceph](/docs/BASE-CEPH.md) as a backend storage
+* Install [Controllers VM](/docs/CONTROLLERS.md)
+* Install [Computes Machines](/docs/COMPUTES.md)
+* Install [Network Machine](/docs/NETWORKS.md)
