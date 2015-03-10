@@ -62,7 +62,7 @@ root@keystone:~/images# neutron agent-list
 ```
 
 
-### Create a volume
+## Create a volume
 When your compute node will be ready, you will be able to test if the volume is well created in ceph with:
 
 From keystone, create a volume:
