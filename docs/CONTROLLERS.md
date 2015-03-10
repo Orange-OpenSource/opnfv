@@ -56,13 +56,13 @@ opensteak-create-vm --name dns --cloud-init dns -c
 ## RabbitMQ
 
 ```bash
-opensteak-create-vm --name rabbitmq -c
+opensteak-create-vm --name rabbitmq1 -c
 ```
 
 ## MySQL
 
 ```bash
-opensteak-create-vm --name mysql -c
+opensteak-create-vm --name mysql1 -c
 ```
 
 Check that it listen on 0.0.0.0:3306 port correctly:
@@ -80,7 +80,7 @@ mysql -u root -p
 ## Keystone
 
 ```bash
-opensteak-create-vm --name keystone -c
+opensteak-create-vm --name keystone1 -c
 ```
 
 Test if it works well with (ssh on VM before):
@@ -109,7 +109,7 @@ You should have:
 ## Glance
 
 ```bash
-opensteak-create-vm --name glance --storage -c
+opensteak-create-vm --name glance1 --storage -c
 ```
 
 In our lab, this machine needs a specific connection to the storage network in order to mount an NFS folder in /var/lib/images (to store the glance images).
@@ -176,7 +176,7 @@ glance image-create  --name "ubuntu-14-10-64b-test"  --file trusty-server-cloudi
 ## Nova (controller part)
 
 ```bash
-opensteak-create-vm --name nova -c
+opensteak-create-vm --name nova1 -c
 ```
 
 Test if it works well from keystone:
@@ -210,7 +210,7 @@ openstack
 ## Neutron (controller part)
 
 ```bash
-opensteak-create-vm --name neutron -c
+opensteak-create-vm --name neutron1 -c
 ```
 
 Test if it works well from keystone:
@@ -245,7 +245,7 @@ openstack
 
 
 ```bash
-opensteak-create-vm --name cinder -c
+opensteak-create-vm --name cinder1 -c
 ```
 
 Test if it works well from keystone:
