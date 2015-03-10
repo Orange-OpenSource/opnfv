@@ -16,9 +16,12 @@
   - [Neutron (controller part)](#neutron-controller-part)
   - [Cinder](#cinder)
 - [Move a VM](#move-a-vm)
-  - [Shutdown VM on host A](#shutdown-vm-on-host-a)
-  - [ Create the VM on host B (new host)](#create-the-vm-on-host-b-new-host)
-  - [Start the VM](#start-the-vm)
+  - [ On host A (old host)](#on-host-a-old-host)
+    - [Shutdown VM](#shutdown-vm)
+    - [Delete the VM](#delete-the-vm)
+  - [ On host B (new host)](#on-host-b-new-host)
+    - [ Create the VM](#create-the-vm)
+    - [Start the VM](#start-the-vm)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -265,11 +268,12 @@ If you need to move a VM from a controller server to another one, you can do tha
 
 We suppose that the VM disk is located in the ceph mount point (/mnt/cephfs/)
 
-## Shutdown VM on host A
+## On host A (old host)
+### Shutdown VM
 First, shutdown the VM:
 
 ```bash
-virsh destroy glance
+virsh destroy glance1
 ```
 
 This will **NOT** destroy the VM, it will just shut it down. You can check the result with:
@@ -278,7 +282,14 @@ This will **NOT** destroy the VM, it will just shut it down. You can check the r
 virsh list --all
 ```
 
-## Create the VM on host B (new host)
+### Delete the VM
+
+```bash
+virsh undefine glance1
+```
+
+## On host B (new host)
+### Create the VM
 Now create the VM on the new host:
 
 ```bash
@@ -293,7 +304,7 @@ ls glance1
 config.log  glance1.xml  meta-data  user-data
 ```
 
-## Start the VM
+### Start the VM
 
 ```bash
 virsh define glance1/glance1.xml
