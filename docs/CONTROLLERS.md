@@ -1,3 +1,23 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Controllers VM installation](#controllers-vm-installation)
+  - [Puppet master](#puppet-master)
+  - [DNS](#dns)
+  - [RabbitMQ](#rabbitmq)
+  - [MySQL](#mysql)
+  - [Keystone](#keystone)
+  - [Glance](#glance)
+    - [With Ceph](#with-ceph)
+      - [Convert from qcow2 to raw](#convert-from-qcow2-to-raw)
+      - [Upload to glance](#upload-to-glance)
+  - [Nova (controller part)](#nova-controller-part)
+  - [Neutron (controller part)](#neutron-controller-part)
+  - [Cinder](#cinder)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Controllers VM installation
 
 Each controller part of OpenStack is installed in a KVM based virtual machine.

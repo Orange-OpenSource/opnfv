@@ -1,3 +1,42 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Ceph Installation](#ceph-installation)
+  - [](#)
+  - [ Intro](#intro)
+  - [Architecture](#architecture)
+  - [Ceph-admin machine preparation](#ceph-admin-machine-preparation)
+    - [ Install ceph-deploy](#install-ceph-deploy)
+    - [ Install ntp](#install-ntp)
+    - [ Create a ceph user on each node (ceph-admin included)](#create-a-ceph-user-on-each-node-ceph-admin-included)
+    - [Add each node in hosts file (ceph-admin included)](#add-each-node-in-hosts-file-ceph-admin-included)
+    - [Create and copy a passwordless ssh key to each node](#create-and-copy-a-passwordless-ssh-key-to-each-node)
+    - [Create a .ssh/config file to connect automatically](#create-a-sshconfig-file-to-connect-automatically)
+  - [ Ceph storage cluster](#ceph-storage-cluster)
+    - [Prepare folder](#prepare-folder)
+    - [Deploy initial monitor on first node](#deploy-initial-monitor-on-first-node)
+    - [Configure ceph](#configure-ceph)
+    - [Install ceph in all nodes](#install-ceph-in-all-nodes)
+    - [Create initial monitor and gather the keys](#create-initial-monitor-and-gather-the-keys)
+    - [ Create and add OSD](#create-and-add-osd)
+    - [Prepare all nodes to administer the cluster](#prepare-all-nodes-to-administer-the-cluster)
+    - [Add a metadata server in first node](#add-a-metadata-server-in-first-node)
+  - [Extend](#extend)
+    - [Extend the OSD pool](#extend-the-osd-pool)
+    - [ Extend the monitors](#extend-the-monitors)
+  - [Check status](#check-status)
+  - [Create a file system](#create-a-file-system)
+  - [ Mount file system](#mount-file-system)
+  - [Customize for OpenStack](#customize-for-openstack)
+    - [ Add a ceph pool in libvirt](#add-a-ceph-pool-in-libvirt)
+    - [ Configure OpenStack Ceph Clients](#configure-openstack-ceph-clients)
+    - [ Create Ceph Pool in libvirt so that controller machines can be integrated in it](#create-ceph-pool-in-libvirt-so-that-controller-machines-can-be-integrated-in-it)
+  - [ Purge conf if needed](#purge-conf-if-needed)
+  - [TODO](#todo)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Ceph Installation
 
 ---

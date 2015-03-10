@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Network configuration](#network-configuration)
+  - [Installation](#installation)
+    - [ 4 interfaces configuration](#4-interfaces-configuration)
+    - [ 2 interfaces configuration](#2-interfaces-configuration)
+  - [Restart](#restart)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Network configuration
 Before proceeding, be sure to have already completed the [base](docs/BASE.md) install
 

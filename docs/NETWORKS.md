@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [External network machine configuration (the one with neutron)](#external-network-machine-configuration-the-one-with-neutron)
+  - [Puppet](#puppet)
+  - [Verification](#verification)
+  - [ Create networks](#create-networks)
+  - [Run a VM to test](#run-a-vm-to-test)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # External network machine configuration (the one with neutron)
 
 ## Puppet

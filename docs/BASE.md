@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Base infra install](#base-infra-install)
+  - [Dependencies](#dependencies)
+  - [ Clone this repo](#clone-this-repo)
+  - [ Create config file from template](#create-config-file-from-template)
+  - [Libvirt default pool](#libvirt-default-pool)
+  - [ Import binaries](#import-binaries)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Base infra install
 Being here, we suppose that you already have an Ubuntu 14.04 server up and running.
 
