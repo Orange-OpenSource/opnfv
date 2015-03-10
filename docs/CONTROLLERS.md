@@ -1,3 +1,16 @@
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Controllers VM installation](#)
+	- [Puppet master](#)
+	- [DNS](#)
+	- [RabbitMQ](#)
+	- [MySQL](#)
+	- [Keystone](#)
+	- [Glance](#)
+	- [Nova (controller part)](#)
+	- [Neutron (controller part)](#)
+	- [Cinder](#)
+
 # Controllers VM installation
 
 Each controller part of OpenStack is installed in a KVM based virtual machine.
