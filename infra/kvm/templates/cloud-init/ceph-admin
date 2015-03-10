@@ -14,7 +14,7 @@ dsmode: net
 #############################################
 runcmd:
  - [ sh, -c, "ifdown eth0 && ifup eth0"]
- - [ sh, -c, "aptitude remove cloud-init -y"]
+ - [ sh, -c, "apt-get -y purge cloud-init"]
 ssh_authorized_keys:
 __SSHAUTHKEYS__
 #############################################

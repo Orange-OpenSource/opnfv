@@ -22,7 +22,7 @@ runcmd:
  - [ sh, -c, "ifdown eth0 && ifup eth0"]
  - [ sh, -c, "wget https://raw.githubusercontent.com/davidblaisonneau-orange/opensteak/master/infra/puppet_master/install-puppet-master.sh"]
  - [ sh, -c, "sudo bash install-puppet-master.sh __DOMAIN__"]
- - [ sh, -c, "aptitude remove cloud-init -y"]
+ - [ sh, -c, "apt-get -y purge cloud-init"]
 ssh_authorized_keys:
 __SSHAUTHKEYS__
 #############################################

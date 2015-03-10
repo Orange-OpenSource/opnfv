@@ -23,7 +23,7 @@ runcmd:
  - [ sh, -c, "apt-get -y install puppet"]
  - [ sh, -c, "puppet agent --enable"]
  - [ sh, -c, "puppet agent -t"]
- - [ sh, -c, "aptitude remove cloud-init -y"]
+ - [ sh, -c, "apt-get -y purge cloud-init"]
 ssh_authorized_keys:
 __SSHAUTHKEYS__
 #############################################
