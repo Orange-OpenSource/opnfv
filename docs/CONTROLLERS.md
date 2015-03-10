@@ -1,16 +1,3 @@
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
-
-- [Controllers VM installation](#)
-	- [Puppet master](#)
-	- [DNS](#)
-	- [RabbitMQ](#)
-	- [MySQL](#)
-	- [Keystone](#)
-	- [Glance](#)
-	- [Nova (controller part)](#)
-	- [Neutron (controller part)](#)
-	- [Cinder](#)
-
 # Controllers VM installation
 
 Each controller part of OpenStack is installed in a KVM based virtual machine.
@@ -142,6 +129,21 @@ root@keystone:/root/images# glance image-list
 +--------------------------------------+--------------------+-------------+------------------+-----------+--------+
 
 
+```
+
+### With Ceph
+When ceph is installed as a backend for Glance, you must upload image in raw format instead of qcow2:
+
+#### Convert from qcow2 to raw
+
+```bash
+qemu-img convert -f qcow2 -O raw trusty-server-cloudimg-amd64-disk1.img trusty-server-cloudimg-amd64-disk1.raw
+```
+
+#### Upload to glance
+
+```bash
+glance image-create  --name "ubuntu-14-10-64b-test"  --file trusty-server-cloudimg-amd64-disk1.raw --disk-format raw --container-format bare --is-public True --progress
 ```
 
 ## Nova (controller part)
