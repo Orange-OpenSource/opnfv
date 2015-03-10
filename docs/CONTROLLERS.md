@@ -15,6 +15,10 @@
   - [Nova (controller part)](#nova-controller-part)
   - [Neutron (controller part)](#neutron-controller-part)
   - [Cinder](#cinder)
+- [Move a VM](#move-a-vm)
+  - [Shutdown VM on host A](#shutdown-vm-on-host-a)
+  - [ Create the VM on host B (new host)](#create-the-vm-on-host-b-new-host)
+  - [Start the VM](#start-the-vm)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -256,4 +260,44 @@ cinder service-list
 
 ```
 
+# Move a VM
+If you need to move a VM from a controller server to another one, you can do that with the following help.
+
+We suppose that the VM disk is located in the ceph mount point (/mnt/cephfs/)
+
+## Shutdown VM on host A
+First, shutdown the VM:
+
+```bash
+virsh destroy glance
+```
+
+This will **NOT** destroy the VM, it will just shut it down. You can check the result with:
+
+```bash
+virsh list --all
+```
+
+## Create the VM on host B (new host)
+Now create the VM on the new host:
+
+```bash
+cd /usr/local/opensteak/infra/kvm/vm_configs
+opensteak-create-vm --name glance1
+```
+
+This will just create the vm config in a subfolder named glance1:
+
+```bash
+ls glance1
+config.log  glance1.xml  meta-data  user-data
+```
+
+## Start the VM
+
+```bash
+virsh define glance1/glance1.xml
+virsh autostart glance1
+virsh start glance1 --console
+```
 
