@@ -19,6 +19,25 @@ On this VM, we install several tools:
 
 * Log on the test-tool VM
 * install rally (https://rally.readthedocs.org/en/latest/tutorial/step_0_installation.html)
+* check 
+```bash
+# rally deployment check
+keystone endpoints are valid and following service are available:
++-------------+-----------+------------+
+| Services  | Type        | Status     |
++-----------+-------------+------------+
+| cinder    | volume      | Available  |
+| cinderv2  | volumev2    | Available  |
+| glance    | image       | Available  |
+| keystone  | identity    | Available  | 
+| neutron   | network     | Available  |
+| nova      | compute     | Available  |
+| nova_ec2  | compute_ec2 | Available  |
+| novav3    | computev3   | Available  |
++-------------+-------------+----------+
+
+```
+
 * For Rally scenario, follow https://rally.readthedocs.org/en/latest/tutorial/step_1_setting_up_env_and_running_benchmark_from_samples.html
 * For Tempest, follow the instructions https://www.mirantis.com/blog/rally-openstack-tempest-testing-made-simpler
 * In first step Rally scenario were fine but Tempest scenarios failed due to configuration
