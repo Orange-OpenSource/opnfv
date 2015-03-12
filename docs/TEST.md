@@ -18,7 +18,7 @@ On this VM, we installed:
 ### Rally
 
 * Log on the test-tool VM
-* install rally (https://rally.readthedocs.org/en/latest/tutorial/step_0_installation.html)
+* install Rally (https://rally.readthedocs.org/en/latest/tutorial/step_0_installation.html)
 
 openrc file (info from OpenStack) is needed, password is required during configuration procedure
 
