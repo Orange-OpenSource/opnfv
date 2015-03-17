@@ -2,16 +2,16 @@ classe:
   nginx::nginx_vhosts:
   'keystone.stack.opensteak.fr':
     listen_port: 5000
-    proxy: 'http://keystone.stack.opensteak.fr:5000'
+    proxy: 'http://keystone.stack.%{hiera('domain')}:5000'
   'glance.stack.opensteak.fr':
     listen_port: 9292
-    proxy: 'http://glance.stack.opensteak.fr:9292'
+    proxy: 'http://glance.stack.%{hiera('domain')}:9292'
   'nova.stack.opensteak.fr':
     listen_port: 8774
-    proxy: 'http://nova.stack.opensteak.fr:8774'
+    proxy: 'http://nova.stack.%{hiera('domain')}:8774'
   'neutron.stack.opensteak.fr':
     listen_port: 9696
-    proxy: 'http://neutron.stack.opensteak.fr:9696'
+    proxy: 'http://neutron.stack.%{hiera('domain')}:9696'
   'cinder.stack.opensteak.fr':
     listen_port: 8776
-    proxy: 'http://cinder.stack.opensteak.fr:8776'
+    proxy: 'http://cinder.stack.%{hiera('domain')}:8776'
