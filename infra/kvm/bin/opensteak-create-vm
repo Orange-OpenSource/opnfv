@@ -68,9 +68,8 @@ Options:
     --mem, -m MEMQUANTITY
         Set quantity of RAM for the VM
 
-    --createvm, -c
-        Automatically create the VM after the configuration
-        is done.
+    --console, -c
+        Show console when creating the VM
         
     --force, -f
         Do not ask for confirmation before launching VM
@@ -89,7 +88,7 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,createvm,force,storage"
+LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,console,force,storage"
 SOPT="hn:i:p:x:y:k:l:m:t:cfs"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
@@ -137,8 +136,8 @@ while true; do
     --ram|-m)
                         RAM=$2; shift
                         ;;
-    --createvm|-c)
-                        CREATEVM="y"
+    --console|-c)
+                        CONSOLE="--console"
                         ;;
     --force|-f)
                         FORCE="y"
@@ -291,9 +290,6 @@ fi
 echo "Creating VM configuration in folder '$ROOT/kvm/vm_configs/$NAME' with
 $RESUME
  "
-if [ "Zy" = "Z$CREATEVM" ]; then
-    echo "Will also create the VM."
-fi
 
 if [ "Zy" != "Z$FORCE" ]; then
     echo "Continue? [Y/n] "
@@ -379,27 +375,23 @@ perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 #################################################
 # Create the VM
 #################################################
-
-if [ "Zy" = "Z$CREATEVM" ]; then
-
-    # Remove old Puppet cert if needed
-    if ( ping puppet -c 1 1>&2> /dev/null ); then
-        PUPPETCERTSTATUSURL='https://puppet:8140/production/certificate_status'
-        curl -i -k -X DELETE -H "Accept: pson" $PUPPETCERTSTATUSURL/$NAME.$IP_DNSSEARCH
-        echo
-        echo "Old Puppet certificate delete"
-    fi
-    
-    # Delete old volume if needed
-    if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/$NAME.img > /dev/null; then
-        virsh vol-delete $TARGETFOLDER/$NAME.img
-    fi
-    
-    # Create a new volume
-    virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
-    
-    # Create the VM
-    virsh define $NAME.xml
-    virsh autostart $NAME
-    virsh start $NAME --console
+# Remove old Puppet cert if needed
+if ( ping puppet -c 1 1>&2> /dev/null ); then
+    PUPPETCERTSTATUSURL='https://puppet:8140/production/certificate_status'
+    curl -i -k -X DELETE -H "Accept: pson" $PUPPETCERTSTATUSURL/$NAME.$IP_DNSSEARCH
+    echo
+    echo "Old Puppet certificate delete"
 fi
+
+# Delete old volume if needed
+if virsh vol-list --pool "$TARGETPOOL" | grep $TARGETFOLDER/$NAME.img > /dev/null; then
+    virsh vol-delete $TARGETFOLDER/$NAME.img
+fi
+
+# Create a new volume
+virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
+
+# Create the VM
+virsh define $NAME.xml
+virsh autostart $NAME
+virsh start $NAME $CONSOLE
