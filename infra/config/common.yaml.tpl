@@ -4,17 +4,16 @@
 ###
 ## DNS
 ###
-domain: opensteak.fr
 dns::external:
  - 8.8.8.8
  - 8.8.4.4
 dns::internal: "%{hiera('infra::dns')}"
-dns::contact: "contact@%{hiera('domain')}"
+dns::contact: "contact@opensteak.fr"
 
 ###
 ## HA
 ###
-stack::ha::enabled: true
+stack::ha::enabled: false
 
 ##
 # KVM password for user ubuntu for OpenSteak infra VM
@@ -40,12 +39,12 @@ horizon::secret_key: "12345"
 ###
 ## Admin stuff
 ###
-admin::mail: "admin@%{hiera('domain')}"
+admin::mail: "admin@opensteak.fr"
 admin::tenant: 'admin'
 
 ###
 ## Log Levels & misc
-####
+###
 verbose: 'False'
 debug: 'False'
 region: 'Orange'
@@ -87,7 +86,7 @@ infra::ceph-admin: 192.168.1.240
 ###
 ## Stack : servers for openstack (vm.stack.DOMAIN)
 ###
-stack::domain: "stack.%{hiera('domain')}"
+stack::domain: "stack.opensteak.fr"
 stack::vm:
  ha1: 192.168.1.200
  rabbitmq1: 192.168.1.201
@@ -112,13 +111,9 @@ stack::vm:
 stack::ha::vip: 192.168.1.250
 
 ###
-## OpenStack stuff
-###
-horizon::publicfqdn: "www.%{hiera('domain')}"
-
-###
 ## Ceph stuff
 ###
+ceph::enabled: false
 cephfs::mount: '/mnt/cephfs'
 cephfs::pool: 'ceph'
 ceph-conf::fsid: '77a16382-8b32-476d-89b8-5ac5381209b7'
@@ -136,7 +131,6 @@ ceph-conf::disk: '/dev/sdb'
 ###
 ## KVM
 ###
-
 # Default KVM sizing
 kvm::default::cpu: 2
 kvm::default::ram: 1048576
@@ -157,5 +151,4 @@ kvm::default::conf::storage: 'storage'
 
 # Default SSH authorizd keys for user ubuntu
 kvm::default::ssh-auth-keys:
- - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0g+ZTxC7weoIJLUafOgrm+h...
- - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0g+ZTxC7weoIJLUafOgrm+h...
+ - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDY15cdBmIs2XOpe4EiFCsaY6bmUmK/GysMoLl4UG51JCfJwvwoWCoA+6mDIbymZxhxq9IGxilp/yTA6WQ9s/5pBag1cUMJmFuda9PjOkXl04jgqh5tR6I+GZ97AvCg93KAECis5ubSqw1xOCj4utfEUtPoF1OuzqM/lE5mY4N6VKXn+fT7pCD6cifBEs6JHhVNvs5OLLp/tO8Pa3kKYQOdyS0xc3rh+t2lrzvKUSWGZbX+dLiFiEpjsUL3tDqzkEMNUn4pdv69OJuzWHCxRWPfdrY9Wg0j3mJesP29EBht+w+EC9/kBKq+1VKdmsXUXAcjEvjovVL8l1BrX3BY0R8D sansmotdepasse
