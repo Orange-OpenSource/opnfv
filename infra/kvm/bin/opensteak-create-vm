@@ -72,6 +72,9 @@ Options:
         Automatically create the VM after the configuration
         is done.
         
+    --force, -f
+        Do not ask for confirmation before launching VM
+        
     --storage, -s
         Add a network interface based on YAML config files
         
@@ -86,8 +89,8 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,createvm,storage"
-SOPT="hn:i:p:x:y:k:l:m:t:cs"
+LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,createvm,force,storage"
+SOPT="hn:i:p:x:y:k:l:m:t:cfs"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
@@ -136,6 +139,9 @@ while true; do
                         ;;
     --createvm|-c)
                         CREATEVM="y"
+                        ;;
+    --force|-f)
+                        FORCE="y"
                         ;;
     --storage|-s)
                         NETSTORAGE="y"
@@ -288,11 +294,13 @@ $RESUME
 if [ "Zy" = "Z$CREATEVM" ]; then
     echo "Will also create the VM."
 fi
-echo "Continue? [Y/n] "
-read RET 
 
-if [ "Z${RET}" != "Z" -a "Z${RET}" != "ZY" -a "Z${RET}" != "Zy" ] ; then
-    exit 0
+if [ "Zy" != "Z$FORCE" ]; then
+    echo "Continue? [Y/n] "
+    read RET     
+    if [ "Z${RET}" != "Z" -a "Z${RET}" != "ZY" -a "Z${RET}" != "Zy" ] ; then
+        exit 0
+    fi
 fi
 
 mkdir -p "$ROOT/kvm/vm_configs/$NAME"
