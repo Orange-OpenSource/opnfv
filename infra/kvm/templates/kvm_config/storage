@@ -27,7 +27,14 @@
       <target dev='vdb' bus='virtio'/>
     </disk>
     <input type='mouse' bus='ps2'/>
-    <console type='pty'/>
+    <serial type='file'>
+      <source path='/var/log/libvirt/qemu/__NAME__-console.log'/>
+      <target port='0'/>
+    </serial>
+    <console type='file'>
+      <source path='/var/log/libvirt/qemu/__NAME__-console.log'/>
+      <target type='serial' port='0'/>
+    </console>
     <memballoon model='virtio'/>
     <interface type='bridge'>
       <source bridge='br-adm'/>
