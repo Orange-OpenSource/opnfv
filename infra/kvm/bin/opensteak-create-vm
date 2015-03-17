@@ -67,9 +67,6 @@ Options:
         
     --mem, -m MEMQUANTITY
         Set quantity of RAM for the VM
-
-    --console, -c
-        Show console when creating the VM
         
     --force, -f
         Do not ask for confirmation before launching VM
@@ -88,8 +85,8 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,console,force,storage"
-SOPT="hn:i:p:x:y:k:l:m:t:cfs"
+LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,force,storage"
+SOPT="hn:i:p:x:y:k:l:m:t:fs"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
@@ -135,9 +132,6 @@ while true; do
                         ;;
     --ram|-m)
                         RAM=$2; shift
-                        ;;
-    --console|-c)
-                        CONSOLE="--console"
                         ;;
     --force|-f)
                         FORCE="y"
@@ -394,4 +388,14 @@ virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.
 # Create the VM
 virsh define $NAME.xml
 virsh autostart $NAME
-virsh start $NAME $CONSOLE
+virsh start $NAME
+
+echo "The console file of this VM is located at:"
+echo " --> /var/log/libvirt/qemu/$NAME-console.log"
+
+# Try to grep The system '$NAME' is finally up, after XXX seconds
+COUNT=0
+while [ $COUNT -eq 0 ]; do
+  COUNT=$(grep "The system $NAME is finally ip" -c /var/log/libvirt/qemu/$NAME-console.log)
+  sleep 1
+done
