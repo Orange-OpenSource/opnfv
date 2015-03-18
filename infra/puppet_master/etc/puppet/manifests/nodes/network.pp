@@ -1,3 +1,3 @@
-node /^cinder.*$/ {
-          include opensteak::neutron-network
+node /^network.*$/ {
+    include opensteak::neutron-network
 }
