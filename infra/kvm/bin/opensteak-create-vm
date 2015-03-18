@@ -68,6 +68,9 @@ Options:
     --mem, -m MEMQUANTITY
         Set quantity of RAM for the VM
         
+    --disksize, -d DISKSIZE
+        Create a disk with that size instead of default one which is 5G
+        
     --force, -f
         Do not ask for confirmation before launching VM
         
@@ -85,8 +88,8 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,force,storage"
-SOPT="hn:i:p:x:y:k:l:m:t:fs"
+LOPT="help,name:,ip:,password:,cloud-init:,meta-data:,kvm-config:,cpu:,mem:,targetpool:,disksize:,force,storage"
+SOPT="hn:i:p:x:y:k:l:m:t:d:fs"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
@@ -132,6 +135,9 @@ while true; do
                         ;;
     --ram|-m)
                         RAM=$2; shift
+                        ;;
+    --disksize|-d)
+                        DISKSIZE=$2; shift
                         ;;
     --force|-f)
                         FORCE="y"
@@ -231,6 +237,11 @@ fi
 # Check RAM
 if [ -z "$RAM" ]; then
     RAM=$(hiera_get kvm::default::ram)
+fi
+
+# check disk size
+if [ -z "$DISKSIZE" ]; then
+    DISKSIZE="5G"
 fi
 
 # check password
@@ -386,6 +397,7 @@ fi
 
 # Create a new volume
 virsh vol-clone --pool $TARGETPOOL trusty-server-cloudimg-amd64-disk1.img $NAME.img
+virsh vol-resize --pool $TARGETPOOL $NAME.img $DISKSIZE
 
 # Create the VM
 virsh define $NAME.xml

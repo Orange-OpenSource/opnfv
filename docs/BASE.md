@@ -24,12 +24,12 @@ dpkg -i puppetlabs-release-trusty.deb
 apt-get update
 apt-get upgrade
 apt-get dist-upgrade
-apt-get install vim git hiera ntp virtinst genisoimage curl qemu-system-x86 qemu-system-common qemu-keymaps ipxe-qemu openvswitch-switch puppet
+apt-get install vim git hiera ntp virtinst genisoimage curl qemu-system-x86 qemu-system-common qemu-keymaps ceph-common ipxe-qemu openvswitch-switch puppet
 service ntp restart
 service libvirt-bin restart
 ```
 
-## Clone this repo
+## Clone this repo
 
 We expect you to clone this repo in /usr/local/ folder as most of the time, the script will try to find necessary files from this folder.
 
@@ -38,13 +38,25 @@ cd /usr/local
 git clone https://github.com/Orange-OpenSource/opnfv.git opensteak
 ```
 
-## Create config file from template
+## Create config file from template
 
 The common.yaml file is the only file that you should tweak in order to setup your OpenSteak installation.
 
 ```bash
 cp /usr/local/opensteak/infra/config/common.yaml.tpl /usr/local/opensteak/infra/config/common.yaml
 vim /usr/local/opensteak/infra/config/common.yaml
+```
+
+To help you generate ceph keys, you can use:
+
+```bash
+ceph-authtool --gen-print-key
+```
+
+To generate uuids, you can use:
+
+```bash
+uuidgen
 ```
 
 ## Libvirt default pool
@@ -55,7 +67,7 @@ cd /usr/local/opensteak/infra/kvm/
 virsh pool-create default_pool.xml
 ```
 
-## Import binaries
+## Import binaries
 To help deploy future controller VM:
 
 ```bash
