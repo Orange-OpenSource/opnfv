@@ -1,3 +1,3 @@
-node /^cinder.*$/ {
+node /^proxy.*$/ {
     include nginx
 }
