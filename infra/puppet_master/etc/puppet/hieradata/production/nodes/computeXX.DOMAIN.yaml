@@ -1,2 +1,0 @@
-bridge_uplinks:
-        - "br-vm:em5"
