@@ -8,3 +8,4 @@
 :hierarchy:
   - nodes/%{::fqdn}
   - common
+  - physical-nodes
