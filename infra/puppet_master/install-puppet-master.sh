@@ -52,7 +52,8 @@ cp -rf etc/puppet/hieradata /etc/puppet/
 rename s/DOMAIN/$DOMAIN/ /etc/puppet/hieradata/production/nodes/*.yaml
 cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
 mv /tmp/hieradata /etc/puppet/hieradata/production/common.yaml
-chgrp puppet /etc/puppet/hieradata/production/common.yaml
+mv /tmp/hieradata-phynodes /etc/puppet/hieradata/production/physical-nodes.yaml
+chgrp puppet /etc/puppet/hieradata/production/*.yaml
 
 # Install and config r10k
 echo "* Install R10k into /etc/r10k.yaml"

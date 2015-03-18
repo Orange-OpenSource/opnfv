@@ -57,6 +57,7 @@ region: 'Orange'
 ###
 ## Infrastructure : servers out of openstack
 ###
+
 # Network
 infra::network: 192.168.1.0
 infra::network_mask: 24
@@ -70,19 +71,9 @@ storage::network_broadcast: 192.168.0.255
 infra::reverse_zone: 1.168.192.in-addr.arpa
 infra::dns: 192.168.1.249
 
-# Phyiscal Machines
-infra::nodes:
- opensteak92: 192.168.1.92
- opensteak93: 192.168.1.93
- opensteak94: 192.168.1.94
- opensteak95: 192.168.1.95
- opensteak96: 192.168.1.96
- opensteak97: 192.168.1.97
- opensteak98: 192.168.1.98
- opensteak99: 192.168.1.99
-
-infra::controllers:
- opensteak92: 192.168.1.92
+# Ceph
+infra::ceph-controllers:
+ - controller1
  
 # Infra tools
 infra::puppet: 192.168.1.241

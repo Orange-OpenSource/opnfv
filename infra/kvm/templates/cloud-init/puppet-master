@@ -14,8 +14,13 @@ dsmode: net
 ############################################
 write_files:
 -   content: |
-__HIERADATA__
+__HIERADATACOMMON__
     path: /tmp/hieradata
+    permissions: '0640'
+    owner: root:root
+-   content: |
+__HIERADATAPHYNODES__
+    path: /tmp/hieradata-phynodes
     permissions: '0640'
     owner: root:root
 runcmd:
