@@ -117,9 +117,10 @@ else
 fi
 
 # Init config
-# TODO overwrite this part to get the common.yaml file from a specific location
+# TODO overwrite this part to get the *.yaml file from a specific location
 if [ ! -e /usr/local/opensteak/infra/config/common.yaml ] ; then
     cp /usr/local/opensteak/infra/config/common.yaml.tpl /usr/local/opensteak/infra/config/common.yaml
+    cp /usr/local/opensteak/infra/config/physical-nodes.yaml.tpl /usr/local/opensteak/infra/config/physical-nodes.yaml
 fi
 
 # Create default virsh pool
@@ -148,7 +149,7 @@ fi
 # Install controllers
 cd /usr/local/opensteak/infra/kvm/vm_configs
 opensteak-create-vm --name puppet --cloud-init puppet-master --force
-opensteak-create-vm --name dns --cloud-init dns --create --force
+opensteak-create-vm --name dns --cloud-init dns --force
 opensteak-create-vm --name rabbitmq1 --force
 opensteak-create-vm --name mysql1 --force
 opensteak-create-vm --name keystone1 --force
@@ -158,3 +159,29 @@ opensteak-create-vm --name neutron1 --force
 opensteak-create-vm --name cinder1 --force
 
 # Install compute & network
+
+
+
+
+# Uninstall
+#virsh destroy cinder1
+#virsh destroy neutron1/
+#virsh destroy neutron1
+#virsh destroy nova1
+#virsh destroy glance1/
+#virsh destroy glance1
+#virsh destroy keystone1
+#virsh destroy mysql1
+#virsh destroy rabbitmq1
+#virsh destroy dns
+#virsh destroy puppet
+#virsh undefine cinder1
+#virsh undefine neutron1
+#virsh undefine nova1
+#virsh undefine glance1
+#virsh undefine keystone1
+#virsh undefine mysql1
+#virsh undefine rabbitmq1
+#virsh undefine dns
+#virsh undefine puppet
+
