@@ -1,3 +1,0 @@
-classes:
-  - opensteak::ceph-client-glance
-  - opensteak::glance

@@ -17,6 +17,3 @@ nginx::nginx_vhosts:
   "stack.%{hiera('domain')}":
      listen_port: 80
      proxy: "http://horizon.stack.%{hiera('domain')}"
-
-classes:
-  - nginx

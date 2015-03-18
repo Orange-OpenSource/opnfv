@@ -1,4 +1,0 @@
-classes:
-  - opensteak::apt
-  - opensteak::key
-  - opensteak::keystone

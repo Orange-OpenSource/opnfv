@@ -1,5 +1,3 @@
 bridge_uplinks:
         - "br-ex:em2"
         - "br-vm:em5"
-classes:
-        - opensteak::neutron-network
