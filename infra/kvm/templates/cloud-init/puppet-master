@@ -25,9 +25,11 @@ __HIERADATAPHYNODES__
     owner: root:root
 runcmd:
  - [ sh, -c, "ifdown eth0 && ifup eth0"]
+ - [ sh, -c, "mv /etc/resolv.conf /etc/resolv.conf.ori && echo 'nameserver 8.8.8.8' > /etc/resolv.conf"]
  - [ sh, -c, "wget https://raw.githubusercontent.com/davidblaisonneau-orange/opensteak/master/infra/puppet_master/install-puppet-master.sh"]
  - [ sh, -c, "sudo bash install-puppet-master.sh __DOMAIN__"]
  - [ sh, -c, "apt-get -y purge cloud-init"]
+ - [ sh, -c, "mv /etc/resolv.conf.ori /etc/resolv.conf"]
 ssh_authorized_keys:
 __SSHAUTHKEYS__
 #############################################
