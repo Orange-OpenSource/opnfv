@@ -15,6 +15,11 @@ dns::contact: "contact@opensteak.fr"
 ###
 stack::ha::enabled: false
 
+###
+## OpenDayLight
+###
+stack::odl::enabled: false
+
 ##
 # KVM password for user ubuntu for OpenSteak infra VM
 ##
