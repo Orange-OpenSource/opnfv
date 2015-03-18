@@ -354,8 +354,8 @@ perl -i -pe "s!__SSHAUTHKEYS__!$SSHAUTHKEYS!" user-data
 if [ "$NAME" = 'puppet' ]; then
 	HIERADATACOMMON=$(cat /usr/local/opensteak/infra/config/common.yaml | perl -pe 's/^/        /'| perl -pe 's!/!__SLASH__!g')
 	HIERADATAPHYNODES=$(cat /usr/local/opensteak/infra/config/physical-nodes.yaml | perl -pe 's/^/        /'| perl -pe 's!/!__SLASH__!g')
-	perl -i -pe "s/__HIERADATA__/$HIERADATA/" user-data
-	perl -i -pe "s/__HIERADATA__/$HIERADATA/" user-data
+	perl -i -pe "s/__HIERADATACOMMON__/$HIERADATACOMMON/" user-data
+	perl -i -pe "s/__HIERADATAPHYNODES__/$HIERADATAPHYNODES/" user-data
 	perl -i -pe "s!__SLASH__!/!g" user-data
 fi
 
