@@ -392,10 +392,17 @@ virsh start $NAME
 
 echo "The console file of this VM is located at:"
 echo " --> /var/log/libvirt/qemu/$NAME-console.log"
+echo ""
+echo "Waiting for 'The system '$NAME' is finally up' in this log file..."
+echo "It may take some times... have a break, have a kit kat."
+echo ""
 
 # Try to grep The system '$NAME' is finally up, after XXX seconds
 COUNT=0
 while [ $COUNT -eq 0 ]; do
-  COUNT=$(grep "The system $NAME is finally ip" -c /var/log/libvirt/qemu/$NAME-console.log)
+  COUNT=$(grep "The system '$NAME' is finally up" -c /var/log/libvirt/qemu/$NAME-console.log)
   sleep 1
 done
+
+echo "The system '$NAME' is finally up!"
+echo ""
