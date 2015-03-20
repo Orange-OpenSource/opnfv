@@ -35,7 +35,7 @@ root@keystone:~/images# neutron agent-list
 Commandes to create network:
 
 ```bash
-neutron net-create Externe --router:external True  --provider:physical_network physnet-ex --provider:network_type flat
+neutron net-create Externe --router:external --provider:physical_network physnet-ex --provider:network_type flat
 neutron subnet-create Externe --name "161.105.252.0/24" --allocation-pool start=161.105.252.106,end=161.105.252.124 --disable-dhcp --gateway 161.105.252.1 161.105.252.0/24
 neutron net-create demo
 neutron subnet-create demo --name "192.168.42.0/24" --gateway 192.168.42.1 192.168.42.0/24
