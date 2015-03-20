@@ -62,7 +62,7 @@ From keystone (openstack client):
 ```bash
 ssh-keygen
 keypair create --public-key /root/.ssh/id_rsa.pub demo-key
-server create --flavor m1.tiny --image cirros-0.3.3-x86_64 --nic net-id=a16c9e85-f96d-43d0-af11-ee230e98f6a6 --security-group default --key-name demo-key demo-instance1
+openstack server create --flavor m1.small --image "Ubuntu 14.04.1 LTS" --nic net-id=2265e0fc-04a2-4783-a98e-c77bbe18cdb2 --security-group default --key-name demo-key demo-instance1
 
 ```
 
