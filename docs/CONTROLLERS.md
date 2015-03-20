@@ -40,7 +40,7 @@ This is the first machine that we install, as it contains all the configuration 
 To create the machine, run:
 
 ```bash
-opensteak-create-vm --name puppet --cloud-init puppet-master -c
+opensteak-create-vm --name puppet --cloud-init puppet-master
 ```
 
 It should configure itself by grabbing the *common.yaml* file from */usr/local/opensteak/infra/config/common.yaml*
@@ -50,19 +50,19 @@ r10k will also update all the puppet modules that will be needed
 ## DNS
 
 ```bash
-opensteak-create-vm --name dns --cloud-init dns -c
+opensteak-create-vm --name dns --cloud-init dns
 ```
 
 ## RabbitMQ
 
 ```bash
-opensteak-create-vm --name rabbitmq1 -c
+opensteak-create-vm --name rabbitmq1
 ```
 
 ## MySQL
 
 ```bash
-opensteak-create-vm --name mysql1 -c
+opensteak-create-vm --name mysql1
 ```
 
 Check that it listen on 0.0.0.0:3306 port correctly:
@@ -80,7 +80,7 @@ mysql -u root -p
 ## Keystone
 
 ```bash
-opensteak-create-vm --name keystone1 -c
+opensteak-create-vm --name keystone1
 ```
 
 Test if it works well with (ssh on VM before):
@@ -109,7 +109,7 @@ You should have:
 ## Glance
 
 ```bash
-opensteak-create-vm --name glance1 --storage -c
+opensteak-create-vm --name glance1
 ```
 
 In our lab, this machine needs a specific connection to the storage network in order to mount an NFS folder in /var/lib/images (to store the glance images).
@@ -176,7 +176,7 @@ glance image-create  --name "ubuntu-14-10-64b-test"  --file trusty-server-cloudi
 ## Nova (controller part)
 
 ```bash
-opensteak-create-vm --name nova1 -c
+opensteak-create-vm --name nova1
 ```
 
 Test if it works well from keystone:
@@ -210,7 +210,7 @@ openstack
 ## Neutron (controller part)
 
 ```bash
-opensteak-create-vm --name neutron1 -c
+opensteak-create-vm --name neutron1
 ```
 
 Test if it works well from keystone:
@@ -245,7 +245,7 @@ openstack
 
 
 ```bash
-opensteak-create-vm --name cinder1 -c
+opensteak-create-vm --name cinder1
 ```
 
 Test if it works well from keystone:
