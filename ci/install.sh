@@ -31,8 +31,10 @@ Options:
     --help, -h
         Print this help and exit.
 
-    --configure-network, -n
-        configure network when needed
+    --network-script, -n
+        Name of the network script to use in order to configure network
+        on this machine. Network won't be configured is this script is 
+        not provided.
         
 EOF
     echo -n '0'
@@ -45,7 +47,7 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,configure-network"
+LOPT="help,network-script"
 SOPT="hn"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
@@ -66,8 +68,8 @@ while true; do
                         usage
                         exit 0
                         ;;
-    --configure-network|-n)
-                        CONFIGURE_NETWORK="y"
+    --network-script|-n)
+                        NETWORK_SCRIPT=$2; shift
                         ;;
     --)
                         shift
@@ -136,8 +138,8 @@ cp /usr/local/opensteak/infra/kvm/bin/* /usr/local/bin/
 chmod +x /usr/local/bin/opensteak*
 
 # Configure networking
-if [ "Zy" = "Z$CONFIGURE_NETWORK" ]; then
-    bash $ROOT/network.sh
+if [ "Z" != "Z$NETWORK_SCRIPT" ]; then
+    bash $ROOT/$NETWORK_SCRIPT
 fi
 
 # Get ubuntu trusty cloud image
