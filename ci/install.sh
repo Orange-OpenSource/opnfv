@@ -119,12 +119,10 @@ else
 fi
 
 # Get config
-# Those files are built from templates one:
+# Those files are built from templates available at:
 # /usr/local/opensteak/infra/config/common.yaml.tpl
 # /usr/local/opensteak/infra/config/physical-nodes.yaml.tpl
-cd /usr/local/opensteak/infra/config
-wget "https://gist.githubusercontent.com/arnaudmorinol/408b8c829aafce91deba/raw/181f60111a8234e88cae96fd5dc7d3c8391ef92c/common.yaml"
-wget "https://gist.githubusercontent.com/arnaudmorinol/5abc1e869eba97663ecf/raw/0b1bfcc9a280531634921e6623a6b88c3433650c/physical-nodes.yaml"
+cp $ROOT/*.yaml /usr/local/opensteak/infra/config/
 
 # Create default virsh pool
 virsh pool-info default >/dev/null 2>&1
