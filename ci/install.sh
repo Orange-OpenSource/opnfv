@@ -45,7 +45,7 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,network"
+LOPT="help,configure-network"
 SOPT="hn"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
@@ -160,7 +160,7 @@ opensteak-create-vm --name neutron1 --force
 opensteak-create-vm --name cinder1 --force
 
 # Install compute & network
-
+puppet agent -t -v
 
 
 
