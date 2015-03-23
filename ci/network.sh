@@ -35,23 +35,19 @@ iface lo inet loopback
 source /etc/network/interfaces.d/*.cfg
 EOF
 
-cat <<EOF > /etc/network/interfaces.d/eth0.cfg
+cat <<EOF > /etc/network/interfaces.d/eth.cfg
 auto eth0
 iface eth0 inet manual
     up ip address add 0/0 dev \$IFACE
     up ip link set \$IFACE up
     down ip link set \$IFACE down
-EOF
 
-cat <<EOF > /etc/network/interfaces.d/eth1.cfg
 auto eth1
 iface eth1 inet manual
     up ip address add 0/0 dev \$IFACE
     up ip link set \$IFACE up
     down ip link set \$IFACE down
-EOF
 
-cat <<EOF > /etc/network/interfaces.d/eth3.cfg
 auto eth3
 iface eth3 inet manual
     up ip address add 0/0 dev \$IFACE
@@ -60,7 +56,7 @@ iface eth3 inet manual
 EOF
 
 cat <<EOF > /etc/network/interfaces.d/bridges.cfg
-# The br-adm network interface - VLAN Access 512
+# The br-adm network interface
 auto br-adm
 iface br-adm inet static
     address 192.168.1.98
@@ -70,11 +66,6 @@ iface br-adm inet static
     gateway 192.168.1.1
     dns-nameservers 192.168.1.201 8.8.8.8
     dns-search stack2.opensteak.fr
-# The br-vm network interface - VLAN Trunk 701 - 899
-auto br-vm
-iface br-vm inet static
-    address 192.168.2.98
-    netmask 24
 EOF
 
 ovs-vsctl add-br br-int
