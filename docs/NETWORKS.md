@@ -35,8 +35,8 @@ root@keystone:~/images# neutron agent-list
 Commandes to create network:
 
 ```bash
-neutron net-create Externe --router:external True  --provider:physical_network physnet-ex --provider:network_type flat
-neutron subnet-create Externe --name "161.105.252.0/24" --allocation-pool start=161.105.252.106,end=161.105.252.124 --disable-dhcp --gateway 161.105.252.1 161.105.252.0/24
+neutron net-create Externe --router:external --provider:physical_network physnet-ex --provider:network_type flat
+neutron subnet-create Externe --name "161.105.252.0/24" --allocation-pool start=161.105.252.107,end=161.105.252.108 --disable-dhcp --gateway 161.105.252.1 161.105.252.0/24
 neutron net-create demo
 neutron subnet-create demo --name "192.168.42.0/24" --gateway 192.168.42.1 192.168.42.0/24
 neutron router-create demo-router
@@ -62,7 +62,7 @@ From keystone (openstack client):
 ```bash
 ssh-keygen
 keypair create --public-key /root/.ssh/id_rsa.pub demo-key
-server create --flavor m1.tiny --image cirros-0.3.3-x86_64 --nic net-id=a16c9e85-f96d-43d0-af11-ee230e98f6a6 --security-group default --key-name demo-key demo-instance1
+openstack server create --flavor m1.small --image "Ubuntu 14.04.1 LTS" --nic net-id=2265e0fc-04a2-4783-a98e-c77bbe18cdb2 --security-group default --key-name demo-key demo-instance1
 
 ```
 
@@ -70,6 +70,6 @@ Then add a floating IP:
 
 ```bash
 neutron floatingip-create Externe
-nova floating-ip-associate demo-instance1 161.105.252.107
+nova floating-ip-associate demo-instance1 161.105.252.108
 ```
 
