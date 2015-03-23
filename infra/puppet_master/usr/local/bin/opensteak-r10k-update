@@ -20,10 +20,10 @@ echo "  -> add_require_json_openstack.rb.patch"
 cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
 patch < $PATCHES/add_require_json_openstack.rb.patch
 
-# add_unless_val.patch
-echo "  -> add_unless_val.patch"
-cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
-patch -p1 < $PATCHES/add_unless_val.patch
+## add_unless_val.patch
+#echo "  -> add_unless_val.patch"
+#cd /etc/puppet/environments/production/modules/keystone/
+#patch -p1 < $PATCHES/add_unless_val.patch
 
 # check_virsh_secret_using_secret_get_value.patch
 echo "  -> check_virsh_secret_using_secret_get_value.patch"
