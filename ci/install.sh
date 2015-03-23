@@ -47,8 +47,8 @@ EOF
 
 # Command line argument parsing, the allowed arguments are
 # alphabetically listed, keep it this way please.
-LOPT="help,network-script"
-SOPT="hn"
+LOPT="help,network-script:"
+SOPT="hn:"
 
 # Note that we use `"$@"' to let each command-line parameter expand to a
 # separate word. The quotes around `$@' are essential!
