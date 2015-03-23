@@ -57,12 +57,12 @@ neutron security-group-rule-create --protocol udp --port-range-min 1 --port-rang
 neutron security-group-rule-create --protocol udp --port-range-min 1 --port-range-max 65000 --direction egress default
 ```
 
-From keystone (openstack client):
+From keystone:
 
 ```bash
 ssh-keygen
-keypair create --public-key /root/.ssh/id_rsa.pub demo-key
-openstack server create --flavor m1.small --image "Ubuntu 14.04.1 LTS" --nic net-id=2265e0fc-04a2-4783-a98e-c77bbe18cdb2 --security-group default --key-name demo-key demo-instance1
+openstack keypair create --public-key /root/.ssh/id_rsa.pub demo-key
+openstack server create --flavor m1.small --image "Ubuntu 14.04.1 LTS" --nic net-id=replace_me --security-group default --key-name demo-key demo-instance1
 
 ```
 
@@ -73,3 +73,8 @@ neutron floatingip-create Externe
 nova floating-ip-associate demo-instance1 161.105.252.108
 ```
 
+And try to connect to the VM:
+
+```bash
+ssh -i .ssh/id_rsa ubuntu@161.105.252.108
+```
