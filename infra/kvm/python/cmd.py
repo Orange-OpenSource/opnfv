@@ -8,7 +8,7 @@ import argparse
 
 def command_line():
     parser = argparse.ArgumentParser(description='This script will create config files for a VM in current folder.')
-    parser.add_argument('-n', '--name', help='', metavar='')
+    parser.add_argument('-n', '--name', help='Set the name of the machine', metavar='')
     parser.add_argument('-i', '--ip', help='Set the ip address of the machine.', metavar='')
     parser.add_argument('-p', '--password', help='Set the ssh password. Login is ubuntu.', metavar='')
     parser.add_argument('-t', '--targetpool', help='Set the target pool to install the volume.', metavar='')
