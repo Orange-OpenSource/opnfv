@@ -20,4 +20,3 @@ infra::nodes:
   bridge_uplinks:
    - "br-ex:eth0"
    - "br-vm:eth3"
-
