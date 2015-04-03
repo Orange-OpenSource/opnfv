@@ -382,6 +382,17 @@ perl -i -pe "s/__NAME__/$NAME/" $NAME.xml
 #################################################
 # Create the VM
 #################################################
+
+# Delete old DDNS entry
+if [ -e $ROOT/rndc.key ]; then
+    nsupdate_cmd="server $IP_INT_DNS\\n\
+update delete $NAME.$IP_DNSSEARCH a\\n\
+update delete $NAME.$IP_DNSSEARCH txt\\n\
+send\\n"
+    echo -e $nsupdate_cmd
+    echo -e $nsupdate_cmd | nsupdate -v -k $ROOT/rndc.key
+fi
+
 # Remove old Puppet cert if needed
 if ( ping puppet -c 1 1>&2> /dev/null ); then
     PUPPETCERTSTATUSURL='https://puppet:8140/production/certificate_status'
