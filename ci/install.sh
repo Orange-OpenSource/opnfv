@@ -163,6 +163,45 @@ opensteak-create-vm --name cinder1 --force
 puppet agent -t -v
 
 
+exit 0
+
+# Test
+# To be done from keystone machine
+source os-creds-admin
+keystone service-list
+openstack compute service list
+openstack extension list --network -c Name -c Alias
+neutron agent-list
+neutron net-create Externe --router:external --provider:physical_network physnet-ex --provider:network_type flat
+neutron subnet-create Externe --name "161.105.252.0/24" --allocation-pool start=161.105.252.107,end=161.105.252.108 --disable-dhcp --gateway 161.105.252.1 161.105.252.0/24
+neutron net-create demo
+neutron subnet-create demo --name "192.168.42.0/24" --gateway 192.168.42.1 192.168.42.0/24
+neutron router-create demo-router
+neutron router-gateway-set demo-router Externe
+neutron router-interface-add demo-router "192.168.42.0/24"
+neutron security-group-rule-create --protocol icmp --direction ingress default
+neutron security-group-rule-create --protocol icmp --direction egress default
+neutron security-group-rule-create --protocol tcp --port-range-min 1 --port-range-max 65000 --direction ingress default
+neutron security-group-rule-create --protocol tcp --port-range-min 1 --port-range-max 65000 --direction egress default
+neutron security-group-rule-create --protocol udp --port-range-min 1 --port-range-max 65000 --direction ingress default
+neutron security-group-rule-create --protocol udp --port-range-min 1 --port-range-max 65000 --direction egress default
+wget https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
+glance image-create \
+ --name "Ubuntu 14.04.1 LTS" \
+ --file trusty-server-cloudimg-amd64-disk1.img \
+ --disk-format qcow2 \
+ --container-format bare \
+ --is-public True \
+ --progress
+glance image-list
+ssh-keygen
+openstack keypair create --public-key /root/.ssh/id_rsa.pub demo-key
+NETID=$(neutron net-show demo | grep ' id ' | tr '|' ' ' | awk '{print $2}')
+openstack server create --flavor m1.small --image "Ubuntu 14.04.1 LTS" --nic net-id=$NETID --security-group default --key-name demo-key demo-instance1
+openstack server list
+neutron floatingip-create Externe
+nova floating-ip-associate demo-instance1 161.105.252.108
+ssh -i .ssh/id_rsa ubuntu@161.105.252.108
 
 # Uninstall
 #virsh destroy cinder1
