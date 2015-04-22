@@ -15,7 +15,7 @@ Each compute node is configured through puppet as well. To continue, be sure to 
 
 ```bash
 puppet agent -t -v
-```bash
+```
 
 Test if it works well from keystone:
 
