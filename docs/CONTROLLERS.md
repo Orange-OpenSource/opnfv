@@ -175,7 +175,13 @@ qemu-img convert -f qcow2 -O raw trusty-server-cloudimg-amd64-disk1.img trusty-s
 #### Upload to glance
 
 ```bash
-glance image-create  --name "ubuntu-14-10-64b-test"  --file trusty-server-cloudimg-amd64-disk1.raw --disk-format raw --container-format bare --is-public True --progress
+glance image-create \
+ --name "Ubuntu 14.04.1 LTS" \
+ --file trusty-server-cloudimg-amd64-disk1.img \
+--disk-format raw \
+--container-format bare \
+--is-public True \
+--progress
 ```
 
 ## Nova (controller part)
@@ -189,8 +195,7 @@ Test if it works well from keystone:
 ```bash
 cd /root
 source os-creds-admin
-openstack
-(openstack) compute service list
+openstack compute service list
 +------------------+------+----------+---------+-------+----------------------------+
 | Binary           | Host | Zone     | Status  | State | Updated At                 |
 +------------------+------+----------+---------+-------+----------------------------+
@@ -199,7 +204,7 @@ openstack
 | nova-conductor   | nova | internal | enabled | up    | 2015-02-20T09:18:28.000000 |
 | nova-cert        | nova | internal | enabled | up    | 2015-02-20T09:21:18.000000 |
 +------------------+------+----------+---------+-------+----------------------------+
-(openstack) host list
+openstack host list
 +-----------+-------------+----------+
 | Host Name | Service     | Zone     |
 +-----------+-------------+----------+
@@ -223,8 +228,7 @@ Test if it works well from keystone:
 ```bash
 cd /root
 source os-creds-admin
-openstack
-(openstack) extension list --network -c Name -c Alias
+openstack extension list --network -c Name -c Alias
 +-----------------------------------------------+-----------------------+
 | Name                                          | Alias                 |
 +-----------------------------------------------+-----------------------+
