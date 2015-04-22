@@ -13,19 +13,6 @@ Each compute node is configured through puppet as well. To continue, be sure to 
 
 ## Puppet
 
-Check if you can ping puppet to be sure:
-
-```bash
-ping puppet
-
-PING puppet.stack.opensteak.fr (192.168.1.202) 56(84) bytes of data.
-64 bytes from puppet.stack.opensteak.fr (192.168.1.202): icmp_seq=1 ttl=64 time=0.864 ms
-64 bytes from puppet.stack.opensteak.fr (192.168.1.202): icmp_seq=2 ttl=64 time=0.340 ms
-
-```
-
-The apply config:
-
 ```bash
 puppet agent -t -v
 ```bash
@@ -35,8 +22,7 @@ Test if it works well from keystone:
 ```bash
 cd /root
 source os-creds-admin
-openstack
-(openstack) compute service list
+openstack compute service list
 +------------------+-------------+----------+----------+-------+----------------------------+
 | Binary           | Host        | Zone     | Status   | State | Updated At                 |
 +------------------+-------------+----------+----------+-------+----------------------------+
@@ -46,7 +32,7 @@ openstack
 | nova-cert        | nova        | internal | enabled  | up    | 2015-02-26T14:09:04.000000 |
 | nova-compute     | opensteak93 | nova     | enabled  | up    | 2015-02-26T14:08:57.000000 |
 +------------------+-------------+----------+----------+-------+----------------------------+
-(openstack) host list
+openstack host list
 +-------------+-------------+----------+
 | Host Name   | Service     | Zone     |
 +-------------+-------------+----------+
@@ -63,7 +49,7 @@ openstack
 Test if neutron-openvswitch-agent is here as well
 
 ```bash
-root@keystone:~/images# neutron agent-list
+neutron agent-list
 +--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
 | id                                   | agent_type         | host        | alive | admin_state_up | binary                    |
 +--------------------------------------+--------------------+-------------+-------+----------------+---------------------------+
