@@ -88,22 +88,24 @@ Test if it works well with (ssh on VM before):
 ```bash
 cd /root
 source os-creds-admin
-keystone service-list
+openstack service list
 ```
 
 You should have:
 
 ```bash
-+----------------------------------+----------+-----------+------------------------------+
-|                id                |   name   |    type   |         description          |
-+----------------------------------+----------+-----------+------------------------------+
-| aff808b962074b989a9ccc61c4aa6acb |  glance  |   image   |   Openstack Image Service    |
-| 4c535dbd4d134c829ba1c1710c1c148e | keystone |  identity |  OpenStack Identity Service  |
-| 05f8d1c690bf4894b761e95ef1ba9ce8 | neutron  |  network  |  Neutron Networking Service  |
-| 1cb4f7b5d6e34e5f90d86d7a59f636aa |   nova   |  compute  |  Openstack Compute Service   |
-| 578a642af4a74e3cac03e58a579691e0 | nova_ec2 |    ec2    |         EC2 Service          |
-| 1ca23d8f2d2c44ce8f96a66cb384d19b |  novav3  | computev3 | Openstack Compute Service v3 |
-+----------------------------------+----------+-----------+------------------------------+
++----------------------------------+----------+-----------+
+| ID                               | Name     | Type      |
++----------------------------------+----------+-----------+
+| 28efd5d67e444d4abde377562394ff05 | neutron  | network   |
+| 41c2b2f2603944a4ae141ad10ad9b436 | cinderv2 | volumev2  |
+| 7443585082eb4b0bbb7ff062831d5ce8 | nova_ec2 | ec2       |
+| 96bf087f57514478b73474d3ec5b5050 | cinder   | volume    |
+| b4f2a47081e94b98bc5cff5d13bc4999 | nova     | compute   |
+| dfba7dbe490e4dce9c5b4b93e647df15 | keystone | identity  |
+| ef303427135847abbb2e979fb03ff819 | glance   | image     |
+| f3144de7a2e244768486237fbcfd4819 | novav3   | computev3 |
++----------------------------------+----------+-----------+
 ```
 
 ## Glance
@@ -111,51 +113,54 @@ You should have:
 ```bash
 opensteak-create-vm --name glance1
 ```
-
-In our lab, this machine needs a specific connection to the storage network in order to mount an NFS folder in /var/lib/images (to store the glance images).
-
-If you don't need that, you won't need the *--storage* option. You will also have to comment out some NFS related block in the manifest file corresponding to glance (https://github.com/Orange-OpenSource/opnfv-puppet/blob/production/manifests/glance.pp)
-
+### First test
 from keystone node:
 ```bash
-root@keystone:~# cd /root
-root@keystone:/root# source os-creds-admin
-root@keystone:/root# glance image-list
+cd /root
+source os-creds-admin
+glance image-list
 +--------------------------------------+--------------+-------------+------------------+----------+--------+
 | ID                                   | Name         | Disk Format | Container Format | Size     | Status |
 +--------------------------------------+--------------+-------------+------------------+----------+--------+
 +--------------------------------------+--------------+-------------+------------------+----------+--------+
-root@keystone:/root# mkdir images && cd images
-root@keystone:/root/images# wget http://cdn.download.cirros-cloud.net/0.3.3/cirros-0.3.3-x86_64-disk.img
-root@keystone:/root/images# glance image-create \
+```
+
+### Import cirros image
+
+```bash
+mkdir images && cd images
+wget http://cdn.download.cirros-cloud.net/0.3.3/cirros-0.3.3-x86_64-disk.img
+glance image-create \
  --name "cirros-0.3.3-x86_64" \
  --file cirros-0.3.3-x86_64-disk.img \
 --disk-format qcow2 \
 --container-format bare \
 --is-public True \
 --progress
-+------------------+--------------------------------------+
-| Property         | Value                                |
-+------------------+--------------------------------------+
-[...]
-root@keystone:/root/images# glance image-list
-root@keystone:/root/images# wget https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
-root@keystone:/root/images# glance image-create \
+```
+
+### Import Ubuntu 14.04 image
+
+```bash
+wget https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
+glance image-create \
  --name "Ubuntu 14.04.1 LTS" \
  --file trusty-server-cloudimg-amd64-disk1.img \
 --disk-format qcow2 \
 --container-format bare \
 --is-public True \
 --progress
-root@keystone:/root/images# glance image-list
+```
+
+### Check image list
+```bash
+glance image-list
 +--------------------------------------+--------------------+-------------+------------------+-----------+--------+
 | ID                                   | Name               | Disk Format | Container Format | Size      | Status |
 +--------------------------------------+--------------------+-------------+------------------+-----------+--------+
 | 5d01c794-d63a-43e2-a356-3d0912b6b046 | CirrOS 0.3.1       | qcow2       | bare             | 13147648  | active |
 | 92ad5e49-12fa-4d29-8a7a-c7dea05823cd | Ubuntu 14.04.1 LTS | qcow2       | bare             | 267452928 | active |
 +--------------------------------------+--------------------+-------------+------------------+-----------+--------+
-
-
 ```
 
 ### With Ceph
