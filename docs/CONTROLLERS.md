@@ -247,16 +247,6 @@ openstack extension list --network -c Name -c Alias
 | Neutron Extra DHCP opts                       | extra_dhcp_opt        |
 | Neutron Extra Route                           | extraroute            |
 +-----------------------------------------------+-----------------------+
-
-neutron agent-list
-+--------------------------------------+--------------------+----------+-------+----------------+---------------------------+
-| id                                   | agent_type         | host     | alive | admin_state_up | binary                    |
-+--------------------------------------+--------------------+----------+-------+----------------+---------------------------+
-| 5dc85648-3ad6-4f21-b2c4-8a965e3b3d49 | Open vSwitch agent | server98 | xxx   | True           | neutron-openvswitch-agent |
-| a1e7d642-92c9-4d37-b79d-8986cb76a6db | Metadata agent     | server98 | :-)   | True           | neutron-metadata-agent    |
-| badc6043-eea7-4f05-89b5-6c6c1eeb1e7d | DHCP agent         | server98 | :-)   | True           | neutron-dhcp-agent        |
-+--------------------------------------+--------------------+----------+-------+----------------+---------------------------+
-
 ```
 
 
