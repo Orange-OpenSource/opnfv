@@ -36,9 +36,9 @@ Commandes to create network:
 
 ```bash
 neutron net-create Externe --router:external --provider:physical_network physnet-ex --provider:network_type flat
-neutron subnet-create Externe --name "161.105.252.0/24" --allocation-pool start=161.105.252.107,end=161.105.252.108 --disable-dhcp --gateway 161.105.252.1 161.105.252.0/24
+neutron subnet-create --name "161.105.252.0/24" --allocation-pool start=161.105.252.107,end=161.105.252.108 --disable-dhcp --gateway 161.105.252.1 Externe 161.105.252.0/24
 neutron net-create demo
-neutron subnet-create demo --name "192.168.42.0/24" --gateway 192.168.42.1 192.168.42.0/24
+neutron subnet-create --name "192.168.42.0/24" --gateway 192.168.42.1 demo 192.168.42.0/24
 neutron router-create demo-router
 neutron router-gateway-set demo-router Externe
 neutron router-interface-add demo-router "192.168.42.0/24"
