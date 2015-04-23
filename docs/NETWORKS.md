@@ -76,5 +76,5 @@ nova floating-ip-associate demo-instance1 161.105.252.108
 And try to connect to the VM:
 
 ```bash
-ssh -i .ssh/id_rsa ubuntu@161.105.252.108
+ssh -i .ssh/id_rsa ubuntu@161.105.252.108 -o userknownhostsfile=/dev/null
 ```
