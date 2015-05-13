@@ -1,0 +1,56 @@
+opensteak:
+ vm_list:
+  - mysql
+  - rabbitmq
+  - keystone
+  - glance
+  - nova
+  - neutron
+  - cinder
+
+environment:
+ domains: "infra.opensteak.fr"
+ media: "Ubuntu mirror"
+ environments: "production"
+ hostgroups: "controller_VM"
+ compute_resources: "controller1.opensteak.fr"
+ operatingsystems: "Ubuntu14.04Cloud"
+ subnets: "Admin"
+ compute_profiles: "Test"
+ smart_proxies: "foreman.infra.opensteak.fr"
+ ptables: "Preseed default"
+
+controller:
+ image_id: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
+ bridge: 'br-adm'
+
+vm:
+ mysql:
+  puppet_classes:
+   - opensteak::mysql
+  description: "Opensteak infra MySQL"
+ rabbitmq:
+  puppet_classes:
+   - opensteak::rabbitmq
+  description: "Opensteak infra RabbitMQ"
+ keystone:
+  puppet_classes:
+   - opensteak::keystone
+   - opensteak::key
+  description: "Opensteak infra Keystone"
+ glance:
+  puppet_classes:
+   - opensteak::glance
+  description: "Opensteak infra Glance"
+ nova:
+  puppet_classes:
+   - opensteak::nova
+  description: "Opensteak infra Nova Controller"
+ neutron:
+  puppet_classes:
+   - opensteak::neutron-controller
+  description: "Opensteak infra Neutron Controller"
+ cinder:
+  puppet_classes:
+   - opensteak::cinder
+  description: "Opensteak infra Cinder"

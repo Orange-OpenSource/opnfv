@@ -1,0 +1,7 @@
+.*.swp
+pkg/
+spec/fixtures
+.rspec_system
+Gemfile.lock
+__pycache__/
+*.pyc
