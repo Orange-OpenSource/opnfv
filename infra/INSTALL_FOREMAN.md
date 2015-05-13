@@ -167,3 +167,7 @@ TO BE COMPLETED
 ### Run puppet
 
 Run puppet on foreman
+
+```
+puppet agent -t
+```
