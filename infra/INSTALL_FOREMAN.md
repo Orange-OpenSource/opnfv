@@ -104,21 +104,10 @@ In the foreman admin settings:
 * Set ignore_puppet_facts_for_provisioning to true (see http://projects.theforeman.org/issues/1861#note-2)
 * Set safemode_render to false
 
-### Check boot image
-
-If there is no boot image:
-```
-ls /var/lib/tftpboot/boot/
-```
-
-```
-wget http://downloads.theforeman.org/discovery/releases/latest/fdi-image-latest.tar \
-  -O - | tar x --overwrite -C /var/lib/tftpboot/boot
-```
 
 ## Install opensteak classes
 
-TO BE COMPLETED
+TO BE COMPLETED (to be done with r10k)
 
 ## Apply puppet classes to foreman
 
