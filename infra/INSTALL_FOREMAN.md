@@ -62,20 +62,32 @@ exit
 
 ### Set templates
 
+#### Preseed default
+We need to update the default 'Preseed default' template:
+
+##### Avoid interfaces to be overwritten by preseed
+
+Seen on http://projects.theforeman.org/projects/foreman/wiki/Tips_&amp_Tricks#Generating-etcnetworkinterfaces
+
+Replace last line:
 ```
-Template: PXELinux global default template
-LABEL discovery
-MENU LABEL Foreman Discovery
-MENU DEFAULT
-KERNEL boot/fdi-image/vmlinuz0
-APPEND initrd=boot/fdi-image/initrd0.img rootflags=loop root=live:/fdi.iso rootfstype=auto ro rd.live.image acpi=force rd.luks=0 rd.md=0 rd.dm=0 rd.lvm=0 rd.bootif=0 rd.neednet=0 nomodeset proxy.url=http://192.168.1.4 proxy.type=foreman
-IPAPPEND 2
-Template: provision
-Modifier la dernière ligne pour avoir :
-d-i preseed/late_command string wget -Y off <%= @static ? "'#{foreman_url('finish')}&static=true'" : foreman_url('finish') %> -O /target/tmp/finish.sh && in-target chmod +x /tmp/finish.sh && in-target /tmp/finish.sh && rm -f /usr/lib/finish-install.d/55netcfg-copy-config
-(ajout du  rm -f /usr/lib/finish-install.d/55netcfg-copy-config)
-vu sur : http://projects.theforeman.org/projects/foreman/wiki/Tips_&amp_Tricks#Generating-etcnetworkinterfaces
-#Creation user
+-d-i preseed/late_command string wget -Y off <%= @static ? "'#{foreman_url('finish')}&static=true'" : foreman_url('finish') %> -O /target/tmp/finish.sh && in-target chmod +x /tmp/finish.sh && in-target /tmp/finish.sh
+```
+with:
+```
++d-i preseed/late_command string wget -Y off <%= @static ? "'#{foreman_url('finish')}&static=true'" : foreman_url('finish') %> -O /target/tmp/finish.sh && in-target chmod +x /tmp/finish.sh && in-target /tmp/finish.sh && rm -f /usr/lib/finish-install.d/55netcfg-copy-config
+```
+
+##### Create default ubuntu user
+
+In user setting section, replace:
+
+```
+d-i passwd passwd/make-user boolean false
+user-setup-udeb passwd/make-user boolean false
+```
+with:
+```
 # The user's name and login.
 d-i passwd/make-user boolean true
 user-setup-udeb passwd/make-user boolean true
@@ -83,15 +95,14 @@ passwd passwd/user-fullname string ubuntu
 passwd passwd/username string ubuntu
 d-i passwd/user-password-crypted password <%= root_pass %>
 d-i passwd/user-default-groups string ubuntu adm dialout cdrom floppy sudo audio dip video plugdev netdev
+d-i user-setup/encrypt-home boolean false
+user-setup-udeb user-setup/encrypt-home boolean false
 ```
 
-```
-# Modification de la conf de base
-Dans les parametres
-- passer la variable ignore_puppet_facts_for_provisioning à true (vu sur http://projects.theforeman.org/issues/1861#note-2)
-- passer la varable safemode_render à false
-
-```
+### Set some global parameters
+In the foreman admin settings:
+* Set ignore_puppet_facts_for_provisioning to true (see http://projects.theforeman.org/issues/1861#note-2)
+* Set safemode_render to false
 
 ### Check boot image
 
