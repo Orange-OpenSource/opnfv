@@ -18,9 +18,9 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
 
 ## Status
 * Puppet modules:
- * Mysql: OK, 
- * Rabbit: OK, 
- * Keystone: OK, 
+ * Mysql: OK,
+ * Rabbit: OK,
+ * Keystone: OK,
  * Glance: OK,
    * with ceph: OK,
  * Cinder: OK,
@@ -28,7 +28,7 @@ The only thing you should do is to provide a valid **Hiera** configuration file.
  * Nova: OK,
    * with ceph: OK,
  * Neutron: OK,
-* Bare metal provisioning: WiP (Work in Progress / MAAS)
+* Bare metal provisioning: OK with Foreman)
 * OpenDayLight: WiP
 * High Availability: WiP
 
@@ -72,16 +72,6 @@ The work is still in progress, but we plan to use HAProxy in front of nodes, wit
 
 
 ## Installation
-### PXE boot for server
-
-We are currently installing a MAAS server to handle PXE boot with IPMI command. 
 
 ### Steps
-Follow these steps when you have at least 3 ubuntu 14.04 servers up and running.
-
-* Install [base infra](/docs/BASE.md) to support KVM
-* Configure [network](/docs/BASE-NETWORKING.md) correctly
-* Install [Ceph](/docs/BASE-CEPH.md) as a backend storage
-* Install [Controllers VM](/docs/CONTROLLERS.md)
-* Install [Computes Machines](/docs/COMPUTES.md)
-* Install [Network Machine](/docs/NETWORKS.md)
+TO BE DONE
