@@ -4,9 +4,8 @@
 
 This part will be automatical in a futur version:
 
- 1. Foreman must be installed [(see INSTALL_FOREMAN.md)](INSTALL_FOREMAN.md)
- 2. OpenSteak classes must be loaded
- 3. Prepare the foreman configurations (names are examples):
+ 1. Foreman must be installed and prepared [(see INSTALL_FOREMAN.md)](INSTALL_FOREMAN.md)
+ 2. Prepare the foreman configurations (names are examples):
     * domains: "infra.myopensteak.com"
     * subnets: "Admin"
         * in domain "infra.myopensteak.com"
@@ -20,7 +19,7 @@ This part will be automatical in a futur version:
             * global::password: the password for user 'ubuntu'
     * operatingsystems: "Ubuntu14.04Cloud"
     * smart_proxies: "foreman.infra.myopensteak.com"
- 4. A physical node to host infra VM:
+ 5. A physical node to host infra VM:
     * hostgroups: "controller"
         * with puppet classes:
             * opensteak::base-network
@@ -32,16 +31,23 @@ This part will be automatical in a futur version:
 
 ## Configuration
 
-Edit file config/infra.yaml to edit the infrastucture parameters
-Edit file config/common.yaml to edit the openstack parameters
+* Edit file config/infra.yaml to edit the infrastucture parameters
+* Edit file config/common.yaml to edit the openstack parameters
+
+## Launch the metadata server
+
+[See INSTALL_METADATA_SERVER.md](INSTALL_METADATA_SERVER.md)
+
+Metadata server must run
 
 ## Install the infrastructure
 
 With foreman login/password:
+
 ```/home/ubuntu/opnfv/infra# python3 install_opensteak.py admin password```
 
 * Launch
-* Check the printed parameters, all vars shall be OK
+* Check the printed parameters, all vars shall be OK. if no, check __config/infra.yaml__ parameters
 * Confirm the VM creation
 
 ## Add physical servers in a 'compute' hostgroup
