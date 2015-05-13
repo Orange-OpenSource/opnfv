@@ -1,150 +1,119 @@
-# config.yaml
+# common.yaml
 ---
-
-###
-## DNS
-###
-dns::external:
- - 8.8.8.8
- - 8.8.4.4
-dns::internal: "%{hiera('infra::dns')}"
-dns::contact: "contact@opensteak.fr"
-
-###
-## HA
-###
-stack::ha::enabled: false
-
-###
-## OpenDayLight
-###
-stack::odl::enabled: false
-
-##
-# KVM password for user ubuntu for OpenSteak infra VM
-##
-kvm::password: 'strongpassword'
 
 ###
 ##  OpenStack passwords
 ###
-ceph::password: "strongpassword"
-admin::password: "strongpassword"
-mysql::service-password: "strongpassword"
-mysql::root-password: "strongpassword"
-rabbitmq::password: "strongpassword"
-glance::password: "strongpassword"
-nova::password: "strongpassword"
-neutron::shared-secret: "strongpassword"
-neutron::password: "strongpassword"
-cinder::password: "strongpassword"
-keystone::admin-token: "strongpassword"
-horizon::secret_key: "12345"
+ceph_password: "password"
+admin_password: "password"
+mysql_service_password: "password"
+mysql_root_password: "password"
+rabbitmq_password: "password"
+glance_password: "password"
+nova_password: "password"
+neutron_shared_secret: "password"
+neutron_password: "password"
+cinder_password: "password"
+keystone_admin_token: "password"
+horizon_secret_key: "12345"
+
+domain: "infra.opensteak.fr"
 
 ###
-## Admin stuff
+## Class parameters
 ###
-admin::mail: "admin@opensteak.fr"
-admin::tenant: 'admin'
+# Rabbit
+opensteak::rabbitmq::rabbitmq_password: "%{hiera('rabbitmq_password')}"
 
-###
-## Log Levels & misc
-###
-verbose: 'False'
-debug: 'False'
-region: 'Orange'
+# MySQL
+opensteak::mysql::root_password: "%{hiera('mysql_root_password')}"
+opensteak::mysql::mysql_password: "%{hiera('mysql_service_password')}"
 
-###
-## Infrastructure : servers out of openstack
-###
+# Key
+opensteak::key::password: "%{hiera('admin_password')}"
+opensteak::key::stack_domain: "%{hiera('domain')}"
 
-# Network
-infra::network: 192.168.1.0
-infra::network_mask: 24
-infra::network_broadcast: 192.168.1.255
-infra::network_gw: 192.168.1.1
-storage::network: 192.168.0.0
-storage::network_mask: 24
-storage::network_broadcast: 192.168.0.255
+# Keystone
+opensteak::keystone::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::keystone::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::keystone::keystone_token: "%{hiera('keystone_admin_token')}"
+opensteak::keystone::stack_domain: "%{hiera('domain')}"
+opensteak::keystone::admin_mail: "admin@opensteak.fr"
+opensteak::keystone::admin_password: "%{hiera('admin_password')}"
+opensteak::keystone::glance_password: "%{hiera('glance_password')}"
+opensteak::keystone::nova_password: "%{hiera('nova_password')}"
+opensteak::keystone::neutron_password: "%{hiera('neutron_password')}"
+opensteak::keystone::cinder_password: "%{hiera('cinder_password')}"
 
-# DNS
-infra::reverse_zone: 1.168.192.in-addr.arpa
-infra::dns: 192.168.1.249
+# Glance
+opensteak::glance::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::glance::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::glance::stack_domain: "%{hiera('domain')}"
+opensteak::glance::glance_password: "%{hiera('glance_password')}"
 
-# Ceph
-infra::ceph-controllers:
- - controller1
- 
-# Infra tools
-infra::puppet: 192.168.1.241
-infra::ceph-admin: 192.168.1.240
+# Nova
+opensteak::nova::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::nova::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::nova::stack_domain: "%{hiera('domain')}"
+opensteak::nova::nova_password: "%{hiera('nova_password')}"
+opensteak::nova::neutron_password: "%{hiera('neutron_password')}"
+opensteak::nova::neutron_shared: "%{hiera('neutron_shared_secret')}"
 
-###
-## Stack : servers for openstack (vm.stack.DOMAIN)
-###
-stack::domain: "stack.opensteak.fr"
-stack::vm:
- ha1: 192.168.1.200
- rabbitmq1: 192.168.1.201
- mysql1: 192.168.1.202
- keystone1: 192.168.1.203
- glance1: 192.168.1.204
- glance-storage1: 192.168.0.204
- nova1: 192.168.1.205
- neutron1: 192.168.1.206
- cinder1: 192.168.1.207
- horizon1: 192.168.1.208
- ha2: 192.168.1.220
- rabbitmq2: 192.168.1.221
- mysql2: 192.168.1.222
- keystone2: 192.168.1.223
- glance2: 192.168.1.224
- glance-storage2: 192.168.0.224
- nova2: 192.168.1.225
- neutron2: 192.168.1.226
- cinder2: 192.168.1.227
- horizon2: 192.168.1.228
-stack::ha::vip: 192.168.1.250
+# Cinder
+opensteak::cinder::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::cinder::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::cinder::stack_domain: "%{hiera('domain')}"
+opensteak::cinder::nova_password: "%{hiera('cinder_password')}"
 
-###
-## Ceph stuff
-###
-ceph::enabled: false
-cephfs::mount: '/mnt/cephfs'
-cephfs::pool: 'ceph'
-ceph-conf::fsid: '77a16382-8b32-476d-89b8-5ac5381209b7'
-ceph-conf::libvirt-rbd-secret: '457eb676-33da-42ec-9a8c-9293d545c337'
-ceph-conf::client-cinder-key: 'AQAPns9UUBRDEhAAX3UhTWUw6OXTjw/TPv6wdw=='
-ceph-conf::client-cinder-backup-key: 'AQCMns9UMEkpKxAAOlCdc5EFlMR6+7iB3F4OiA=='
-ceph-conf::client-glance-key: 'AQB6ns9UWJCEBhAAz1632+o+zxgMLGrXlp3rHQ=='
-ceph-conf::client-bootstrap-osd-key: 'AQBvW8tUyOFPKRAA9OC5DmhyLLmHuE5f+qKbgQ=='
-ceph-conf::client-bootstrap-mds-key: 'AQBwW8tU4LdvAhAA2VO8W9/M0TQFf4xl14tUBA=='
-ceph-conf::client-admin-key: 'AQBvW8tUMKg7FBAABuiYm434KAYTilIaESJaAQ=='
-ceph-conf::mds-key: 'AQC0g8tUGCzgAxAAbiynJ/yvu463DcMESVVbXw=='
-ceph-conf::mon-key: 'AQAJcMpUAAAAABAAXUZk1mOusq5pyOmnhBfElg=='
-ceph-conf::disk: '/dev/sdb'
+# Compute
+opensteak::nova-compute::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::nova-compute::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::nova-compute::stack_domain: "%{hiera('domain')}"
+opensteak::nova-compute::neutron_password: "%{hiera('neutron_password')}"
 
-###
-## KVM
-###
-# Default KVM sizing
-kvm::default::cpu: 2
-kvm::default::ram: 1048576
 
-# Default Pool
-kvm::default::pool::name: 'default'
-kvm::default::pool::mount: '/var/lib/libvirt/images'
+# Neutron controller
+opensteak::neutron-controller::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::neutron-controller::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::neutron-controller::stack_domain: "%{hiera('domain')}"
+opensteak::neutron-controller::nova_password: "%{hiera('nova_password')}"
+opensteak::neutron-controller::neutron_password: "%{hiera('neutron_password')}"
+# Neutron compute
+opensteak::neutron-compute::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::neutron-compute::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::neutron-compute::stack_domain: "%{hiera('domain')}"
+opensteak::neutron-compute::neutron_password: "%{hiera('neutron_password')}"
+opensteak::neutron-compute::neutron_shared: "%{hiera('neutron_shared_secret')}"
+opensteak::neutron-compute::infra_nodes:
+ server186:
+  ip: 192.168.1.27
+  bridge_uplinks:
+   - 'br-vm:p3p1'
+ server187:
+  ip: 192.168.1.155
+  bridge_uplinks:
+   - 'br-vm:p3p1'
+ server188:
+  ip: 192.168.1.116
+  bridge_uplinks:
+   - 'br-vm:p3p1'
+ server189:
+  ip: 192.168.1.117
+  bridge_uplinks:
+   - 'br-vm:p3p1'
+# Neutron network
+opensteak::neutron-network::mysql_password: "%{hiera('mysql_root_password')}"
+opensteak::neutron-network::rabbitmq_password: "%{hiera('rabbitmq_password')}"
+opensteak::neutron-network::stack_domain: "%{hiera('domain')}"
+opensteak::neutron-network::neutron_password: "%{hiera('neutron_password')}"
+opensteak::neutron-network::neutron_shared: "%{hiera('neutron_shared_secret')}"
+opensteak::neutron-network::infra_nodes:
+ server98:
+  ip: 192.168.1.58
+  bridge_uplinks:
+   - 'br-ex:em2'
+   - 'br-vm:em5'
 
-# Default configs
-kvm::default::init::folder: 'kvm/templates/cloud-init'
-kvm::default::init::name: 'basic'
-kvm::default::net::folder: 'kvm/templates/meta-data'
-kvm::default::net::name: 'basic'
-kvm::default::net::storage: 'storage'
-kvm::default::conf::folder: 'kvm/templates/kvm_config'
-kvm::default::conf::name: 'basic'
-kvm::default::conf::storage: 'storage'
-
-# Default SSH authorizd keys for user ubuntu
-kvm::default::ssh-auth-keys:
- - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDY15cdBmIs2XOpe4EiFCsaY6bmUmK/GysMoLl4UG51JCfJwvwoWCoA+6mDIbymZxhxq9IGxilp/yTA6WQ9s/5pBag1cUMJmFuda9PjOkXl04jgqh5tR6I+GZ97AvCg93KAECis5ubSqw1xOCj4utfEUtPoF1OuzqM/lE5mY4N6VKXn+fT7pCD6cifBEs6JHhVNvs5OLLp/tO8Pa3kKYQOdyS0xc3rh+t2lrzvKUSWGZbX+dLiFiEpjsUL3tDqzkEMNUn4pdv69OJuzWHCxRWPfdrY9Wg0j3mJesP29EBht+w+EC9/kBKq+1VKdmsXUXAcjEvjovVL8l1BrX3BY0R8D sansmotdepasse
+# Horizon
+opensteak::horizon::stack_domain: "%{hiera('domain')}"
+opensteak::horizon::secret_key: "%{hiera('horizon_secret_key')}"
