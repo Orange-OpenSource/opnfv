@@ -11,7 +11,6 @@ echo "deb http://deb.theforeman.org/ trusty 1.7" > /etc/apt/sources.list.d/forem
 echo "deb http://deb.theforeman.org/ plugins 1.7" >> /etc/apt/sources.list.d/foreman.list
 wget -q http://deb.theforeman.org/pubkey.gpg -O- | apt-key add -
 apt-get update && apt-get install foreman-installer
-
 ```
 
 ### Install Foreman
@@ -38,6 +37,7 @@ sudo foreman-installer \
  --foreman-proxy-dns-reverse=1.168.192.in-addr.arpa\
  --foreman-proxy-dns-forwarders=8.8.8.8\
  --foreman-proxy-foreman-base-url=https://localhost
+```
 
 ### Sync community templates for last ubuntu versions
 ```
