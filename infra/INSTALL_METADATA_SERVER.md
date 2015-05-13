@@ -40,4 +40,4 @@ sudo pip3 install beautifulsoup4 PyYAML requests requests-futures
 
 With foreman login/password:
 
-```/home/ubuntu/opnfv/infra# python3 metadata_server.py admin password```
+```/home/ubuntu/opnfv/infra# python3 metadata-server.py admin password```
