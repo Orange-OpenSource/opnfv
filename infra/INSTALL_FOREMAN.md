@@ -107,7 +107,21 @@ In the foreman admin settings:
 
 ## Install opensteak classes
 
-TO BE COMPLETED (to be done with r10k)
+### Install r10k
+from opnfv/infra folder
+```
+gem install -q r10k
+cp puppet_master/etc/r10k.yaml /etc/r10k.yaml
+cp puppet_master/usr/local/bin/opensteak-r10k-update /usr/local/bin/opensteak-r10k-update
+sed -i -r "s|__PATCHESFOLDER__|$(pwd)puppet_master/patches|" /usr/local/bin/opensteak-r10k-update
+chmod +x /usr/local/bin/opensteak-r10k-update
+```
+
+### Run r10k
+
+```
+opensteak-r10k-update
+```
 
 ## Apply puppet classes to foreman
 
