@@ -52,7 +52,7 @@ class OpenSteakPrinter:
         if res is False and quit is True:
             sys.exit(0)
 
-    def ask_validation(self, prompt=None, resp=False):
+    def ask_validation(self, prompt=None, resp=False, exit=True):
         if prompt is None:
             prompt = 'Continue ?'
         if resp:
@@ -68,8 +68,10 @@ class OpenSteakPrinter:
                 continue
             if ans == 'y' or ans == 'Y':
                 return True
-            if ans == 'n' or ans == 'N':
-                sys.exit(0)
+            else:
+                if exit:
+                    sys.exit(0)
+                return False
 
 
 if __name__ == "__main__":
