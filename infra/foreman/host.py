@@ -14,20 +14,35 @@ class Host:
     """
     Host class
     """
-    def __init__(self, api, ip, tplFolder = 'templates/'):
-        self.ip = ip
+    def __init__(self, api, ip = '', tplFolder = 'templates/'):
+        self.foreman = api
         self.tplFolder = tplFolder
+        if ip:
+            self.getNameFromSourceIP(ip)
+            self.load()
+
+    def load(self, name = None):
+        if name is not None:
+            self.name = name
+        self.data = self.foreman.get('hosts', self.name)
+        self.group = HostGroup(self.foreman, self.data['hostgroup_id'])
+        self.domain = Domain(self.foreman ,self.data['domain_id'])
+        self.__loadparam__()
+        self.__loadpass__()
+
+    def getNameFromSourceIP(self, ip):
+        self.ip = ip
         self.name = socket.gethostbyaddr(self.ip)[0]
-        self.api = api
-        self.data = api.get('hosts', self.name)
-        self.group = HostGroup(api, self.data['hostgroup_id'])
-        self.domain = Domain(api ,self.data['domain_id'])
+
+    def __loadparam__(self):
         if 'parameters' in self.data:
             self.params = {}
             for param in self.data['parameters']:
                 self.params[param['name']] = param['value']
         else:
             self.params = []
+
+    def __loadpass__(self):
         if 'password' in self.params:
             self.password = self.params['password']
         elif 'password' in self.group.params:

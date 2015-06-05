@@ -1,12 +1,13 @@
 opensteak:
  vm_list:
-  - mysql
-  - rabbitmq
-  - keystone
-  - glance
-  - nova
-  - neutron
-  - cinder
+  - foreman2
+#  - mysql
+#  - rabbitmq
+#  - keystone
+#  - glance
+#  - nova
+#  - neutron
+#  - cinder
 
 environment:
  domains: "infra.opensteak.fr"
@@ -54,3 +55,8 @@ vm:
   puppet_classes:
    - opensteak::cinder
   description: "Opensteak infra Cinder"
+ foreman2:
+  puppet_classes:
+  description: "Foreman test"
+
+

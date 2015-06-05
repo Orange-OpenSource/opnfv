@@ -25,22 +25,28 @@ class OpenSteakPrinter:
         if value is None:
             print(' -', msg, '=', name)
         elif value is False:
-            print(' -', '['+self.FAIL+"KO"+self.ENDC+"]",
+            print(' ['+self.FAIL+"KO"+self.ENDC+"]",
                   msg, '>', name, '(NOT found)')
         else:
-            print(' -', '['+self.OKBLUE+"OK"+self.ENDC+"]",
+            print(' ['+self.OKBLUE+"OK"+self.ENDC+"]",
                   msg, '>', name, '=', str(value))
 
     def list(self, msg):
         print(' -', msg)
 
+    def list_id(self, dic):
+        for (k,v) in dic.items():
+            self.list("{}: {}".format(k,v))
+
     def status(self, res, msg, failed="", eol="\n", quit=True):
         if res is True:
-            msg = ' - ['+self.OKGREEN+"OK"+self.ENDC+"] "+msg
+            msg = ' ['+self.OKGREEN+"OK"+self.ENDC+"] "+msg
         elif res:
-            msg = ' - ['+self.OKBLUE+res+self.ENDC+"] "+msg
+            msg = ' ['+self.OKBLUE+res+self.ENDC+"] "+msg
         else:
-            msg = ' - ['+self.FAIL+"KO"+self.ENDC+"] "+msg+' > '+failed
+            msg = ' ['+self.FAIL+"KO"+self.ENDC+"] "+msg
+            if failed:
+                msg += ' > '+failed
         msg = msg.ljust(140)+eol
         sys.stdout.write(msg)
         if res is False and quit is True:

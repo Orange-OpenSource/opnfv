@@ -6,15 +6,27 @@ class Domain:
     """
     Domain class
     """
-    def __init__(self, api, id='0'):
-        self.api = api
-        self.data = api.get('domains', id)
+    def __init__(self, api, id = None):
+        self.foreman = api
+        if id:
+            self.load(id=id)
+
+    def load(self, id='0', name=''):
+        if name:
+            id = self.__getIdByName__(name)
+        self.data = self.foreman.get('domains', id)
         if 'parameters' in self.data:
             self.params = self.data['parameters']
         else:
             self.params = []
         self.name = self.data['name']
 
+    def __getIdByName__(self, name):
+        ret = self.foreman.list('domains', filter='name = '+name, only_id=True)
+        if ret[name]:
+            return ret[name]
+        else:
+            return None
 
 if __name__ == "__main__":
     import pprint

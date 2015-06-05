@@ -6,16 +6,45 @@ Installation for Ubuntu 14.04
 
 ### Prepare repos
 
+You may optionally use the latest available version of Puppet from the Puppet Labs repositories, which is a bit newer than that provided by Ubuntu itself.
+
 ```
-echo "deb http://deb.theforeman.org/ trusty 1.7" > /etc/apt/sources.list.d/foreman.list
-echo "deb http://deb.theforeman.org/ plugins 1.7" >> /etc/apt/sources.list.d/foreman.list
+apt-get -y install ca-certificates
+wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
+dpkg -i puppetlabs-release-trusty.deb
+```
+
+Enable the Foreman repo:
+
+```
+echo "deb http://deb.theforeman.org/ trusty 1.8" > /etc/apt/sources.list.d/foreman.list
+echo "deb http://deb.theforeman.org/ plugins 1.8" >> /etc/apt/sources.list.d/foreman.list
 wget -q http://deb.theforeman.org/pubkey.gpg -O- | apt-key add -
-apt-get update && apt-get install foreman-installer
+```
+
+### Check hostname is on the public interface
+
+```
+perl -i -pe 's/^127.0.1.1.*\n$//' /etc/hosts
+ip addr list eth0 |grep inet |cut -d' ' -f6|cut -d/ -f1| perl -pe "s/\$/\t\t$(hostname -f) $(hostname)/" >> /etc/hosts
+ping $(hostname -f) -c1
+```
+
+### Set vars
+
+```
+DOMAIN="home"
+OPENSTEAKFOLDER="opensteak"
+OPENSTEAKROOT="/usr/local"
+OPENSTEAKPATH="$OPENSTEAKROOT/$OPENSTEAKFOLDER"
+IP=$(ip addr list eth0 |grep inet |cut -d' ' -f6|cut -d/ -f1 |head -n1)
+DATEE=$(date +%F-%Hh%M)
 ```
 
 ### Install Foreman
 
 ```
+apt-get update && apt-get -y install foreman-installer
 gem install rubyipmi
 sudo foreman-installer \
  --enable-foreman-proxy\
@@ -25,16 +54,16 @@ sudo foreman-installer \
  --enable-foreman-compute-libvirt\
  --foreman-proxy-bmc=true\
  --foreman-proxy-tftp=true\
- --foreman-proxy-tftp-servername=192.168.1.4\
+ --foreman-proxy-tftp-servername=$IP\
  --foreman-proxy-dhcp=true\
  --foreman-proxy-dhcp-interface=eth0\
- --foreman-proxy-dhcp-gateway=192.168.1.4\
- --foreman-proxy-dhcp-range="192.168.1.10 192.168.1.150"\
- --foreman-proxy-dhcp-nameservers="192.168.1.4"\
+ --foreman-proxy-dhcp-gateway=$IP\
+ --foreman-proxy-dhcp-range="172.16.0.10 172.16.0.250"\
+ --foreman-proxy-dhcp-nameservers="$IP"\
  --foreman-proxy-dns=true\
  --foreman-proxy-dns-interface=eth0\
- --foreman-proxy-dns-zone=infra.opensteak.fr\
- --foreman-proxy-dns-reverse=1.168.192.in-addr.arpa\
+ --foreman-proxy-dns-zone=$DOMAIN\
+ --foreman-proxy-dns-reverse=0.16.172.in-addr.arpa\
  --foreman-proxy-dns-forwarders=8.8.8.8\
  --foreman-proxy-foreman-base-url=https://localhost
 ```
@@ -42,6 +71,16 @@ sudo foreman-installer \
 ### Sync community templates for last ubuntu versions
 ```
 foreman-rake templates:sync
+```
+
+### Get OpenSteak files
+
+```
+cd /usr/local/
+git clone https://github.com/Orange-OpenSource/opnfv.git opensteak
+cd opensteak/infra/puppet_master
+bash install-puppet-master.sh
+cp ../config/common.yaml.tpl /etc/puppet/hieradata/production/common.yaml
 ```
 
 ### Set AppArmor
@@ -59,6 +98,8 @@ su foreman -s /bin/bash
 ssh-keygen
 exit
 ```
+
+############################################################################################################################
 
 ### Set templates
 

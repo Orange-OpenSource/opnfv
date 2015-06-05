@@ -78,17 +78,20 @@ class ForemanAPI:
         return list[name] if len(list)>0 else False
 
 
-    def set(self, obj, id, action, payload, async=False):
+    def set(self, obj, id, payload, action = '', async=False):
         """ Function set
         Set an object by id
         @param obj: object name ('hosts', 'puppetclasses'...)
         @param id: the id of the object (name or id)
+        @param action: specific action of an object ('power'...)
         @param payload: the dict of the payload
         @param async: should this request be async, if true use
                         return.result() to get the response
         @return RETURN: the server response
         """
-        self.url = self.base_url+obj+'/{}/{}'.format(id, action)
+        self.url = self.base_url+obj+'/{}'.format(id)
+        if action:
+            self.url += '/{}'.format(action)
         payload = json.dumps(payload)
         if async:
             session = FuturesSession()
@@ -143,10 +146,14 @@ class ForemanAPI:
         """
         self.last_obj = obj
         if self.resp.status_code > 299:
-            self.ret = json.loads(self.resp.text)
             print(">> Error {} for object '{}'".format(self.resp.status_code,
                                                        self.last_obj))
-            pprint(self.ret[list(self.ret.keys())[0]])
+            try:
+                self.ret = json.loads(self.resp.text)
+                pprint(self.ret[list(self.ret.keys())[0]])
+            except:
+                self.ret = self.resp.text
+                pprint(self.ret)
             return False
         self.res = json.loads(self.resp.text)
         if 'results' in self.res.keys():

@@ -1,0 +1,61 @@
+domains: "home"
+media: "Ubuntu mirror"
+environments: "production"
+operatingsystems: "Ubuntu14.04Cloud"
+subnets: "Admin"
+compute_profiles: "Test"
+smart_proxies: "myforeman.home"
+ptables: "Preseed default"
+architectures: "x86_64"
+
+operatingsystems:
+ "Ubuntu 14.04.1 LTS":
+  name: "Ubuntu"
+  description: "Ubuntu 14.04.1 LTS"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+ "Ubuntu 14.04 Cloud":
+  name: "Ubuntu14.04Cloud"
+  description: "Ubuntu 14.04 Cloud"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+
+hostgroupTop:
+ name: 'Opensteak'
+ classes:
+ - "ntp"
+ subnet: "Admin"
+hostgroups:
+ hostgroupController:
+  name: 'controller'
+  classes:
+   - "opensteak::base-network"
+   - "opensteak::libvirt"
+ hostgroupControllerVM:
+  name: 'controller_VM'
+  classes:
+   - "opensteak::apt"
+ hostgroupCompute:
+  name: 'compute'
+  classes:
+   - "opensteak::neutron-compute"
+   - "opensteak::nova-compute"
+subnets:
+ Admin:
+  shared: False
+  data:
+   network: "172.16.0.0"
+   mask: "255.255.255.0"
+   vlanid:
+   gateway: "172.16.0.1"
+   dns_primary: "172.16.0.2"
+   from: "172.16.0.10"
+   to: "172.16.0.200"
+   ipam: "DHCP"
+   boot_mode: "DHCP"

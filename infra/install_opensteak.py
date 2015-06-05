@@ -4,6 +4,7 @@ from opensteak.conf import OpenSteakConfig
 from opensteak.printer import OpenSteakPrinter
 import time
 import sys
+from pprint import pprint as pp
 
 #~
 #~ Check for params
@@ -36,9 +37,10 @@ p.header("Check puppet classes")
 p_ids = {}
 for name in conf['opensteak']['vm_list']:
     p_ids[name] = {}
-    for pclass in conf['vm'][name]['puppet_classes']:
-        p_ids[name][pclass] = foreman.get_id_by_name('puppetclasses', pclass)
-        p.config('Puppet Class', pclass, p_ids[name][pclass])
+    if conf['vm'][name]['puppet_classes']:
+        for pclass in conf['vm'][name]['puppet_classes']:
+            p_ids[name][pclass] = foreman.get_id_by_name('puppetclasses', pclass)
+            p.config('Puppet Class', pclass, p_ids[name][pclass])
 
 #~
 #~ Print controller specifics parameters
@@ -67,9 +69,9 @@ for name in conf['opensteak']['vm_list']:
         "host": {
             "comment": conf['vm'][name]['description'],
             "compute_attributes": {
-                "cpus": 1,
+                "cpus": 2,
                 "image_id": conf['controller']['image_id'],
-                "memory": '805306368',
+                "memory": '4194304000',
                 "nics_attributes": {
                     "0": {
                         "_delete": "",
@@ -150,7 +152,7 @@ for name in conf['opensteak']['vm_list']:
         p.status('In progress', name+' creation: start in {0}s'.format(sleep-i), eol='\r')
     #~ Power on the VM
     p.status('In progress', name+' creation: starting', eol='\r')
-    future2 = foreman.set('hosts', name, 'power', {"power_action": "start", "host": {}}, async=True)
+    future2 = foreman.set('hosts', name, {"power_action": "start", "host": {}}, 'power', async=True)
     #~ Show Power on result
     if future2.result().status_code is 200:
         p.status('In progress', name+' creation: wait for end of boot', eol='\r')
