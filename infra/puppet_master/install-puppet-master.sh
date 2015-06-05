@@ -51,8 +51,8 @@ ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
 cp -rf etc/puppet/hieradata /etc/puppet/
 rename s/DOMAIN/$DOMAIN/ /etc/puppet/hieradata/production/nodes/*.yaml
 cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
-mv /tmp/hieradata /etc/puppet/hieradata/production/common.yaml
-mv /tmp/hieradata-phynodes /etc/puppet/hieradata/production/physical-nodes.yaml
+cp ../config/common.yaml /etc/puppet/hieradata/production/common.yaml
+mv ../config/physical-nodes.yaml.tpl /etc/puppet/hieradata/production/physical-nodes.yaml
 chgrp puppet /etc/puppet/hieradata/production/*.yaml
 
 # Install and config r10k
@@ -82,12 +82,12 @@ perl -i -pe "s/__MASK__/$MASK/" /etc/puppet/auth.conf
 
 # Restart puppetmaster
 echo "* Restart puppetmaster"
-service puppetmaster restart           
+service puppetmaster restart
 
 # Install VIM puppet
 echo "* Install VIM puppet"
 if [ ! -d ~/.vim/autoload ] ; then
-  mkdir -p ~/.vim/autoload 
+  mkdir -p ~/.vim/autoload
 fi
 if [ ! -d ~/.vim/bundle ] ; then
   mkdir -p ~/.vim/bundle
