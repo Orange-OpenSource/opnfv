@@ -16,7 +16,10 @@
 #     David Blaisonneau <david.blaisonneau@orange.com>
 #     Arnaud Morin <arnaud1.morin@orange.com>
 
+import base64
+from string import Template
 from opensteak.foreman_objects.item import ForemanItem
+from pprint import pprint as pp
 
 
 class ForemanItemHost(ForemanItem):
@@ -43,7 +46,6 @@ class ForemanItemHost(ForemanItem):
         """ Function getStatus
         Get the status of an host
 
-        @param key: The host name or ID
         @return RETURN: The host status
         """
         return self.parent.api.get('hosts', self.key, 'status')['status']
@@ -52,41 +54,74 @@ class ForemanItemHost(ForemanItem):
         """ Function powerOn
         Power on a host
 
-        @param key: The host name or ID
         @return RETURN: The API result
         """
         return self.parent.api.set('hosts', self.key,
                                    {"power_action": "start"},
                                    'power', async=self.async)
 
-    def getUserData(self, key, tplFolder='templates/'):
+    def getParamFromEnv(self, var, default = ''):
+        """ Function getParamFromEnv
+        Search a parameter in the host environment
+
+        @param var: the var name
+        @param hostgroup: the hostgroup item linked to this host
+        @param default: default value
+        @return RETURN: the value
+        """
+        if self.getParam(var):
+            return self.getParam(var)
+        if self.hostgroup:
+            if self.hostgroup.getParam(var):
+                return self.hostgroup.getParam(var)
+        if self.domain.getParam('password'):
+            return self.domain.getParam('password')
+        else:
+            return default
+
+    def getUserData(self,
+                    hostgroup,
+                    domain,
+                    defaultPwd = '',
+                    defaultSshKey = '',
+                    tplFolder='templates/'):
         """ Function getUserData
         Generate a userdata script for metadata server from Foreman API
 
-        @param key: The host name or ID
-        @return RETURN: The API result
+        @param domain: the domain item linked to this host
+        @param hostgroup: the hostgroup item linked to this host
+        @param defaultPwd: the default password if no password is specified
+                           in the host>hostgroup>domain params
+        @param defaultSshKey: the default ssh key if no password is specified
+                              in the host>hostgroup>domain params
+        @param tplFolder: the templates folder
+        @return RETURN: the user data
         """
-        if 'user-data' in self[key].keys():
-            return self[key]['user-data']
+        if 'user-data' in self.keys():
+            return self['user-data']
         else:
-            class MyTemplate(Template):
-                delimiter = '%'
-                idpattern = r'[a-z][_a-z0-9]*'
-            with open(self.tplFolder+'puppet.conf', 'rb') as puppet_file:
+            self.hostgroup = hostgroup
+            self.domain = domain
+            password = self.getParamFromEnv('password', defaultPwd)
+            sshauthkeys = self.getParamFromEnv('global_sshkey', defaultSshKey)
+            with open(tplFolder+'puppet.conf', 'rb') as puppet_file:
                 content = puppet_file.read()
                 enc_puppet_file = base64.b64encode(content)
-            with open(self.tplFolder+'cloud-init.tpl', 'r') as content_file:
+            with open(tplFolder+'cloud-init.tpl', 'r') as content_file:
                 tpl = content_file.read()
                 s = MyTemplate(tpl)
-                if 'global_sshkey' in self.group.params:
-                    sshauthkeys = ' - '+self.group.params['global_sshkey']
-                else:
-                    sshauthkeys = ''
+                if sshauthkeys:
+                    sshauthkeys = ' - '+sshauthkeys
                 self.userdata = s.substitute(
-                    password = self.password,
-                    fqdn = self.name,
-                    sshauthkeys = sshauthkeys,
-                    foremanurlbuilt = "http://foreman.{}/unattended/built"\
-                                      .format(self.domain.name),
-                    puppet_conf_content = enc_puppet_file.decode('utf-8'))
+                    password=password,
+                    fqdn=self['name'],
+                    sshauthkeys=sshauthkeys,
+                    foremanurlbuilt="http://foreman.{}/unattended/built"
+                                    .format(self.domain['name']),
+                    puppet_conf_content=enc_puppet_file.decode('utf-8'))
                 return self.userdata
+
+
+class MyTemplate(Template):
+    delimiter = '%'
+    idpattern = r'[a-z][_a-z0-9]*'

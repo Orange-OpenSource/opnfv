@@ -35,7 +35,8 @@ class ForemanItem(dict):
         self.parent = parent
         self.key = key
         self.store = dict()
-        self.update(dict(*args, **kwargs))
+        if args[0]:
+            self.update(dict(*args, **kwargs))
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__

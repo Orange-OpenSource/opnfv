@@ -114,7 +114,6 @@ class OpenSteakPrinter:
         if res is False and quit is True:
             sys.exit(0)
 
-<<<<<<< HEAD
     def ask_validation(self, prompt=None, resp=False):
         """ Function ask_validation
         Ask a validation message
@@ -123,9 +122,6 @@ class OpenSteakPrinter:
         @param resp: The default value (Default is False)
         @return RETURN: Trie or False
         """
-=======
-    def ask_validation(self, prompt=None, resp=False, exit=True):
->>>>>>> 52b0ec379aaeba9dd744bd3ef4c2992c9f5eaacb
         if prompt is None:
             prompt = 'Continue ?'
         if resp:
@@ -141,27 +137,5 @@ class OpenSteakPrinter:
                 continue
             if ans == 'y' or ans == 'Y':
                 return True
-<<<<<<< HEAD
             if ans == 'n' or ans == 'N':
                 sys.exit(0)
-=======
-            else:
-                if exit:
-                    sys.exit(0)
-                return False
-
-
-if __name__ == "__main__":
-    p = OpenSteakPrinter()
-    import time
-    p.config('Var category', 'var1', 'yes, I exist')
-    p.config('Var category - bla bla bla bla', 'var2', None)
-    p.status(True, "Status message", failed="message if failed")
-    p.status('Progress', "Status message - in progress", eol='\r')
-    time.sleep(1)
-    p.status(True, "Status message", failed="message if failed")
-    p.status('Progress', "Status message blah bla", eol='\r')
-    time.sleep(1)
-    p.status(False, "Status message", failed="message if failed")
-    p.status(False, "Status message", failed="message if failed")
->>>>>>> 52b0ec379aaeba9dd744bd3ef4c2992c9f5eaacb

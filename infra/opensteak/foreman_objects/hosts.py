@@ -17,6 +17,7 @@
 #     Arnaud Morin <arnaud1.morin@orange.com>
 
 from opensteak.foreman_objects.objects import ForemanObjects
+from opensteak.foreman_objects.itemHost import ForemanItemHost
 import time
 from string import Template
 
