@@ -13,20 +13,20 @@ if [ "Z$USER" != "Zroot" ] ; then
   echo "sudo $PRGNAME"
   exit 1
 fi
-
+#~ #~
 # Install puppet master
 echo "* Install puppet master from puppet labs repo"
 wget -q https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 dpkg -i puppetlabs-release-trusty.deb
 apt-get update >/dev/null
 apt-get -y install puppetmaster git >/dev/null
-
+#~ #~
 # Get files
 echo "* Get Github files"
 cd $OPENSTEAKROOT
 git clone https://github.com/Orange-OpenSource/opnfv.git $OPENSTEAKFOLDER
 cd $OPENSTEAKPATH/infra/puppet_master/
-
+#~
 # Get Puppet Conf
 echo "* Push puppet conf into /etc/puppet/"
 if [ -e /etc/puppet/puppet.conf ] ; then
@@ -83,22 +83,3 @@ perl -i -pe "s/__MASK__/$MASK/" /etc/puppet/auth.conf
 # Restart puppetmaster
 echo "* Restart puppetmaster"
 service puppetmaster restart
-
-# Install VIM puppet
-echo "* Install VIM puppet"
-if [ ! -d ~/.vim/autoload ] ; then
-  mkdir -p ~/.vim/autoload
-fi
-if [ ! -d ~/.vim/bundle ] ; then
-  mkdir -p ~/.vim/bundle
-fi
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-cat <<EOF > ~/.vimrc
-execute pathogen#infect()
-syntax on
-filetype plugin indent on
-EOF
-cd ~/.vim/bundle
-if [ ! -d vim-puppet ] ; then
-  git clone https://github.com/rodjek/vim-puppet.git > /dev/null
-fi

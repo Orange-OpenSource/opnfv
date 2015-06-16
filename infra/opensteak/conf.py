@@ -13,12 +13,19 @@ class OpenSteakConfig:
     Use this object as a dict
     """
 
-    def __init__(self, config_file="/usr/local/opensteak/infra/config/common.yaml", autosave=False):
-        """Load saved opensteak config.
-        - config_file: the yaml config file to read.
+    def __init__(self,
+                 config_file="/usr/local/opensteak/infra/config/common.yaml",
+                 autosave=False):
+        """ Function __init__
+        Load saved opensteak config.
+
+        @param PARAM: DESCRIPTION
+        @return RETURN: DESCRIPTION
+        @param config_file: the yaml config file to read.
             default is '/usr/local/opensteak/infra/config/common.yaml'
-        - autosave: save automaticly the config at destroy
-            default is False"""
+        @param autosave: save automaticly the config at destroy
+            default is False
+        """
         self.config_file = config_file
         self.autosave = autosave
         with open(self.config_file, 'r') as stream:
@@ -48,7 +55,3 @@ class OpenSteakConfig:
     def __del__(self):
         if self.autosave:
             self.save()
-
-if __name__ == "__main__":
-    config = OpenSteakConfig('config.yaml')
-    print(config.dump())

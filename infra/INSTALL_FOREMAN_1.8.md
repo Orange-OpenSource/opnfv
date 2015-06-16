@@ -4,12 +4,29 @@ Installation for Ubuntu 14.04
 
 ## Install foreman
 
+```
+cat << EOF > /etc/network/interfaces
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+        address 172.16.0.2
+        netmask 255.255.255.0
+        gateway 172.16.0.1
+        dns-nameservers 8.8.8.8
+EOF
+```
+
 ### Prepare repos
 
 You may optionally use the latest available version of Puppet from the Puppet Labs repositories, which is a bit newer than that provided by Ubuntu itself.
 
 ```
-apt-get -y install ca-certificates
+apt-get -y install ca-certificates wget
 wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 dpkg -i puppetlabs-release-trusty.deb
 ```
@@ -77,10 +94,9 @@ foreman-rake templates:sync
 
 ```
 cd /usr/local/
-git clone https://github.com/Orange-OpenSource/opnfv.git opensteak
+git clone https://github.com/Orange-OpenSource/opnfv.git -b foreman opensteak
 cd opensteak/infra/puppet_master
 bash install-puppet-master.sh
-cp ../config/common.yaml.tpl /etc/puppet/hieradata/production/common.yaml
 ```
 
 ### Set AppArmor

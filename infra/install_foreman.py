@@ -31,8 +31,8 @@ smartProxy = conf['smart_proxies']
 smartProxyId = foreman.get_id_by_name('smart_proxies', smartProxy)
 p.status(bool(smartProxyId),
          'Check smart proxy ' + smartProxy + ' exists')
-p.status(bool(foreman.create('smart_proxies/{}/import_puppetclasses'.format(smartProxyId), '{}')),
-       'Import puppet classes from proxy '+smartProxy)
+#~ p.status(bool(foreman.create('smart_proxies/{}/import_puppetclasses'.format(smartProxyId), '{}')),
+       #~ 'Import puppet classes from proxy '+smartProxy)
 p_ids = {}
 for name in conf['hostgroups']:
     p_ids[name] = {}
@@ -52,18 +52,16 @@ p.header("Check and create")
 #~ Operating systems
 #~
 operatingSystems = conf['operatingsystems']
-osIds = set()
+osActualTitles = foreman.list('operatingsystems', only_id=True, key='title')
 for os, data in operatingSystems.items():
-    if not foreman.list('operatingsystems', filter='title = "{}"'.format(os), only_id=True):
+    if os not in osActualTitles.keys():
         payload = {'operatingsystem': {"title": os}}
         payload['operatingsystem'].update(data)
-        pp(payload)
         foreman.create('operatingsystems', payload)
-    osId = foreman.list('operatingsystems', filter='title = "{}"'.format(os), only_id=True)[data['name']]
-    p.status(bool(osId),
-             'Operating system ' + os)
-    osIds.add(osId)
-sys.exit()
+    isCreated = os in foreman.list('operatingsystems', only_id=True, key='title').keys()
+    p.status(bool(isCreated), 'Operating system ' + os)
+osIds = set(foreman.list('operatingsystems', only_id=True, key='title').values())
+
 #~
 #~ Architecture
 #~
