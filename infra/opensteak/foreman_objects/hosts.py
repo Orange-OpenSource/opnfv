@@ -19,7 +19,6 @@
 from opensteak.foreman_objects.objects import ForemanObjects
 from opensteak.foreman_objects.itemHost import ForemanItemHost
 import time
-from string import Template
 
 
 class Hosts(ForemanObjects):
@@ -87,24 +86,34 @@ class Hosts(ForemanObjects):
         for i in range(0, sleep):
             time.sleep(1)
             self.__printProgression__('In progress',
-                                      key + ' creation: start in {0}s'.format(sleep - i),
+                                      key + ' creation: start in {0}s'
+                                      .format(sleep - i),
                                       eol='\r')
 
         #  Power on the VM
-        self.__printProgression__('In progress', key + ' creation: starting', eol='\r')
+        self.__printProgression__('In progress',
+                                  key + ' creation: starting', eol='\r')
         future2 = self[key].powerOn()
 
         #  Show Power on result
         if future2.result().status_code is 200:
-            self.__printProgression__('In progress', key + ' creation: wait for end of boot', eol='\r')
+            self.__printProgression__('In progress',
+                                      key + ' creation: wait for end of boot',
+                                      eol='\r')
         else:
-            self.__printProgression__(False, key + ' creation: Error', failed=str(future2.result().status_code))
+            self.__printProgression__(False,
+                                      key + ' creation: Error',
+                                      failed=str(future2.result().status_code))
             return False
         #  Show creation result
         if future1.result().status_code is 200:
-            self.__printProgression__('In progress', key + ' creation: created', eol='\r')
+            self.__printProgression__('In progress',
+                                      key + ' creation: created',
+                                      eol='\r')
         else:
-            self.__printProgression__(False, key + ' creation: Error', failed=str(future1.result().status_code))
+            self.__printProgression__(False,
+                                      key + ' creation: Error',
+                                      failed=str(future1.result().status_code))
             return False
 
         # Wait for puppet catalog to be applied
@@ -112,14 +121,20 @@ class Hosts(ForemanObjects):
         while not loop_stop:
             status = self[key].getStatus()
             if status == 'No Changes' or status == 'Active':
-                self.__printProgression__(True, key + ' creation: provisioning OK')
+                self.__printProgression__(True,
+                                          key + ' creation: provisioning OK')
                 loop_stop = True
             elif status == 'Error':
-                self.__printProgression__(False, key + ' creation: Error', failed="Error during provisioning")
+                self.__printProgression__(False,
+                                          key + ' creation: Error',
+                                          failed="Error during provisioning")
                 loop_stop = True
                 return False
             else:
-                self.__printProgression__('In progress', key + ' creation: provisioning ({})'.format(status), eol='\r')
+                self.__printProgression__('In progress',
+                                          key + ' creation: provisioning ({})'
+                                          .format(status),
+                                          eol='\r')
             time.sleep(5)
 
         return True

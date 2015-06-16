@@ -59,6 +59,11 @@ class MetaDataHandler(tornado.web.RequestHandler):
     Meta Data handler
     """
     def get(self, meta):
+        """ Function get
+        Return meta data parameters from the foreman API
+
+        @return RETURN: meta data parameters
+        """
         hostname = getNameFromSourceIP(getIP(self.request))
         host = foreman.hosts[hostname]
         available_meta = {
