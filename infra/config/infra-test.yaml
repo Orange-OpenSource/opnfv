@@ -66,3 +66,13 @@ subnets:
    to: "192.168.4.200"
    ipam: "DHCP"
    boot_mode: "DHCP"
+
+foreman:
+ ip: "172.16.0.2"
+ password: "opnfv"
+ cpu: "2"
+ ram: "2097152"
+ iso: "trusty-server-cloudimg-amd64-disk1.img"
+ disksize: "5G"
+ force: True
+ dns: "8.8.8.8"
