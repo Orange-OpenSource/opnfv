@@ -15,10 +15,11 @@ r10k deploy environment -pv
 # Apply the patches
 echo " * Applying some patches"
 
+# COMMENTED ON 2015/06/17 as seems to be patched upstream. TO BE CONFIRMED.
 # add_require_json_openstack.rb.patch
-echo "  -> add_require_json_openstack.rb.patch"
-cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
-patch < $PATCHES/add_require_json_openstack.rb.patch
+#echo "  -> add_require_json_openstack.rb.patch"
+#cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
+#patch < $PATCHES/add_require_json_openstack.rb.patch
 
 # COMMENTED ON 2015/03/31 as seems to be patched upstream. TO BE CONFIRMED.
 # check_virsh_secret_using_secret_get_value.patch
