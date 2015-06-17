@@ -2,7 +2,7 @@
 
 ## Installation
 
-The installation should be done automatically by **opensteak-create-vm** script (with cloud-init).
+The installation should be done automatically when you setup the foreman VM.
 
 But you can still run it by hand as root:
 
