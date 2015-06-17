@@ -1,6 +1,6 @@
 #!/bin/bash
 PRGNAME=$(basename $0)
-PATCHES="__PATCHESFOLDER__"
+PATCHES="/usr/local/opensteak/infra/puppet_master/patches"
 
 # Check if we are root
 if [ "Z$USER" != "Zroot" ] ; then
