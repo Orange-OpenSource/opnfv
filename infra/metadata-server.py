@@ -105,7 +105,7 @@ if __name__ == "__main__":
         foreman = OpenSteakForeman(login=sys.argv[1],
                                    password=sys.argv[2],
                                    ip=sys.argv[3])
-        conf = OpenSteakConfig(config_file='config/infra-test.yaml')
+        conf = OpenSteakConfig(config_file='config/infra.yaml')
         p = OpenSteakPrinter()
         application.listen(8888)
         tornado.ioloop.IOLoop.instance().start()
