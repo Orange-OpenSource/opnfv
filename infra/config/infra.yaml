@@ -1,62 +1,78 @@
-opensteak:
- vm_list:
-  - foreman2
-#  - mysql
-#  - rabbitmq
-#  - keystone
-#  - glance
-#  - nova
-#  - neutron
-#  - cinder
+domains: "test-infra.opensteak.fr"
+media: "Ubuntu mirror"
+environments: "production"
+operatingsystems: "Ubuntu14.04Cloud"
+subnets: "Admin"
+compute_profiles: "Test"
+smart_proxies: "foreman.infra.opensteak.fr"
+ptables: "Preseed default"
+architectures: "x86_64"
 
-environment:
- domains: "infra.opensteak.fr"
- media: "Ubuntu mirror"
- environments: "production"
- hostgroups: "controller_VM"
- compute_resources: "controller1.opensteak.fr"
- operatingsystems: "Ubuntu14.04Cloud"
- subnets: "Admin"
- compute_profiles: "Test"
- smart_proxies: "foreman.infra.opensteak.fr"
- ptables: "Preseed default"
+operatingsystems:
+ "Ubuntu 14.04.1 LTS":
+  name: "Ubuntu"
+  description: "Ubuntu 14.04.1 LTS"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+ "Ubuntu 14.04 Cloud":
+  name: "Ubuntu14.04Cloud"
+  description: "Ubuntu 14.04 Cloud"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
 
-controller:
- image_id: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
- bridge: 'br-adm'
+hostgroupTop:
+ name: 'test'
+ classes:
+ - "ntp"
+ subnet: "Admin"
+ params:
+  password: 'toto'
+hostgroups:
+ hostgroupController:
+  name: 'controller'
+  classes:
+   - "opensteak::base-network"
+   - "opensteak::libvirt"
+  params:
+   foreman_sshkey: 'xxxx'
+ hostgroupControllerVM:
+  name: 'controller_VM'
+  classes:
+   - "opensteak::apt"
+  params:
+   foreman_sshkey: 'xxxx'
+   password: 'toto'
+ hostgroupCompute:
+  name: 'compute'
+  classes:
+   - "opensteak::neutron-compute"
+   - "opensteak::nova-compute"
+subnets:
+ Test-Admin:
+  shared: False
+  data:
+   network: "192.168.4.0"
+   mask: "255.255.255.0"
+   vlanid:
+   gateway: "192.168.4.1"
+   dns_primary: "192.168.1.4"
+   from: "192.168.4.10"
+   to: "192.168.4.200"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
 
-vm:
- mysql:
-  puppet_classes:
-   - opensteak::mysql
-  description: "Opensteak infra MySQL"
- rabbitmq:
-  puppet_classes:
-   - opensteak::rabbitmq
-  description: "Opensteak infra RabbitMQ"
- keystone:
-  puppet_classes:
-   - opensteak::keystone
-   - opensteak::key
-  description: "Opensteak infra Keystone"
- glance:
-  puppet_classes:
-   - opensteak::glance
-  description: "Opensteak infra Glance"
- nova:
-  puppet_classes:
-   - opensteak::nova
-  description: "Opensteak infra Nova Controller"
- neutron:
-  puppet_classes:
-   - opensteak::neutron-controller
-  description: "Opensteak infra Neutron Controller"
- cinder:
-  puppet_classes:
-   - opensteak::cinder
-  description: "Opensteak infra Cinder"
- foreman2:
-  puppet_classes:
-  description: "Foreman test"
-
-
+foreman:
+ ip: "172.16.0.2"
+ password: "opnfv"
+ cpu: "2"
+ ram: "2097152"
+ iso: "trusty-server-cloudimg-amd64-disk1.img"
+ disksize: "5G"
+ force: True
+ dns: "8.8.8.8"
