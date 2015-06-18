@@ -17,7 +17,7 @@ PASSWORD="${password}"
 dpkg-reconfigure locales
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
-unset LC_ALL                                                                                     
+unset LC_ALL
 umask 0022
 
 ### Check hostname is on the public interface
@@ -27,7 +27,6 @@ perl -i -pe 's/^127.0.1.1.*\n$$//' /etc/hosts
 perl -i -pe "s/^$${IP}.*\n$$//" /etc/hosts
 # Append a line
 echo "$${IP} $${NAME}.$${DOMAIN} $${NAME}" >> /etc/hosts
-
 
 ### Dependencies
 echo "* Install dependencies"
@@ -169,11 +168,7 @@ echo "* Run R10k. You can re-run r10k by calling:"
 echo "   opensteak-r10k-update"
 opensteak-r10k-update
 
-# Restart puppetmaster
-echo "* Restart puppetmaster"
-service puppetmaster restart
-
-# Install VIM puppet
+#### Install VIM puppet
 echo "* Install VIM puppet"
 if [ ! -d ~/.vim/autoload ] ; then
   mkdir -p ~/.vim/autoload

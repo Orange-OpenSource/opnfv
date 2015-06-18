@@ -7,6 +7,6 @@ network-interfaces: |
     address ${ip}
     netmask ${netmask}
     gateway ${gateway}
-    dns-nameservers 8.8.8.8
-    dns-search opensteak.localnet
+    dns-nameservers ${dns}
+    dns-search ${domain}
 local-hostname: ${name}
