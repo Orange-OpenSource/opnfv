@@ -33,9 +33,14 @@ class OperatingSystems(ForemanObjects):
         @param key: The operating system id/name
         @return RETURN: The item
         """
-        return ForemanItem(self.api, key,
-                           self.objName, self.payloadObj,
-                           self.api.list(self.objName, filter='title = "{}"'.format(key))[0])
+        ret = self.api.list(self.objName,
+                            filter='title = "{}"'.format(key))
+        if len(ret):
+            return ForemanItem(self.api, key,
+                               self.objName, self.payloadObj,
+                               ret[0])
+        else:
+            return None
 
     def __setitem__(self, key, attributes):
         """ Function __getitem__

@@ -53,8 +53,8 @@ p.header("Get puppt classes")
 
 # Reload the smart proxy to get the latest puppet classes
 
-# p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
-#                'Import puppet classes from proxy '+smartProxy)
+p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
+         'Import puppet classes from proxy '+smartProxy)
 
 # Get the list of puppet classes ids
 puppetClassesId = {}
@@ -122,10 +122,13 @@ hg_parent = conf['hostgroupTop']['name']
 payload = {"environment_name": conf['environments'],
            "subnet_name": conf['hostgroupTop']['subnet'],
            "domain_name": domain}
-hg_parentId = foreman.hostgroups.checkAndCreate(hg_parent, payload,
-                                                conf['hostgroupTop'],
-                                                False,
-                                                puppetClassesId['hostgroupTop'])
+hg_parentId = foreman.hostgroups.checkAndCreate(
+    hg_parent,
+    payload,
+    conf['hostgroupTop'],
+    False,
+    puppetClassesId['hostgroupTop']
+)
 p.status(bool(hg_parentId), 'Hostgroup {}'.format(hg_parent))
 
 for hg in conf['hostgroups'].keys():
