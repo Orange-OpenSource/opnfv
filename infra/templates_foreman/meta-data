@@ -5,7 +5,7 @@ network-interfaces: |
   auto eth0
   iface eth0 inet static
     address ${ip}
-    netmask ${netmask}
+    netmask ${netmaskshort}
     gateway ${gateway}
     dns-nameservers ${dns}
     dns-search ${domain}

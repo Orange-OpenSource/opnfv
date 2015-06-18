@@ -51,6 +51,7 @@ args = {}
 args["name"] = "foreman"
 args["ip"] = OpenSteakConfig["foreman"]["ip"]
 args["netmask"] = OpenSteakConfig["subnets"]["Admin"]["data"]["mask"]
+args["netmaskshort"] = sum([bin(int(x)).count('1') for x in OpenSteakConfig["subnets"]["Admin"]["data"]["mask"].split('.')])
 args["gateway"] = OpenSteakConfig["subnets"]["Admin"]["data"]["gateway"]
 args["network"] = OpenSteakConfig["subnets"]["Admin"]["data"]["network"]
 args["password"] = OpenSteakConfig["foreman"]["password"]
@@ -65,6 +66,11 @@ reverse_octets = str(OpenSteakConfig["foreman"]["ip"]).split('.')[-2::-1]
 args["reversedns"] = '.'.join(reverse_octets) + '.in-addr.arpa'
 args["dns"] = OpenSteakConfig["foreman"]["dns"]
 args["bridge"] = OpenSteakConfig["foreman"]["bridge"]
+if OpenSteakConfig["foreman"]["bridge_type"] == "openvswitch":
+    args["bridgeconfig"] = "<virtualport type='openvswitch'></virtualport>"
+else
+    # no specific config for linuxbridge
+    args["bridgeconfig"] = ""
 
 p.list_id(args)
 

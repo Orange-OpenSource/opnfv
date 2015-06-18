@@ -5,7 +5,7 @@ NAME="${name}"
 DOMAIN="${domain}"
 DATEE=$$(date +%F-%Hh%M)
 IP="${ip}"
-MASK="${netmask}"
+MASK="${netmaskshort}"
 NET="${network}"
 DHCP_RANGE="${dhcprange}"
 REVERSE_DNS="${reversedns}"
@@ -14,7 +14,7 @@ ADMIN="admin"
 PASSWORD="${password}"
 
 ### Set correct env
-dpkg-reconfigure locales
+#dpkg-reconfigure locales
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 unset LC_ALL
@@ -34,8 +34,10 @@ apt-get -y install ca-certificates wget git isc-dhcp-server
 
 ### Set AppArmor
 echo "* Set App armor"
-perl -i -pe 's!#include <local/usr.sbin.dhcpd>!include <local/usr.sbin.dhcpd>!' /etc/apparmor.d/usr.sbin.dhcpd
-echo "/etc/bind/rndc.key r," >> /etc/apparmor.d/local/usr.sbin.dhcpd
+cat /etc/apparmor.d/local/usr.sbin.dhcpd | grep '/etc/bind/rndc.key r,' >/dev/null
+if [ $$? -eq 1 ] ; then
+    echo "/etc/bind/rndc.key r," >> /etc/apparmor.d/local/usr.sbin.dhcpd
+fi
 
 ### Prepare repos
 echo "* Enable Puppet labs repo"
@@ -192,3 +194,7 @@ echo "* SSH Key"
 cp /mnt/id_rsa /usr/share/foreman/.ssh/
 cp /mnt/id_rsa.pub /usr/share/foreman/.ssh/
 chown foreman:foreman /usr/share/foreman/.ssh/ -R
+
+### Run puppet
+puppet agent -t -v
+

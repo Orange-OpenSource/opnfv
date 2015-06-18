@@ -77,3 +77,4 @@ foreman:
  force: True
  dns: "8.8.8.8"
  bridge: "br-libvirt"
+ bridge_type: "openvswitch"

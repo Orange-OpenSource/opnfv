@@ -58,8 +58,7 @@
     <memballoon model='virtio'/>
     <interface type='bridge'>
       <source bridge='${bridge}'/>
-      <virtualport type='openvswitch'>
-      </virtualport>
+      ${bridgeconfig}
       <model type='virtio'/>
     </interface>
   </devices>
