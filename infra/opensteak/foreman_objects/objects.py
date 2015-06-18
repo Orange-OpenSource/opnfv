@@ -41,7 +41,7 @@ class ForemanObjects:
             self.objName = objName
         if payloadObj:
             self.payloadObj = payloadObj
-        #~ For asynchronous creations
+        # For asynchronous creations
         self.async = False
 
     def __iter__(self):
@@ -57,7 +57,11 @@ class ForemanObjects:
         @param key: The targeted object
         @return RETURN: A ForemanItem
         """
-        return ForemanItem(self, key, self.api.get(self.objName, key))
+        return ForemanItem(self.api,
+                           key,
+                           self.objName,
+                           self.payloadObj,
+                           self.api.get(self.objName, key))
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__
@@ -96,15 +100,19 @@ class ForemanObjects:
         """
         return self.api.get_id_by_name(self.objName, key)
 
-    def list(self):
+    def list(self, limit=20):
         """ Function list
         Get the list of all objects
 
         @param key: The targeted object
+        @param limit: The limit of items to return
         @return RETURN: A ForemanItem list
         """
-        return list(map(lambda x: ForemanItem(self, x['name'], x),
-                        self.api.list(self.objName)))
+        return list(map(lambda x:
+                        ForemanItem(self.api, x['id'],
+                                    self.objName, self.payloadObj,
+                                    x),
+                        self.api.list(self.objName, limit=limit)))
 
     def listName(self):
         """ Function listName

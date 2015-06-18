@@ -17,7 +17,7 @@
 #     Arnaud Morin <arnaud1.morin@orange.com>
 
 from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.itemHostsGroup import ForemanItemHostsGroup
+from opensteak.foreman_objects.itemHostsGroup import ItemHostsGroup
 from pprint import pprint as pp
 
 
@@ -25,14 +25,16 @@ class HostGroups(ForemanObjects):
     """
     HostGroups class
     """
+    objName = 'hostgroups'
+    payloadObj = 'hostgroup'
 
     def list(self):
         """ Function list
         list the hostgroups
 
-        @return RETURN: List of ForemanItemHostsGroup objects
+        @return RETURN: List of ItemHostsGroup objects
         """
-        return list(map(lambda x: ForemanItemHostsGroup(self, x['name'], x),
+        return list(map(lambda x: ItemHostsGroup(self.api, x['id'], x),
                         self.api.list(self.objName)))
 
     def __getitem__(self, key):
@@ -40,12 +42,13 @@ class HostGroups(ForemanObjects):
         Get an hostgroup
 
         @param key: The hostgroup name or ID
-        @return RETURN: The ForemanItemHostsGroup object of an host
+        @return RETURN: The ItemHostsGroup object of an host
         """
         # Because Hostgroup did not support get by name we need to do it by id
-        id = self.getId(key)
-        ret = self.api.get(self.objName, id)
-        return ForemanItemHostsGroup(self, id, ret)
+        if type(key) is not int:
+            key = self.getId(key)
+        ret = self.api.get(self.objName, key)
+        return ItemHostsGroup(self.api, key, ret)
 
     def __delitem__(self, key):
         """ Function __delitem__
@@ -55,8 +58,9 @@ class HostGroups(ForemanObjects):
         @return RETURN: The API result
         """
         # Because Hostgroup did not support get by name we need to do it by id
-        id = self.getId(key)
-        return self.api.delete(self.objName, id)
+        if type(key) is not int:
+            key = self.getId(key)
+        return self.api.delete(self.objName, key)
 
     def checkAndCreate(self, key, payload,
                        hostgroupConf,
@@ -75,7 +79,7 @@ class HostGroups(ForemanObjects):
                               foreman.conf
         @param hostgroupParent: The id of the parent hostgroup
         @param puppetClassesId: The dict of puppet classes ids in foreman
-        @return RETURN: The ForemanItemHostsGroup object of an host
+        @return RETURN: The ItemHostsGroup object of an host
         """
         if key not in self:
             self[key] = payload

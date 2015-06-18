@@ -17,7 +17,7 @@
 #     Arnaud Morin <arnaud1.morin@orange.com>
 
 from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.itemHost import ForemanItemHost
+from opensteak.foreman_objects.itemHost import ItemHost
 import time
 
 
@@ -25,14 +25,16 @@ class Hosts(ForemanObjects):
     """
     Host sclass
     """
+    objName = 'hosts'
+    payloadObj = 'host'
 
     def list(self):
         """ Function list
         list the hosts
 
-        @return RETURN: List of ForemanItemHost objects
+        @return RETURN: List of ItemHost objects
         """
-        return list(map(lambda x: ForemanItemHost(self, x['name'], x),
+        return list(map(lambda x: ItemHost(self.api, x['id'], x),
                         self.api.list(self.objName)))
 
     def __getitem__(self, key):
@@ -40,9 +42,9 @@ class Hosts(ForemanObjects):
         Get an host
 
         @param key: The host name or ID
-        @return RETURN: The ForemanItemHost object of an host
+        @return RETURN: The ItemHost object of an host
         """
-        return ForemanItemHost(self, key, self.api.get(self.objName, key))
+        return ItemHost(self.api, key, self.api.get(self.objName, key))
 
     def __printProgression__(self, status, msg, eol):
         """ Function __printProgression__

@@ -19,28 +19,40 @@
 import base64
 from string import Template
 from opensteak.foreman_objects.item import ForemanItem
-from pprint import pprint as pp
 
 
-class ForemanItemHost(ForemanItem):
+class ItemHost(ForemanItem):
     """
-    ForemanItemHostsGroup class
+    ItemHostsGroup class
     Represent the content of a foreman hostgroup as a dict
     """
 
-    def __init__(self, parent, key, *args, **kwargs):
-        """ Function __init__
-        Represent the content of a foreman host as a dict
-        Add 2 keys:
-        - puppetclass_ids: a list of puppet classes ids
-        - param_ids: a list with the names of the params
+    objName = 'hosts'
+    payloadObj = 'host'
 
-        @param parent: The parent object class
-        @param key: The parent object Key
+    def __init__(self, api, key, *args, **kwargs):
+        """ Function __init__
+        Represent the content of a foreman object as a dict
+
+        @param api: The foreman api
+        @param key: The object Key
         @param *args, **kwargs: the dict representation
         @return RETURN: Itself
         """
-        ForemanItem.__init__(self, parent, key, *args, **kwargs)
+        ForemanItem.__init__(self, api, key,
+                             self.objName, self.payloadObj,
+                             *args, **kwargs)
+        #~ scp_ids = map(lambda x: x['id'],
+                      #~ self.api.list('hosts/{}/smart_class_parameters'
+                                           #~ .format(key)))
+        #~ scp_items = list(map(lambda x: ItemSmartClassParameter(self.api, x,
+                             #~ self.api.get('smart_class_parameters', x)),
+                             #~ scp_ids))
+        #~ scp = {'{}::{}'.format(x['puppetclass']['name'],
+                               #~ x['parameter']): x
+               #~ for x in scp_items}
+#~
+        #~ self.update({'smart_class_parameters_dict': scp})
 
     def getStatus(self):
         """ Function getStatus
@@ -48,7 +60,7 @@ class ForemanItemHost(ForemanItem):
 
         @return RETURN: The host status
         """
-        return self.parent.api.get('hosts', self.key, 'status')['status']
+        return self.api.get('hosts', self.key, 'status')['status']
 
     def powerOn(self):
         """ Function powerOn
@@ -56,11 +68,11 @@ class ForemanItemHost(ForemanItem):
 
         @return RETURN: The API result
         """
-        return self.parent.api.set('hosts', self.key,
+        return self.api.set('hosts', self.key,
                                    {"power_action": "start"},
                                    'power', async=self.async)
 
-    def getParamFromEnv(self, var, default = ''):
+    def getParamFromEnv(self, var, default=''):
         """ Function getParamFromEnv
         Search a parameter in the host environment
 
@@ -82,8 +94,8 @@ class ForemanItemHost(ForemanItem):
     def getUserData(self,
                     hostgroup,
                     domain,
-                    defaultPwd = '',
-                    defaultSshKey = '',
+                    defaultPwd='',
+                    defaultSshKey='',
                     tplFolder='templates/'):
         """ Function getUserData
         Generate a userdata script for metadata server from Foreman API
