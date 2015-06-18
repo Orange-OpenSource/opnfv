@@ -42,17 +42,6 @@ class ItemHost(ForemanItem):
         ForemanItem.__init__(self, api, key,
                              self.objName, self.payloadObj,
                              *args, **kwargs)
-        #~ scp_ids = map(lambda x: x['id'],
-                      #~ self.api.list('hosts/{}/smart_class_parameters'
-                                           #~ .format(key)))
-        #~ scp_items = list(map(lambda x: ItemSmartClassParameter(self.api, x,
-                             #~ self.api.get('smart_class_parameters', x)),
-                             #~ scp_ids))
-        #~ scp = {'{}::{}'.format(x['puppetclass']['name'],
-                               #~ x['parameter']): x
-               #~ for x in scp_items}
-#~
-        #~ self.update({'smart_class_parameters_dict': scp})
 
     def getStatus(self):
         """ Function getStatus
@@ -69,8 +58,8 @@ class ItemHost(ForemanItem):
         @return RETURN: The API result
         """
         return self.api.set('hosts', self.key,
-                                   {"power_action": "start"},
-                                   'power', async=self.async)
+                            {"power_action": "start"},
+                            'power', async=self.async)
 
     def getParamFromEnv(self, var, default=''):
         """ Function getParamFromEnv
@@ -96,7 +85,8 @@ class ItemHost(ForemanItem):
                     domain,
                     defaultPwd='',
                     defaultSshKey='',
-                    tplFolder='templates/'):
+                    proxyHostname='',
+                    tplFolder='templates_metadata/'):
         """ Function getUserData
         Generate a userdata script for metadata server from Foreman API
 
@@ -106,6 +96,7 @@ class ItemHost(ForemanItem):
                            in the host>hostgroup>domain params
         @param defaultSshKey: the default ssh key if no password is specified
                               in the host>hostgroup>domain params
+        @param proxyHostname: hostname of the smartproxy
         @param tplFolder: the templates folder
         @return RETURN: the user data
         """
@@ -117,11 +108,13 @@ class ItemHost(ForemanItem):
             password = self.getParamFromEnv('password', defaultPwd)
             sshauthkeys = self.getParamFromEnv('global_sshkey', defaultSshKey)
             with open(tplFolder+'puppet.conf', 'rb') as puppet_file:
-                content = puppet_file.read()
-                enc_puppet_file = base64.b64encode(content)
+                p = MyTemplate(puppet_file.read())
+                if proxyHostname == '':
+                    proxyHostname = 'foreman' + domain
+                enc_puppet_file = base64.b64encode(p.substitute(
+                    foremanHostname=proxyHostname))
             with open(tplFolder+'cloud-init.tpl', 'r') as content_file:
-                tpl = content_file.read()
-                s = MyTemplate(tpl)
+                s = MyTemplate(content_file.read())
                 if sshauthkeys:
                     sshauthkeys = ' - '+sshauthkeys
                 self.userdata = s.substitute(
