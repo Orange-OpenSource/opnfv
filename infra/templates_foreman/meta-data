@@ -1,0 +1,12 @@
+instance-id: ${name};
+network-interfaces: |
+  auto lo
+  iface lo inet loopback
+  auto eth0
+  iface eth0 inet static
+    address ${ip}
+    netmask ${netmask}
+    gateway ${gateway}
+    dns-nameservers 8.8.8.8
+    dns-search opensteak.localnet
+local-hostname: ${name}
