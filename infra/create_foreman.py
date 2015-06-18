@@ -90,9 +90,9 @@ for f in os.listdir("templates_foreman/"):
 ###
 # Work on files
 ###
-for f in os.listdir("files/"):
+for f in os.listdir("files_foreman/"):
     tempFiles[f] = "{0}/{1}".format(tempFolder,f)
-    shutil.copyfile("files/{0}".format(f),tempFiles[f])
+    shutil.copyfile("files_foreman/{0}".format(f),tempFiles[f])
 
 p.status(True, msg="Temporary files created:")
 p.list_id(tempFiles)
