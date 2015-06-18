@@ -121,7 +121,7 @@ class ForemanObjects:
         @param key: The targeted object
         @return RETURN: A dict of obejct name:id
         """
-        return self.api.list(self.objName, only_id=True)
+        return self.api.list(self.objName, limit=999999, only_id=True)
 
     def checkAndCreate(self, key, payload):
         """ Function checkAndCreate

@@ -54,3 +54,13 @@ class OperatingSystems(ForemanObjects):
             payload[self.payloadObj].update(attributes)
             return self.api.create(self.objName, payload)
         return False
+
+    def listName(self):
+        """ Function listName
+        Get the list of all objects name with Ids
+
+        @param key: The targeted object
+        @return RETURN: A dict of obejct name:id
+        """
+        return { x['title']: x['id'] for x in self.api.list(self.objName,
+                                                            limit=999999)}
