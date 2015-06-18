@@ -64,6 +64,7 @@ args["domain"] = OpenSteakConfig["domains"]
 reverse_octets = str(OpenSteakConfig["foreman"]["ip"]).split('.')[-2::-1]
 args["reversedns"] = '.'.join(reverse_octets) + '.in-addr.arpa'
 args["dns"] = OpenSteakConfig["foreman"]["dns"]
+args["bridge"] = OpenSteakConfig["foreman"]["bridge"]
 
 p.list_id(args)
 

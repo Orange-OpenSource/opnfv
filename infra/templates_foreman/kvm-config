@@ -57,7 +57,7 @@
     </video>
     <memballoon model='virtio'/>
     <interface type='bridge'>
-      <source bridge='br-libvirt'/>
+      <source bridge='${bridge}'/>
       <virtualport type='openvswitch'>
       </virtualport>
       <model type='virtio'/>

@@ -76,3 +76,4 @@ foreman:
  disksize: "5G"
  force: True
  dns: "8.8.8.8"
+ bridge: "br-libvirt"
