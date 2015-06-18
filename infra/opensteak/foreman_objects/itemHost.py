@@ -105,12 +105,12 @@ class ItemHost(ForemanItem):
         else:
             self.hostgroup = hostgroup
             self.domain = domain
+            if proxyHostname == '':
+                proxyHostname = 'foreman.' + domain
             password = self.getParamFromEnv('password', defaultPwd)
             sshauthkeys = self.getParamFromEnv('global_sshkey', defaultSshKey)
             with open(tplFolder+'puppet.conf', 'rb') as puppet_file:
                 p = MyTemplate(puppet_file.read())
-                if proxyHostname == '':
-                    proxyHostname = 'foreman' + domain
                 enc_puppet_file = base64.b64encode(p.substitute(
                     foremanHostname=proxyHostname))
             with open(tplFolder+'cloud-init.tpl', 'r') as content_file:
@@ -121,8 +121,8 @@ class ItemHost(ForemanItem):
                     password=password,
                     fqdn=self['name'],
                     sshauthkeys=sshauthkeys,
-                    foremanurlbuilt="http://foreman.{}/unattended/built"
-                                    .format(self.domain['name']),
+                    foremanurlbuilt="http://{}/unattended/built"
+                                    .format(proxyHostname),
                     puppet_conf_content=enc_puppet_file.decode('utf-8'))
                 return self.userdata
 
