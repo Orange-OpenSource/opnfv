@@ -49,7 +49,8 @@ class UserDataHandler(tornado.web.RequestHandler):
         domain = foreman.domains[host['domain_id']]
         ret = host.getUserData(hostgroup=hg,
                                domain=domain,
-                               defaultPwd=DEFAULT_PASSWORD)
+                               defaultPwd=DEFAULT_PASSWORD,
+                               proxyHostname=conf['smart_proxies'])
         p.status(bool(ret), "user data sent to {}".format(hostname))
         self.write(ret)
 
