@@ -1,4 +1,4 @@
-domains: "test-infra.opensteak.fr"
+domains: "infra.opensteak.fr"
 media: "Ubuntu mirror"
 environments: "production"
 operatingsystems: "Ubuntu14.04Cloud"
@@ -54,7 +54,7 @@ hostgroups:
    - "opensteak::neutron-compute"
    - "opensteak::nova-compute"
 subnets:
- Test-Admin:
+ Admin:
   shared: False
   data:
    network: "192.168.4.0"
@@ -68,7 +68,7 @@ subnets:
    boot_mode: "DHCP"
 
 foreman:
- ip: "172.16.0.2"
+ ip: "192.168.4.2"
  password: "opnfv"
  cpu: "2"
  ram: "2097152"
