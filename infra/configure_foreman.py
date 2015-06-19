@@ -39,7 +39,7 @@ args["ip"] = conf["foreman"]["ip"]
 # Prepare classes
 #
 foreman = OpenSteakForeman(login=args["admin"],
-                           password=args["password"], 
+                           password=args["password"],
                            ip=args["ip"])
 
 
@@ -65,9 +65,9 @@ p.header("Get puppet classes")
 
 # Reload the smart proxy to get the latest puppet classes
 
-p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
-         'Import puppet classes from proxy '+smartProxy,
-         '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
+#~ p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
+         #~ 'Import puppet classes from proxy '+smartProxy,
+         #~ '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
 
 # Get the list of puppet classes ids
 puppetClassesId = {}
@@ -91,10 +91,10 @@ p.header("Check and create - OS")
 operatingSystems = conf['operatingsystems']
 osIds = set()
 for os, data in operatingSystems.items():
-    osId = foreman.operatingSystems.checkAndCreate(os, {})
+    osId = foreman.operatingSystems.checkAndCreate(os, data)
     p.status(bool(osId), 'Operating system ' + os)
     osIds.add(osId)
-
+sys.exit()
 ##############################################
 p.header("Check and create - Architecture")
 ##############################################
