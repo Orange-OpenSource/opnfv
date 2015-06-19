@@ -20,6 +20,7 @@ from opensteak.conf import OpenSteakConfig
 from opensteak.foreman import OpenSteakForeman
 from opensteak.printer import OpenSteakPrinter
 import sys
+from pprint import pprint as pp
 
 
 p = OpenSteakPrinter()
@@ -65,9 +66,9 @@ p.header("Get puppet classes")
 
 # Reload the smart proxy to get the latest puppet classes
 
-#~ p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
-         #~ 'Import puppet classes from proxy '+smartProxy,
-         #~ '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
+p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
+         'Import puppet classes from proxy '+smartProxy,
+         '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
 
 # Get the list of puppet classes ids
 puppetClassesId = {}
@@ -83,6 +84,12 @@ for name in conf['hostgroups']:
         puppetClassesId[name][pclass] = foreman.puppetClasses[pclass]['id']
         p.status(bool(puppetClassesId[name][pclass]),
                  'Puppet Class "{}"'.format(pclass))
+puppetClassesId['foreman'] = {}
+for pclass in conf['foreman']['classes']:
+        puppetClassesId['foreman'][pclass] =\
+            foreman.puppetClasses[pclass]['id']
+        p.status(bool(puppetClassesId['foreman'][pclass]),
+                 'Puppet Class "{}"'.format(pclass))
 
 ##############################################
 p.header("Check and create - OS")
@@ -94,7 +101,7 @@ for os, data in operatingSystems.items():
     osId = foreman.operatingSystems.checkAndCreate(os, data)
     p.status(bool(osId), 'Operating system ' + os)
     osIds.add(osId)
-sys.exit()
+
 ##############################################
 p.header("Check and create - Architecture")
 ##############################################
@@ -154,7 +161,29 @@ for hg in conf['hostgroups'].keys():
                                                     puppetClassesId[hg])),
              'Sub Hostgroup {}'.format(conf['hostgroups'][hg]['name']))
 
+
+##############################################
+p.header("Configure Foreman host")
+##############################################
+
+hostName = "foreman.{}".format(conf['domains'])
+foremanHost = foreman.hosts[hostName]
+pp(puppetClassesId)
+p.status(foremanHost.checkAndCreateClasses(
+         puppetClassesId['foreman'].values()),
+         "Add puppet classes to foreman host")
+
+scp = { x['parameter']: x['id'] for x in
+        foreman.puppetClasses['opensteak::dhcp']['smart_class_parameters'] }
+
+scp_id = scp['dnsdomain']
+foreman.smartClassParameters[scp_id]['override'] = True
+foreman.smartClassParameters[scp_id]['value'] = True
+
+["infra.opensteak.fr","storage.infra.opensteak.fr","vm.infra.opensteak.fr","0.168.192.in-addr.arpa","1.168.192.in-addr.arpa","2.168.192.in-addr.arpa"]
+
 sys.exit()
+
 ##############################################
 p.header("Clean")
 ##############################################

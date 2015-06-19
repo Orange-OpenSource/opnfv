@@ -47,7 +47,7 @@ class ForemanItem(dict):
             self.update(dict(*args, **kwargs))
         # We get the smart class parameters for the good items
         if objName in ['hosts', 'hostgroups',
-                          'puppet_classes', 'environments']:
+                       'puppet_classes', 'environments']:
             from opensteak.foreman_objects.itemSmartClassParameter\
                 import ItemSmartClassParameter
             scp_ids = map(lambda x: x['id'],
@@ -69,8 +69,25 @@ class ForemanItem(dict):
         @param attribute: The data
         @return RETURN: The API result
         """
-        payload = {self.payloadObj: {key: attributes}}
-        return self.api.set(self.objName, self.key, payload)
+        if key is 'puppetclass_ids':
+            payload = {"puppetclass_id": attributes,
+                       self.payloadObj + "_class":
+                           {"puppetclass_id": attributes}}
+            return self.api.create("{}/{}/{}"
+                                   .format(self.objName,
+                                           self.key,
+                                           "puppetclass_ids"),
+                                   payload)
+        elif key is 'parameters':
+            payload = {"parameter": attributes}
+            return self.api.create("{}/{}/{}"
+                                   .format(self.objName,
+                                           self.key,
+                                           "parameters"),
+                                   payload)
+        else:
+            payload = {self.payloadObj: {key: attributes}}
+            return self.api.set(self.objName, self.key, payload)
 
     def getParam(self, name=None):
         """ Function getParam
@@ -88,3 +105,31 @@ class ForemanItem(dict):
                     return False
             else:
                 return l
+
+    def checkAndCreateClasses(self, classes):
+        """ Function checkAndCreateClasses
+        Check and add puppet classe
+
+        @param key: The parameter name
+        @param classes: The classes ids list
+        @return RETURN: boolean
+        """
+        actual_classes = self['puppetclass_ids']
+        for v in classes:
+            if v not in actual_classes:
+                self['puppetclass_ids'] = v
+        return list(classes).sort() is list(self['puppetclass_ids']).sort()
+
+    def checkAndCreateParams(self, params):
+        """ Function checkAndCreateParams
+        Check and add global parameters
+
+        @param key: The parameter name
+        @param params: The params dict
+        @return RETURN: boolean
+        """
+        actual_params = self['param_ids']
+        for k, v in params.items():
+            if k not in actual_params:
+                self['parameters'] = {"name": k, "value": v}
+        return self['param_ids'].sort() == list(params.values()).sort()
