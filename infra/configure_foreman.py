@@ -22,21 +22,26 @@ from opensteak.printer import OpenSteakPrinter
 import sys
 
 
+p = OpenSteakPrinter()
+
 #
 # Check for params
 #
-if len(sys.argv) != 4:
-    print('Error: Usage\npython3 {} foreman_user \
-          foreman_password foreman_ip'.format(sys.argv[0]))
-    exit(1)
+p.header("Check parameters")
+conf = OpenSteakConfig(config_file='config/infra.yaml')
+
+args = {}
+args["admin"] = conf["foreman"]["admin"]
+args["password"] = conf["foreman"]["password"]
+args["ip"] = conf["foreman"]["ip"]
 
 #
 # Prepare classes
 #
-foreman = OpenSteakForeman(login=sys.argv[1],
-                           password=sys.argv[2], ip=sys.argv[3])
-conf = OpenSteakConfig(config_file='config/infra.yaml')
-p = OpenSteakPrinter()
+foreman = OpenSteakForeman(login=args["admin"],
+                           password=args["password"], 
+                           ip=args["ip"])
+
 
 ##############################################
 p.header("Check smart proxy")

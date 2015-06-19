@@ -69,6 +69,7 @@ subnets:
 
 foreman:
  ip: "192.168.4.2"
+ admin: "admin"
  password: "opnfv"
  cpu: "2"
  ram: "2097152"
