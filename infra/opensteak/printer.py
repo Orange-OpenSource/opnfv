@@ -3,15 +3,15 @@
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
-# 
+#
 #      http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-# 
+#
 # Authors:
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
@@ -106,9 +106,9 @@ class OpenSteakPrinter:
             msg = '{} [{}{}{}] {}'.format(ind, self.OKBLUE, res,
                                           self.ENDC, msg)
         else:
-            msg = '{} [{}KO{}] {}'.format(ind, self.FAIL, res, self.ENDC, msg)
+            msg = '{} [{}KO{}] {}'.format(ind, self.FAIL, self.ENDC, msg)
             if failed:
-                msg += ' > {}'.format(failed)
+                msg += '\n > {}'.format(failed)
         msg = msg.ljust(140) + eol
         sys.stdout.write(msg)
         if res is False and quit is True:
