@@ -21,7 +21,19 @@ from opensteak.foreman import OpenSteakForeman
 import sys
 from pprint import pprint as pp
 
-foreman = OpenSteakForeman(login=sys.argv[1],
-                           password=sys.argv[2],
-                           ip=sys.argv[3])
+#
+# Check for params
+#
 conf = OpenSteakConfig(config_file='config/infra.yaml')
+
+args = {}
+args["admin"] = conf["foreman"]["admin"]
+args["password"] = conf["foreman"]["password"]
+args["ip"] = conf["foreman"]["ip"]
+
+#
+# Prepare classes
+#
+foreman = OpenSteakForeman(login=args["admin"],
+                           password=args["password"], 
+                           ip=args["ip"])
