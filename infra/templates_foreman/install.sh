@@ -26,7 +26,7 @@ NET="${network}"
 DHCP_RANGE="${dhcprange}"
 REVERSE_DNS="${reversedns}"
 DNS_FORWARDER="${dns}"
-ADMIN="admin"
+ADMIN="${admin}"
 PASSWORD="${password}"
 
 ### Set correct env

@@ -57,6 +57,7 @@ args["netmaskshort"] = sum([bin(int(x)).count('1')
                             .split('.')])
 args["gateway"] = OpenSteakConfig["subnets"]["Admin"]["data"]["gateway"]
 args["network"] = OpenSteakConfig["subnets"]["Admin"]["data"]["network"]
+args["admin"] = OpenSteakConfig["foreman"]["admin"]
 args["password"] = OpenSteakConfig["foreman"]["password"]
 args["cpu"] = OpenSteakConfig["foreman"]["cpu"]
 args["ram"] = OpenSteakConfig["foreman"]["ram"]
