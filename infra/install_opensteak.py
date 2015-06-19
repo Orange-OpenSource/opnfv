@@ -19,6 +19,7 @@
 from opensteak.conf import OpenSteakConfig
 from opensteak.foreman import OpenSteakForeman
 from opensteak.printer import OpenSteakPrinter
+import argparse
 import sys
 from pprint import pprint as pp
 
@@ -28,12 +29,26 @@ p = OpenSteakPrinter()
 #~ Check for params
 #~
 p.header("Check parameters")
-conf = OpenSteakConfig(config_file='config/infra.yaml')
-
 args = {}
-args["admin"] = conf["foreman"]["admin"]
-args["password"] = conf["foreman"]["password"]
-args["ip"] = conf["foreman"]["ip"]
+
+# Update args with values from CLI
+parser = argparse.ArgumentParser(description='This script will configure foreman.', usage='%(prog)s [options]')
+parser.add_argument('-c', '--config', help='YAML config file to use (default is config/infra.yaml).', default='config/infra.yaml')
+args.update(vars(parser.parse_args()))
+
+# Open config file
+conf = OpenSteakConfig(config_file=args["config"])
+
+a = {}
+a["admin"] = conf["foreman"]["admin"]
+a["password"] = conf["foreman"]["password"]
+a["ip"] = conf["foreman"]["ip"]
+
+# Update args with values from config file
+args.update(a)
+del a
+
+# p.list_id(args)
 
 #~
 #~ Prepare classes

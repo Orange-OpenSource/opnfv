@@ -29,6 +29,7 @@ from opensteak.templateparser import OpenSteakTemplateParser
 from opensteak.virsh import OpenSteakVirsh
 from pprint import pprint as pp
 # from ipaddress import IPv4Address
+import argparse
 import tempfile
 import shutil
 import os
@@ -36,50 +37,59 @@ import os
 
 p = OpenSteakPrinter()
 
-# Validate the paramters
+#
+# Check for params
+#
 p.header("Check parameters")
-
-# Deprecated way, with OpenSteakArgParser
-# OpenSteakArgParser = OpenSteakArgParser()
-# args = vars(OpenSteakArgParser.parse())
-
-# Get the parameters from YAML file
-OpenSteakConfig = OpenSteakConfig(config_file="./config/infra.yaml")
-# pp(OpenSteakConfig.dump())
-
 args = {}
-args["name"] = "foreman"
-args["ip"] = OpenSteakConfig["foreman"]["ip"]
-args["netmask"] = OpenSteakConfig["subnets"]["Admin"]["data"]["mask"]
-args["netmaskshort"] = sum([bin(int(x)).count('1')
-                            for x in OpenSteakConfig["subnets"]["Admin"]
+
+# Update args with values from CLI
+parser = argparse.ArgumentParser(description='This script will configure foreman.', usage='%(prog)s [options]')
+parser.add_argument('-c', '--config', help='YAML config file to use (default is config/infra.yaml).', default='config/infra.yaml')
+args.update(vars(parser.parse_args()))
+
+# Open config file
+conf = OpenSteakConfig(config_file=args["config"])
+# pp(conf.dump())
+
+a = {}
+a["name"] = "foreman"
+a["ip"] = conf["foreman"]["ip"]
+a["netmask"] = conf["subnets"]["Admin"]["data"]["mask"]
+a["netmaskshort"] = sum([bin(int(x)).count('1')
+                            for x in conf["subnets"]["Admin"]
                                                     ["data"]["mask"]
                             .split('.')])
-args["gateway"] = OpenSteakConfig["subnets"]["Admin"]["data"]["gateway"]
-args["network"] = OpenSteakConfig["subnets"]["Admin"]["data"]["network"]
-args["admin"] = OpenSteakConfig["foreman"]["admin"]
-args["password"] = OpenSteakConfig["foreman"]["password"]
-args["cpu"] = OpenSteakConfig["foreman"]["cpu"]
-args["ram"] = OpenSteakConfig["foreman"]["ram"]
-args["iso"] = OpenSteakConfig["foreman"]["iso"]
-args["disksize"] = OpenSteakConfig["foreman"]["disksize"]
-args["force"] = OpenSteakConfig["foreman"]["force"]
-args["dhcprange"] = "{0} {1}".format(OpenSteakConfig["subnets"]["Admin"]
+a["gateway"] = conf["subnets"]["Admin"]["data"]["gateway"]
+a["network"] = conf["subnets"]["Admin"]["data"]["network"]
+a["admin"] = conf["foreman"]["admin"]
+a["password"] = conf["foreman"]["password"]
+a["cpu"] = conf["foreman"]["cpu"]
+a["ram"] = conf["foreman"]["ram"]
+a["iso"] = conf["foreman"]["iso"]
+a["disksize"] = conf["foreman"]["disksize"]
+a["force"] = conf["foreman"]["force"]
+a["dhcprange"] = "{0} {1}".format(conf["subnets"]["Admin"]
                                                     ["data"]["from"],
-                                     OpenSteakConfig["subnets"]["Admin"]
+                                     conf["subnets"]["Admin"]
                                                     ["data"]["to"])
-args["domain"] = OpenSteakConfig["domains"]
-reverse_octets = str(OpenSteakConfig["foreman"]["ip"]).split('.')[-2::-1]
-args["reversedns"] = '.'.join(reverse_octets) + '.in-addr.arpa'
-args["dns"] = OpenSteakConfig["foreman"]["dns"]
-args["bridge"] = OpenSteakConfig["foreman"]["bridge"]
-if OpenSteakConfig["foreman"]["bridge_type"] == "openvswitch":
-    args["bridgeconfig"] = "<virtualport type='openvswitch'></virtualport>"
+a["domain"] = conf["domains"]
+reverse_octets = str(conf["foreman"]["ip"]).split('.')[-2::-1]
+a["reversedns"] = '.'.join(reverse_octets) + '.in-addr.arpa'
+a["dns"] = conf["foreman"]["dns"]
+a["bridge"] = conf["foreman"]["bridge"]
+if conf["foreman"]["bridge_type"] == "openvswitch":
+    a["bridgeconfig"] = "<virtualport type='openvswitch'></virtualport>"
 else:
     # no specific config for linuxbridge
-    args["bridgeconfig"] = ""
+    a["bridgeconfig"] = ""
+
+# Update args with values from config file
+args.update(a)
+del a
 
 p.list_id(args)
+exit(0)
 
 # Ask confirmation
 if args["force"] is not True:
