@@ -3,15 +3,15 @@
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
-# 
+#
 #      http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-# 
+#
 # Authors:
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
@@ -47,13 +47,22 @@ smartProxyId = foreman.smartProxies[smartProxy]['id']
 p.status(bool(smartProxyId), 'Check smart proxy ' + smartProxy + ' exists')
 
 ##############################################
-p.header("Get puppt classes")
+p.header("Check and create - Environment production")
+##############################################
+
+environment = conf['environments']
+environmentId = foreman.environments.checkAndCreate(environment, {})
+p.status(bool(environmentId), 'Environment ' + environment)
+
+##############################################
+p.header("Get puppet classes")
 ##############################################
 
 # Reload the smart proxy to get the latest puppet classes
 
 p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
-         'Import puppet classes from proxy '+smartProxy)
+         'Import puppet classes from proxy '+smartProxy,
+         '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
 
 # Get the list of puppet classes ids
 puppetClassesId = {}
