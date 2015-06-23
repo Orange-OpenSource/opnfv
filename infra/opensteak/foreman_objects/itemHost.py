@@ -60,6 +60,16 @@ class ItemHost(ForemanItem):
         """
         return self.api.get('hosts', self.key, 'status')['status']
 
+    def puppetRun(self):
+        """ Function puppetRun
+        Force puppet run on a host
+
+        @return RETURN: The API result
+        """
+        return self.api.set('hosts', self.key,
+                            {"host": {}},
+                            'puppetrun', async=False)
+
     def powerOn(self):
         """ Function powerOn
         Power on a host

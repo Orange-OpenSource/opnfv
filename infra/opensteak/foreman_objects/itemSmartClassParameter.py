@@ -19,6 +19,7 @@
 
 from opensteak.foreman_objects.item import ForemanItem
 from opensteak.foreman_objects.itemOverrideValues import ItemOverrideValues
+from pprint import pprint as pp
 
 
 class ItemSmartClassParameter(ForemanItem):
@@ -39,16 +40,17 @@ class ItemSmartClassParameter(ForemanItem):
         @param *args, **kwargs: the dict representation
         @return RETURN: Itself
         """
+        self.key = key
         ForemanItem.__init__(self, api, key,
                              self.objName, self.payloadObj,
                              *args, **kwargs)
         self.update({'override_values':
-            list(map(lambda x: ItemOverrideValues(self.api,
-                                                  x['id'],
-                                                  self.objName,
-                                                  key,
-                                                  x),
-                 self['override_values']))})
+                    list(map(lambda x: ItemOverrideValues(self.api,
+                                                          x['id'],
+                                                          self.objName,
+                                                          self.key,
+                                                          x),
+                             self['override_values']))})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__
@@ -60,3 +62,38 @@ class ItemSmartClassParameter(ForemanItem):
         """
         payload = {self.payloadObj: {key: attributes}}
         return self.api.set(self.objName, self.key, payload)
+
+    def getOverrideValueForHost(self, hostname):
+        for sc in self['override_values']:
+            if sc['match'] == 'fqdn=' + hostname:
+                return sc
+        return False
+
+    def setOverrideValue(self, attributes, hostName):
+        """ Function __setitem__
+        Set a parameter of a foreman object as a dict
+
+        @param key: The key to modify
+        @param attribute: The data
+        @return RETURN: The API result
+        """
+        self['override'] = True
+        self['default_value'] = None
+        attrType = type(attributes)
+        if attrType is list:
+            self['parameter_type'] = 'array'
+        elif attrType is dict:
+            self['parameter_type'] = 'hash'
+        else:
+            self['parameter_type'] = 'string'
+        orv = self.getOverrideValueForHost(hostName)
+        if orv:
+            orv['value'] = attributes
+            return True
+        else:
+            self.api.create('{}/{}/{}'.format(self.objName,
+                                              self.key,
+                                              'override_values'),
+                            {"override_value":
+                                {"match": "fqdn={}".format(hostName),
+                                 "value": attributes}})

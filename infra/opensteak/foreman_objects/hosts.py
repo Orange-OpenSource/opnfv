@@ -3,15 +3,15 @@
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
-# 
+#
 #      http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-# 
+#
 # Authors:
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
@@ -58,6 +58,58 @@ class Hosts(ForemanObjects):
         """
         if self.printHostProgress:
             self.__printProgression__(status, msg, eol=eol)
+
+    def createController(self, key, attributes, printHostProgress=False):
+        """ Function createController
+        Create a controller node
+
+        @param key: The host name or ID
+        @param attributes:The payload of the host creation
+        @param printHostProgress: The link to opensteak.printerlib
+                                to print or not the
+                                progression of the host creation
+        @return RETURN: The API result
+        """
+
+        self.printHostProgress = printHostProgress
+        self.async = False
+        # Create the VM in foreman
+        self.__printProgression__('In progress',
+                                  key + ' creation: push in Foreman', eol='\r')
+        self.api.create('hosts', attributes, async=self.async)
+
+        # Wait for puppet catalog to be applied
+        self.waitPuppetCatalogToBeApplied(key)
+
+        return True
+
+    def waitPuppetCatalogToBeApplied(self, key):
+        """ Function waitPuppetCatalogToBeApplied
+        Wait for puppet catalog to be applied
+
+        @param key: The host name or ID
+        @return RETURN: None
+        """
+        # Wait for puppet catalog to be applied
+        loop_stop = False
+        while not loop_stop:
+            status = self[key].getStatus()
+            if status == 'No Changes' or status == 'Active':
+                self.__printProgression__(True,
+                                          key + ' creation: provisioning OK')
+                loop_stop = True
+            elif status == 'Error':
+                self.__printProgression__(False,
+                                          key + ' creation: Error',
+                                          failed="Error during provisioning")
+                loop_stop = True
+                return False
+            else:
+                self.__printProgression__('In progress',
+                                          key + ' creation: provisioning ({})'
+                                          .format(status),
+                                          eol='\r')
+            time.sleep(5)
 
     def createVM(self, key, attributes, printHostProgress=False):
         """ Function createVM
@@ -119,24 +171,6 @@ class Hosts(ForemanObjects):
             return False
 
         # Wait for puppet catalog to be applied
-        loop_stop = False
-        while not loop_stop:
-            status = self[key].getStatus()
-            if status == 'No Changes' or status == 'Active':
-                self.__printProgression__(True,
-                                          key + ' creation: provisioning OK')
-                loop_stop = True
-            elif status == 'Error':
-                self.__printProgression__(False,
-                                          key + ' creation: Error',
-                                          failed="Error during provisioning")
-                loop_stop = True
-                return False
-            else:
-                self.__printProgression__('In progress',
-                                          key + ' creation: provisioning ({})'
-                                          .format(status),
-                                          eol='\r')
-            time.sleep(5)
+        self.waitPuppetCatalogToBeApplied(key)
 
         return True

@@ -55,27 +55,59 @@ hostgroups:
    - "opensteak::nova-compute"
 subnets:
  Admin:
+  domain: 'infra.opensteak.fr'
   shared: False
   data:
-   network: "192.168.4.0"
+   network: "192.168.1.0"
    mask: "255.255.255.0"
    vlanid:
-   gateway: "192.168.4.1"
-   dns_primary: "192.168.1.4"
-   from: "192.168.4.10"
-   to: "192.168.4.200"
+   gateway: "192.168.1.1"
+   dns_primary: "192.168.1.2"
+   from: "192.168.1.20"
+   to: "192.168.1.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ Storage:
+  domain: 'storage.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.0.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.0.20"
+   to: "192.168.0.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ VM:
+  domain: 'vm.storage.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.2.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.2.20"
+   to: "192.168.2.170"
    ipam: "DHCP"
    boot_mode: "DHCP"
 
 foreman:
- ip: "192.168.4.2"
+ ip: "192.168.1.4"
  admin: "admin"
- password: "opnfv"
+ password: "B1ng0!42"
  cpu: "2"
  ram: "2097152"
  iso: "trusty-server-cloudimg-amd64-disk1.img"
  disksize: "5G"
  force: True
  dns: "8.8.8.8"
- bridge: "br-libvirt"
+ bridge: "virbr0"
  bridge_type: "openvswitch"
+ classes:
+  "opensteak::dhcp":
+   dnsdomain: #Build with the other parameters
+   interfaces:
+    - "eth0"
+    - "eth1"
+    - "eth2"
+   # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
+   # pools: #Build with the other parameters

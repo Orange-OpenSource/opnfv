@@ -58,3 +58,12 @@ class OpenSteakForeman:
         self.smartClassParameters =  ForemanObjects(self.api,
                                                    'smart_class_parameters',
                                                    'smart_class_parameter')
+        self.settings =  ForemanObjects(self.api,
+                                        'settings',
+                                        'setting')
+        self.ptables =  ForemanObjects(self.api,
+                                       'ptables',
+                                       'ptable')
+        self.media =  ForemanObjects(self.api,
+                                      'media',
+                                      'medium')

@@ -33,9 +33,19 @@ p.header("Check parameters")
 args = {}
 
 # Update args with values from CLI
-parser = argparse.ArgumentParser(description='This script will configure foreman.', usage='%(prog)s [options]')
-parser.add_argument('-c', '--config', help='YAML config file to use (default is config/infra.yaml).', default='config/infra.yaml')
-parser.add_argument('-d', '--disable-update', help='Disable Puppet class update on foreman. This can be used when the configuration has already been done.', default=False, action='store_true')
+parser = argparse.ArgumentParser(description='This script will configure'
+                                             'foreman.',
+                                 usage='%(prog)s [options]')
+parser.add_argument('-c', '--config',
+                    help='YAML config file to use (default is '
+                          'config/infra.yaml).',
+                    default='config/infra.yaml')
+parser.add_argument('-d', '--disable_update',
+                    help='Disable Puppet class update on foreman. This can '
+                         'be used when the configuration has already '
+                         'been done.',
+                    default=False,
+                    action='store_true')
 args.update(vars(parser.parse_args()))
 
 # Open config file
@@ -81,10 +91,10 @@ p.header("Get puppet classes")
 ##############################################
 
 # Reload the smart proxy to get the latest puppet classes
-
-p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
-         'Import puppet classes from proxy '+smartProxy,
-         '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
+if not args["disable_update"]:
+    p.status(bool(foreman.smartProxies.importPuppetClasses(smartProxyId)),
+             'Import puppet classes from proxy '+smartProxy,
+             '{}\n >> {}'.format(foreman.api.errorMsg, foreman.api.url))
 
 # Get the list of puppet classes ids
 puppetClassesId = {}
@@ -179,25 +189,95 @@ for hg in conf['hostgroups'].keys():
 
 
 ##############################################
+p.header("Authorize Foreman to do puppet runs")
+##############################################
+
+foreman.settings['puppetrun']['value'] = 'true'
+p.status(foreman.settings['puppetrun']['value'],
+         'Set puppetrun parameter to True')
+
+##############################################
 p.header("Configure Foreman host")
 ##############################################
 
 hostName = "foreman.{}".format(conf['domains'])
 foremanHost = foreman.hosts[hostName]
-pp(puppetClassesId)
-p.status(foremanHost.checkAndCreateClasses(
+
+# Add puppet classes to foreman
+p.status(foreman.hosts[hostName].checkAndCreateClasses(
          puppetClassesId['foreman'].values()),
          "Add puppet classes to foreman host")
 
-scp = { x['parameter']: x['id'] for x in
-        foreman.puppetClasses['opensteak::dhcp']['smart_class_parameters'] }
+# Add smart class parameters of opensteak::dhcp to foreman
+className = 'opensteak::dhcp'
+scp = {x['parameter']: x['id'] for x in
+       foreman.puppetClasses[className]['smart_class_parameters']}
+for k, v in conf['foreman']['classes'][className].items():
+    if v is None:
+        if k == 'pools':
+            v = {'pools': dict()}
+            for subn in conf['subnets'].values():
+                v['pools'][subn['domain']] = dict()
+                v['pools'][subn['domain']]['network'] = subn['data']['network']
+                v['pools'][subn['domain']]['netmask'] = subn['data']['mask']
+                v['pools'][subn['domain']]['range'] =\
+                    subn['data']['from'] + ' ' + subn['data']['to']
+                if 'gateway' in subn['data'].keys():
+                    v['pools'][subn['domain']]['gateway'] =\
+                        subn['data']['gateway']
+        elif k == 'dnsdomain':
+            v = list()
+            for subn in conf['subnets'].values():
+                v.append(subn['domain'])
+                revZone = subn['data']['network'].split('.')[::-1]
+                while revZone[0] is '0':
+                    revZone=revZone[1::]
+                v.append('.'.join(revZone) + '.in-addr.arpa')
+    scp_id = scp[k]
+    foreman.hosts[hostName][
+        'smart_class_parameters_dict'][
+        '{}::{}'.format(className, k)].setOverrideValue(v, hostName)
 
-scp_id = scp['dnsdomain']
-foreman.smartClassParameters[scp_id]['override'] = True
-foreman.smartClassParameters[scp_id]['value'] = True
+foremanSCP = set([x['parameter']
+                 for x in foreman.hosts[hostName]
+                 ['smart_class_parameters_dict'].values()])
+awaitedSCP = set(conf['foreman']['classes'][className].keys())
+p.status(awaitedSCP.issubset(foremanSCP),
+         "Add smart class parameters to class {} on foreman host"
+         .format(className))
 
-["infra.opensteak.fr","storage.infra.opensteak.fr","vm.infra.opensteak.fr","0.168.192.in-addr.arpa","1.168.192.in-addr.arpa","2.168.192.in-addr.arpa"]
+# Run puppet on foreman
+p.status(bool(foreman.hosts[hostName].puppetRun()),
+         'Run puppet on foreman host')
 
+
+##############################################
+p.header("Add controller nodes")
+##############################################
+
+controllerName = 'controller1.infra.opensteak.fr'
+bmcIp = '192.168.1.199'
+pTableName = "Preseed default"
+mediaName = "Ubuntu mirror"
+osName = "Ubuntu 14.04.2 LTS"
+password = "opnfv"
+payload = {
+  "host": {
+    "name": controllerName,
+    "environment_id": environmentId,
+    "domain_id": domainId,
+    "ptable_id": foreman.ptables[pTableName]['id'],
+    "medium_id": foreman.media[mediaName]['id'],
+    "sp_ip": bmcIp,
+    "architecture_id": architectureId,
+    "operatingsystem_id": foreman.operatingSystems[osName]['id'],
+    "puppet_proxy_id": smartProxyId,
+    "hostgroup_id": foreman.hostgroups[
+        conf['hostgroups']['hostgroupController']['name']]['id'],
+    "root_pass": password,
+  }
+}
+foreman.hosts.createController(controllerName, payload)
 sys.exit()
 
 ##############################################
