@@ -71,17 +71,18 @@ class Hosts(ForemanObjects):
         @return RETURN: The API result
         """
 
-        self.printHostProgress = printHostProgress
-        self.async = False
-        # Create the VM in foreman
-        self.__printProgression__('In progress',
-                                  key + ' creation: push in Foreman', eol='\r')
-        self.api.create('hosts', attributes, async=self.async)
+        if key not in self:
+            self.printHostProgress = printHostProgress
+            self.async = False
+            # Create the VM in foreman
+            self.__printProgression__('In progress',
+                                      key + ' creation: push in Foreman', eol='\r')
+            self.api.create('hosts', attributes, async=self.async)
 
-        # Wait for puppet catalog to be applied
-        self.waitPuppetCatalogToBeApplied(key)
+            # Wait for puppet catalog to be applied
+            # self.waitPuppetCatalogToBeApplied(key)
 
-        return True
+        return self[key]['id']
 
     def waitPuppetCatalogToBeApplied(self, key):
         """ Function waitPuppetCatalogToBeApplied
@@ -173,4 +174,4 @@ class Hosts(ForemanObjects):
         # Wait for puppet catalog to be applied
         self.waitPuppetCatalogToBeApplied(key)
 
-        return True
+        return self[key]['id']

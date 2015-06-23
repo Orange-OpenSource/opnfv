@@ -53,6 +53,7 @@ class Api:
         @return RETURN: the list of the object
         """
         self.url = '{}{}/?per_page={}'.format(self.base_url, obj, limit)
+        self.method = 'GET'
         if filter:
             self.url += '&search={}'.format(filter)
         self.resp = requests.get(url=self.url, auth=self.auth,
@@ -82,6 +83,7 @@ class Api:
         @return RETURN: the targeted object
         """
         self.url = '{}{}/{}'.format(self.base_url, obj, id)
+        self.method = 'GET'
         if sub_object:
             self.url += '/' + sub_object
         self.resp = requests.get(url=self.url, auth=self.auth,
@@ -115,6 +117,7 @@ class Api:
         @return RETURN: the server response
         """
         self.url = '{}{}/{}'.format(self.base_url, obj, id)
+        self.method = 'PUT'
         if action:
             self.url += '/{}'.format(action)
         self.payload = json.dumps(payload)
@@ -140,6 +143,7 @@ class Api:
         @return RETURN: the server response
         """
         self.url = self.base_url + obj
+        self.method = 'POST'
         self.payload = json.dumps(payload)
         if async:
             session = FuturesSession()
@@ -160,6 +164,7 @@ class Api:
         @return RETURN: the server response
         """
         self.url = '{}{}/{}'.format(self.base_url, obj, id)
+        self.method = 'DELETE'
         self.resp = requests.delete(url=self.url,
                                     auth=self.auth,
                                     headers=self.headers, )

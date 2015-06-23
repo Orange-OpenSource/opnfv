@@ -19,6 +19,7 @@
 import base64
 from string import Template
 from opensteak.foreman_objects.item import ForemanItem
+from opensteak.foreman_objects.itemInterfaces import ItemInterfaces
 
 
 class ItemHost(ForemanItem):
@@ -50,7 +51,34 @@ class ItemHost(ForemanItem):
                                         .format(self.objName, key),
                                         only_id=True)
                           .keys())})
+        self.update({'interfaces':
+                     {x['identifier']: ItemInterfaces(self.api,
+                                                      x['id'],
+                                                      self.objName,
+                                                      self.key,
+                                                      x)
+                      for x in list(self.api.list('{}/{}/interfaces'
+                                                  .format(self.objName, key)))
+                      }
+                     })
 
+    def __setitem__(self, key, attributes):
+        """ Function __setitem__
+        Set a parameter of a foreman object as a dict
+
+        @param key: The key to modify
+        @param attribute: The data
+        @return RETURN: The API result
+        """
+        if key is 'interfaces':
+            payload = {"interface": attributes}
+            return self.api.create("{}/{}/{}"
+                                   .format(self.objName,
+                                           self.key,
+                                           "interfaces"),
+                                   payload)
+        else:
+            ForemanItem.__init__(self, key, attributes)
 
     def getStatus(self):
         """ Function getStatus
