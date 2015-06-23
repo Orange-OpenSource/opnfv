@@ -44,7 +44,7 @@ p.header("Check parameters")
 args = {}
 
 # Update args with values from CLI
-parser = argparse.ArgumentParser(description='This script will configure foreman.', usage='%(prog)s [options]')
+parser = argparse.ArgumentParser(description='This script will create a foreman VM.', usage='%(prog)s [options]')
 parser.add_argument('-c', '--config', help='YAML config file to use (default is config/infra.yaml).', default='config/infra.yaml')
 args.update(vars(parser.parse_args()))
 
@@ -89,7 +89,6 @@ args.update(a)
 del a
 
 p.list_id(args)
-exit(0)
 
 # Ask confirmation
 if args["force"] is not True:

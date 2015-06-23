@@ -51,6 +51,7 @@ echo "* Set App armor"
 cat /etc/apparmor.d/local/usr.sbin.dhcpd | grep '/etc/bind/rndc.key r,' >/dev/null
 if [ $$? -eq 1 ] ; then
     echo "/etc/bind/rndc.key r," >> /etc/apparmor.d/local/usr.sbin.dhcpd
+    service apparmor reload
 fi
 
 ### Prepare repos
