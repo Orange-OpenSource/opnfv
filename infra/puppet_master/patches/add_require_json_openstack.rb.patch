@@ -5,7 +5,7 @@
  require 'csv'
  require 'puppet'
 +require 'json'
- 
+
  class Puppet::Error::OpenstackAuthInputError < Puppet::Error
  end
 
