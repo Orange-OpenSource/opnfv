@@ -16,22 +16,16 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-from opensteak.foreman_objects.objects import ForemanObjects
+
+from opensteak.foreman_objects.subItem import SubItem
 
 
-class SmartProxies(ForemanObjects):
+class SubItemParameter(SubItem):
     """
-    Domain class
+    ItemOverrideValues class
+    Represent the content of a foreman smart class parameter as a dict
     """
-    objName = 'smart_proxies'
-    payloadObj = 'smart_proxy'
 
-    def importPuppetClasses(self, smartProxyId):
-        """ Function importPuppetClasses
-        Force the reload of puppet classes
-
-        @param smartProxyId: smartProxy Id
-        @return RETURN: the API result
-        """
-        return self.api.create('{}/{}/import_puppetclasses'
-                               .format(self.objName, smartProxyId), '{}')
+    objName = 'parameters'
+    payloadObj = 'parameter'
+    index = 'id'

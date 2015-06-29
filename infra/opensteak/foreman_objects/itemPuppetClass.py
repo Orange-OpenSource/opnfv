@@ -16,30 +16,15 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.item import ForemanItem
+
+from opensteak.foreman_objects.subItem import SubItem
 
 
-class PuppetClasses(ForemanObjects):
+class ItemPuppetClass(SubItem):
     """
-    OperatingSystems class
+    ItemOverrideValues class
+    Represent the content of a foreman smart class parameter as a dict
     """
+
     objName = 'puppetclasses'
     payloadObj = 'puppetclass'
-
-    def load(self):
-        """ Function load
-        Get the list of all objects
-
-        @param key: The targeted object
-        @param limit: The limit of items to return
-        @return RETURN: A ForemanItem list
-        """
-        cl_tmp = self.api.list(self.objName, limit=self.searchLimit).values()
-        cl = []
-        for i in cl_tmp:
-            cl.extend(i)
-        return {x[self.index]: ForemanItem(self.api, x['id'],
-                                           self.objName, self.payloadObj,
-                                           x)
-                for x in cl}

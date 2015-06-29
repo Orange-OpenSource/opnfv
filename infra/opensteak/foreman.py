@@ -18,7 +18,6 @@
 
 from opensteak.foreman_objects.api import Api
 from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.domains import Domains
 from opensteak.foreman_objects.smart_proxies import SmartProxies
 from opensteak.foreman_objects.operatingsystems import OperatingSystems
 from opensteak.foreman_objects.hostgroups import HostGroups
@@ -43,27 +42,29 @@ class OpenSteakForeman:
         """
         self.api = Api(login=login, password=password, ip=ip,
                        printErrors=False)
-        self.domains = Domains(self.api)
+        self.domains = ForemanObjects(self.api,
+                                    'domains',
+                                    'domain')
         self.smartProxies = SmartProxies(self.api)
         self.puppetClasses = PuppetClasses(self.api)
         self.operatingSystems = OperatingSystems(self.api)
         self.architectures = Architectures(self.api)
         self.subnets = Subnets(self.api)
         self.hostgroups = HostGroups(self.api)
-        self.hosts = Hosts(self.api)
+        # self.hosts = Hosts(self.api)
         self.computeResources = ComputeResources(self.api)
         self.environments =  ForemanObjects(self.api,
                                             'environments',
                                             'environment')
-        self.smartClassParameters =  ForemanObjects(self.api,
-                                                   'smart_class_parameters',
-                                                   'smart_class_parameter')
-        self.settings =  ForemanObjects(self.api,
-                                        'settings',
-                                        'setting')
-        self.ptables =  ForemanObjects(self.api,
-                                       'ptables',
-                                       'ptable')
-        self.media =  ForemanObjects(self.api,
-                                      'media',
-                                      'medium')
+        # self.smartClassParameters =  ForemanObjects(self.api,
+                                                   # 'smart_class_parameters',
+                                                   # 'smart_class_parameter')
+        # self.settings =  ForemanObjects(self.api,
+                                        # 'settings',
+                                        # 'setting')
+        # self.ptables =  ForemanObjects(self.api,
+                                       # 'ptables',
+                                       # 'ptable')
+        # self.media =  ForemanObjects(self.api,
+                                      # 'media',
+                                      # 'medium')

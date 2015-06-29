@@ -20,19 +20,20 @@ from opensteak.conf import OpenSteakConfig
 from opensteak.foreman import OpenSteakForeman
 from opensteak.printer import OpenSteakPrinter
 import argparse
-import sys
 from pprint import pprint as pp
 
 #
 # Check for params
 #
 p = OpenSteakPrinter()
-p.header("Check parameters")
 args = {}
 
 # Update args with values from CLI
-parser = argparse.ArgumentParser(description='This script will configure foreman.', usage='%(prog)s [options]')
-parser.add_argument('-c', '--config', help='YAML config file to use (default is config/infra.yaml).', default='config/infra.yaml')
+parser = argparse.ArgumentParser(description='This script will configure'
+                                             'foreman.',
+                                 usage='%(prog)s [options]')
+parser.add_argument('-c', '--config', help='YAML config file to use (default '
+                    'is config/infra.yaml).', default='config/infra.yaml')
 args.update(vars(parser.parse_args()))
 
 # Open config file

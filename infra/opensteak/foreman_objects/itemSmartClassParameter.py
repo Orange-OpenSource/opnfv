@@ -19,7 +19,6 @@
 
 from opensteak.foreman_objects.item import ForemanItem
 from opensteak.foreman_objects.itemOverrideValues import ItemOverrideValues
-from pprint import pprint as pp
 
 
 class ItemSmartClassParameter(ForemanItem):

@@ -19,19 +19,24 @@
 import base64
 from string import Template
 from opensteak.foreman_objects.item import ForemanItem
-from opensteak.foreman_objects.itemInterfaces import ItemInterfaces
+from opensteak.foreman_objects.subItemInterface import SubItemInterface
+from opensteak.foreman_objects.subItemParameter import SubItemParameter
+from opensteak.foreman_objects.subItemPuppetClass import SubItemPuppetClass
+from opensteak.foreman_objects.subDict import SubDict
 
 
 class ItemHost(ForemanItem):
     """
-    ItemHostsGroup class
+    ItemHost class
     Represent the content of a foreman hostgroup as a dict
     """
 
     objName = 'hosts'
     payloadObj = 'host'
 
-    def __init__(self, api, key, *args, **kwargs):
+    def __init__(self, api, key,
+                 objName, payloadObj,
+                 *args, **kwargs):
         """ Function __init__
         Represent the content of a foreman object as a dict
 
@@ -43,24 +48,23 @@ class ItemHost(ForemanItem):
         ForemanItem.__init__(self, api, key,
                              self.objName, self.payloadObj,
                              *args, **kwargs)
-        self.update({'puppetclass_ids':
-                     self.api.list('{}/{}/puppetclass_ids'
-                                   .format(self.objName, key))})
+        self.update({'puppetclasses':
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemPuppetClass)})
+        self.update({'parameters':
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemParameter)})
         self.update({'param_ids':
                      list(self.api.list('{}/{}/parameters'
                                         .format(self.objName, key),
                                         only_id=True)
                           .keys())})
         self.update({'interfaces':
-                     {x['identifier']: ItemInterfaces(self.api,
-                                                      x['id'],
-                                                      self.objName,
-                                                      self.key,
-                                                      x)
-                      for x in list(self.api.list('{}/{}/interfaces'
-                                                  .format(self.objName, key)))
-                      }
-                     })
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemInterface)})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__

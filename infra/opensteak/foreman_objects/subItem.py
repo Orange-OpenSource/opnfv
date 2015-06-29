@@ -20,14 +20,11 @@
 from opensteak.foreman_objects.item import ForemanItem
 
 
-class ItemInterfaces(ForemanItem):
+class SubItem(ForemanItem):
     """
     ItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
     """
-
-    objName = 'interfaces'
-    payloadObj = 'interface'
 
     def __init__(self, api, key, parentName, parentKey, *args, **kwargs):
         """ Function __init__

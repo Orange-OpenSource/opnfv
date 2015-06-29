@@ -27,24 +27,7 @@ class Hosts(ForemanObjects):
     """
     objName = 'hosts'
     payloadObj = 'host'
-
-    def list(self):
-        """ Function list
-        list the hosts
-
-        @return RETURN: List of ItemHost objects
-        """
-        return list(map(lambda x: ItemHost(self.api, x['id'], x),
-                        self.api.list(self.objName)))
-
-    def __getitem__(self, key):
-        """ Function __getitem__
-        Get an host
-
-        @param key: The host name or ID
-        @return RETURN: The ItemHost object of an host
-        """
-        return ItemHost(self.api, key, self.api.get(self.objName, key))
+    itemType = ItemHost
 
     def __printProgression__(self, status, msg, eol):
         """ Function __printProgression__

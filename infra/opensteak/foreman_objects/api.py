@@ -27,7 +27,8 @@ class Api:
     Api class
     Class to deal with the foreman API v2
     """
-    def __init__(self, password, login='admin', ip='127.0.0.1', printErrors=False):
+    def __init__(self, password, login='admin', ip='127.0.0.1',
+                 printErrors=False):
         """ Function __init__
         Init the API with the connection params
 
@@ -179,8 +180,8 @@ class Api:
         """
         self.last_obj = obj
         if self.resp.status_code > 299:
-            self.errorMsg = ">> Error {} for object '{}'".format(self.resp.status_code,
-                                                                 self.last_obj)
+            self.errorMsg = ">> Error {} for object '{}'"\
+                            .format(self.resp.status_code, self.last_obj)
             try:
                 self.ret = json.loads(self.resp.text)
                 self.errorMsg += pformat(self.ret[list(self.ret.keys())[0]])

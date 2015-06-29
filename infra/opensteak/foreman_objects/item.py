@@ -69,7 +69,7 @@ class ForemanItem(dict):
         @param attribute: The data
         @return RETURN: The API result
         """
-        if key is 'puppetclass_ids':
+        if key is 'puppetclass':
             payload = {"puppetclass_id": attributes,
                        self.payloadObj + "_class":
                            {"puppetclass_id": attributes}}
@@ -114,11 +114,12 @@ class ForemanItem(dict):
         @param classes: The classes ids list
         @return RETURN: boolean
         """
-        actual_classes = self['puppetclass_ids']
+        actual_classes = self['puppetclasses'].keys()
         for v in classes:
             if v not in actual_classes:
                 self['puppetclass_ids'] = v
-        return list(classes).sort() is list(self['puppetclass_ids']).sort()
+        return list(classes).sort() is\
+            list(self['puppetclasses'].keys()).sort()
 
     def checkAndCreateParams(self, params):
         """ Function checkAndCreateParams

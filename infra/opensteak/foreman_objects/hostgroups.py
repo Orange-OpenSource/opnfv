@@ -18,7 +18,6 @@
 
 from opensteak.foreman_objects.objects import ForemanObjects
 from opensteak.foreman_objects.itemHostsGroup import ItemHostsGroup
-from pprint import pprint as pp
 
 
 class HostGroups(ForemanObjects):
@@ -27,15 +26,7 @@ class HostGroups(ForemanObjects):
     """
     objName = 'hostgroups'
     payloadObj = 'hostgroup'
-
-    def list(self):
-        """ Function list
-        list the hostgroups
-
-        @return RETURN: List of ItemHostsGroup objects
-        """
-        return list(map(lambda x: ItemHostsGroup(self.api, x['id'], x),
-                        self.api.list(self.objName)))
+    itemType = ItemHostsGroup
 
     def __getitem__(self, key):
         """ Function __getitem__
@@ -46,9 +37,10 @@ class HostGroups(ForemanObjects):
         """
         # Because Hostgroup did not support get by name we need to do it by id
         if type(key) is not int:
-            key = self.getId(key)
+            key = self[key]['id']
         ret = self.api.get(self.objName, key)
-        return ItemHostsGroup(self.api, key, ret)
+        return ItemHostsGroup(self.api, key, self.objName,
+                              self.payloadObj, ret)
 
     def __delitem__(self, key):
         """ Function __delitem__
@@ -59,8 +51,8 @@ class HostGroups(ForemanObjects):
         """
         # Because Hostgroup did not support get by name we need to do it by id
         if type(key) is not int:
-            key = self.getId(key)
-        return self.api.delete(self.objName, key)
+            key = self[key]['id']
+        return ForemanObjects.__delitem__(key)
 
     def checkAndCreate(self, key, payload,
                        hostgroupConf,
@@ -88,9 +80,9 @@ class HostGroups(ForemanObjects):
             return False
 
         # Create Hostgroup classes
-        hostgroupClassIds = self[key]['puppetclass_ids']
+        hostgroupClassIds = self[key]['puppetclasses'].keys()
         if 'classes' in hostgroupConf.keys():
-            if not self[key].checkAndCreateClasses(puppetClassesId.values()):
+            if not self[key].checkAndCreateClasses(hostgroupClassIds.values()):
                 print("Failed in classes")
                 return False
 
