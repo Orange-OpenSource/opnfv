@@ -37,10 +37,8 @@ class HostGroups(ForemanObjects):
         """
         # Because Hostgroup did not support get by name we need to do it by id
         if type(key) is not int:
-            key = self[key]['id']
-        ret = self.api.get(self.objName, key)
-        return ItemHostsGroup(self.api, key, self.objName,
-                              self.payloadObj, ret)
+            key = self.listName()[key]
+        return ForemanObjects.__getitem__(self, key)
 
     def __delitem__(self, key):
         """ Function __delitem__
@@ -51,8 +49,8 @@ class HostGroups(ForemanObjects):
         """
         # Because Hostgroup did not support get by name we need to do it by id
         if type(key) is not int:
-            key = self[key]['id']
-        return ForemanObjects.__delitem__(key)
+            key = self.listName()[key]
+        return ForemanObjects.__delitem__(self, key)
 
     def checkAndCreate(self, key, payload,
                        hostgroupConf,
@@ -80,8 +78,8 @@ class HostGroups(ForemanObjects):
             return False
 
         # Create Hostgroup classes
-        hostgroupClassIds = self[key]['puppetclasses'].keys()
         if 'classes' in hostgroupConf.keys():
+            hostgroupClassIds = self[key]['puppetclasses'].keys()
             if not self[key].checkAndCreateClasses(hostgroupClassIds.values()):
                 print("Failed in classes")
                 return False

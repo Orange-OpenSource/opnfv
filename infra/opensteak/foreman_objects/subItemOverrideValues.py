@@ -18,13 +18,14 @@
 
 
 from opensteak.foreman_objects.subItem import SubItem
+from pprint import pprint as pp
 
-
-class ItemPuppetClass(SubItem):
+class SubItemOverrideValues(SubItem):
     """
-    ItemOverrideValues class
+    SubItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
     """
 
-    objName = 'puppetclasses'
-    payloadObj = 'puppetclass'
+    objName = 'override_values'
+    payloadObj = 'override_value'
+    index = 'id'

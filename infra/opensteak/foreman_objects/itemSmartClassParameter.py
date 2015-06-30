@@ -18,7 +18,8 @@
 
 
 from opensteak.foreman_objects.item import ForemanItem
-from opensteak.foreman_objects.itemOverrideValues import ItemOverrideValues
+from opensteak.foreman_objects.subItemOverrideValues import SubItemOverrideValues
+from opensteak.foreman_objects.subDict import SubDict
 
 
 class ItemSmartClassParameter(ForemanItem):
@@ -44,12 +45,16 @@ class ItemSmartClassParameter(ForemanItem):
                              self.objName, self.payloadObj,
                              *args, **kwargs)
         self.update({'override_values':
-                    list(map(lambda x: ItemOverrideValues(self.api,
-                                                          x['id'],
-                                                          self.objName,
-                                                          self.key,
-                                                          x),
-                             self['override_values']))})
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemOverrideValues)})
+        # self.update({'override_values':
+                    # list(map(lambda x: ItemOverrideValues(self.api,
+                                                          # x['id'],
+                                                          # self.objName,
+                                                          # self.key,
+                                                          # x),
+                             # self['override_values']))})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__

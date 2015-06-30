@@ -17,6 +17,7 @@
 #     Arnaud Morin <arnaud1.morin@orange.com>
 
 from pprint import pprint as pp
+from opensteak.foreman_objects.subDict import SubDict
 
 
 class ForemanItem(dict):
@@ -48,18 +49,12 @@ class ForemanItem(dict):
         # We get the smart class parameters for the good items
         if objName in ['hosts', 'hostgroups',
                        'puppet_classes', 'environments']:
-            from opensteak.foreman_objects.itemSmartClassParameter\
-                import ItemSmartClassParameter
-            scp_ids = map(lambda x: x['id'],
-                          self.api.list('{}/{}/smart_class_parameters'
-                                        .format(self.objName, key)))
-            scp_items = list(map(lambda x: ItemSmartClassParameter(self.api, x,
-                                 self.api.get('smart_class_parameters', x)),
-                                 scp_ids))
-            scp = {'{}::{}'.format(x['puppetclass']['name'],
-                                   x['parameter']): x
-                   for x in scp_items}
-            self.update({'smart_class_parameters_dict': scp})
+            from opensteak.foreman_objects.subItemSmartClassParameter\
+                import SubItemSmartClassParameter
+            self.update({'smart_class_parameters_dict':
+                        SubDict(self.api, self.objName,
+                                self.payloadObj, self.key,
+                                SubItemSmartClassParameter)})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__
@@ -69,25 +64,25 @@ class ForemanItem(dict):
         @param attribute: The data
         @return RETURN: The API result
         """
-        if key is 'puppetclass':
-            payload = {"puppetclass_id": attributes,
-                       self.payloadObj + "_class":
-                           {"puppetclass_id": attributes}}
-            return self.api.create("{}/{}/{}"
-                                   .format(self.objName,
-                                           self.key,
-                                           "puppetclass_ids"),
-                                   payload)
-        elif key is 'parameters':
-            payload = {"parameter": attributes}
-            return self.api.create("{}/{}/{}"
-                                   .format(self.objName,
-                                           self.key,
-                                           "parameters"),
-                                   payload)
-        else:
-            payload = {self.payloadObj: {key: attributes}}
-            return self.api.set(self.objName, self.key, payload)
+        # if key is 'puppetclass':
+            # payload = {"puppetclass_id": attributes,
+                       # self.payloadObj + "_class":
+                           # {"puppetclass_id": attributes}}
+            # return self.api.create("{}/{}/{}"
+                                   # .format(self.objName,
+                                           # self.key,
+                                           # "puppetclass_ids"),
+                                   # payload)
+        # elif key is 'parameters':
+            # payload = {"parameter": attributes}
+            # return self.api.create("{}/{}/{}"
+                                   # .format(self.objName,
+                                           # self.key,
+                                           # "parameters"),
+                                   # payload)
+        # else:
+        payload = {self.payloadObj: {key: attributes}}
+        return self.api.set(self.objName, self.key, payload)
 
     def getParam(self, name=None):
         """ Function getParam

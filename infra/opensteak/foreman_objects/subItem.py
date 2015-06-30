@@ -16,7 +16,6 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-
 from opensteak.foreman_objects.item import ForemanItem
 
 

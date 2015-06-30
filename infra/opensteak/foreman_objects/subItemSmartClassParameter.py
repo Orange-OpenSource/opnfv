@@ -17,17 +17,20 @@
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
 
+from opensteak.foreman_objects.subItem import SubItem
 from opensteak.foreman_objects.item import ForemanItem
-from pprint import pprint as pp
+from opensteak.foreman_objects.itemSmartClassParameter import ItemSmartClassParameter
 
-class ItemOverrideValues(ForemanItem):
+
+class SubItemSmartClassParameter(dict):
     """
     ItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
     """
 
-    objName = 'override_values'
-    payloadObj = 'override_value'
+    objName = 'smart_class_parameters'
+    payloadObj = 'smart_class_parameter'
+    index = 'id'
 
     def __init__(self, api, key, parentName, parentKey, *args, **kwargs):
         """ Function __init__
@@ -42,20 +45,14 @@ class ItemOverrideValues(ForemanItem):
         """
         self.parentName = parentName
         self.parentKey = parentKey
-        ForemanItem.__init__(self, api, key,
-                             self.objName, self.payloadObj,
-                             *args, **kwargs)
-
-    def __setitem__(self, key, attributes):
-        """ Function __setitem__
-        Set a parameter of a foreman object as a dict
-
-        @param key: The key to modify
-        @param attribute: The data
-        @return RETURN: The API result
-        """
-        payload = {self.payloadObj: {key: attributes}}
-        return self.api.set('{}/{}/{}'.format(self.parentName,
-                                              self.parentKey,
-                                              self.objName),
-                            self.key, payload)
+        self.api = api
+        scp_ids = map(lambda x: x['id'],
+                      self.api.list('{}/{}/smart_class_parameters'
+                                    .format(self.objName, key)))
+        scp_items = list(map(lambda x: ItemSmartClassParameter(self.api, x,
+                             self.api.get('smart_class_parameters', x)),
+                             scp_ids))
+        scp = {'{}::{}'.format(x['puppetclass']['name'],
+                               x['parameter']): x
+               for x in scp_items}
+        self.update({'smart_class_parameters_dict': scp})

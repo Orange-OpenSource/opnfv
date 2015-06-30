@@ -42,23 +42,24 @@ class OpenSteakForeman:
         """
         self.api = Api(login=login, password=password, ip=ip,
                        printErrors=False)
-        self.domains = ForemanObjects(self.api,
-                                    'domains',
-                                    'domain')
-        self.smartProxies = SmartProxies(self.api)
-        self.puppetClasses = PuppetClasses(self.api)
-        self.operatingSystems = OperatingSystems(self.api)
-        self.architectures = Architectures(self.api)
-        self.subnets = Subnets(self.api)
-        self.hostgroups = HostGroups(self.api)
+        # self.domains = ForemanObjects(self.api,
+                                    # 'domains',
+                                    # 'domain')
+        # self.smartProxies = SmartProxies(self.api)
+        # self.puppetClasses = PuppetClasses(self.api)
+        # self.operatingSystems = OperatingSystems(self.api)
+        # self.architectures = Architectures(self.api)
+        # self.subnets = Subnets(self.api)
+        # self.hostgroups = HostGroups(self.api)
         # self.hosts = Hosts(self.api)
-        self.computeResources = ComputeResources(self.api)
-        self.environments =  ForemanObjects(self.api,
-                                            'environments',
-                                            'environment')
-        # self.smartClassParameters =  ForemanObjects(self.api,
-                                                   # 'smart_class_parameters',
-                                                   # 'smart_class_parameter')
+        # self.computeResources = ComputeResources(self.api)
+        # self.environments =  ForemanObjects(self.api,
+                                            # 'environments',
+                                            # 'environment')
+        self.smartClassParameters = ForemanObjects(self.api,
+                                                   'smart_class_parameters',
+                                                   'smart_class_parameter',
+                                                   index='id')
         # self.settings =  ForemanObjects(self.api,
                                         # 'settings',
                                         # 'setting')

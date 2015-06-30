@@ -51,11 +51,20 @@ class ForemanObjects(dict):
         # For asynchronous creations
         self.async = False
         # Default params
-        if payloadObj:
-            self.payloadObj = payloadObj
+        if index:
+            self.index = index
         if searchLimit:
             self.searchLimit = searchLimit
         dict.__init__(self, self.load())
+
+    def reload(self):
+        """ Function reload
+        Reload the full object to ensure sync
+        """
+        realData = self.load()
+        self.clear()
+        self.update(realData)
+
 
     def updateAfterDecorator(function):
         """ Function updateAfterDecorator
@@ -63,9 +72,7 @@ class ForemanObjects(dict):
         """
         def _updateAfterDecorator(self, *args, **kwargs):
             ret = function(self, *args, **kwargs)
-            realData = self.load()
-            self.clear()
-            self.update(realData)
+            self.reload()
             return ret
         return _updateAfterDecorator
 
@@ -74,11 +81,8 @@ class ForemanObjects(dict):
         Decorator to ensure local dict is sync with remote foreman
         """
         def _updateBeforeDecorator(self, *args, **kwargs):
-            ret = function(self, *args, **kwargs)
-            realData = self.load()
-            self.clear()
-            self.update(realData)
-            return ret
+            self.reload()
+            return function(self, *args, **kwargs)
         return _updateBeforeDecorator
 
     def get(self, key):
@@ -116,7 +120,7 @@ class ForemanObjects(dict):
             return self.api.create(self.objName, payload, async=self.async)
         return False
 
-    @updateAfterDecorator
+    # @updateAfterDecorator
     def __delitem__(self, key):
         """ Function __delitem__
 
@@ -146,7 +150,7 @@ class ForemanObjects(dict):
                 for x in self.api.list(self.objName,
                                        limit=self.searchLimit)}
 
-    @updateBeforeDecorator
+    # @updateBeforeDecorator
     def listName(self):
         """ Function listName
         Get the list of all objects name with Ids
