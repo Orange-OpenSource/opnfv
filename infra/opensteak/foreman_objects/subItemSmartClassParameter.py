@@ -48,7 +48,7 @@ class SubItemSmartClassParameter(dict):
         self.api = api
         scp_ids = map(lambda x: x['id'],
                       self.api.list('{}/{}/smart_class_parameters'
-                                    .format(self.objName, key)))
+                                    .format(self.parentName, key)))
         scp_items = list(map(lambda x: ItemSmartClassParameter(self.api, x,
                              self.api.get('smart_class_parameters', x)),
                              scp_ids))
