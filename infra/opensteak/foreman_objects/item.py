@@ -45,16 +45,35 @@ class ForemanItem(dict):
             self.payloadObj = payloadObj
         self.store = dict()
         if args[0]:
-            self.update(dict(*args, **kwargs))
+            self.load(dict(*args, **kwargs))
         # We get the smart class parameters for the good items
-        if objName in ['hosts', 'hostgroups',
-                       'puppet_classes', 'environments']:
-            from opensteak.foreman_objects.subItemSmartClassParameter\
-                import SubItemSmartClassParameter
-            self.update({'smart_class_parameters_dict':
+
+    def load(self, data):
+        """ Function load
+        Store the object data
+        """
+        self.clear()
+        self.update(data)
+        self.enhance()
+
+    def enhance(self):
+        """ Function enhance
+        Enhance the object with new item or enhanced items
+        """
+        if self.objName in ['hosts', 'hostgroups',
+                            'puppet_classes']:
+            from opensteak.foreman_objects.itemSmartClassParameter\
+                import ItemSmartClassParameter
+            self.update({'smart_class_parameters':
                         SubDict(self.api, self.objName,
                                 self.payloadObj, self.key,
-                                SubItemSmartClassParameter)})
+                                ItemSmartClassParameter)})
+
+    def reload(self):
+        """ Function reload
+        Sync the full object
+        """
+        self.load(self.api.get(self.objName, self.key))
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__
@@ -64,23 +83,17 @@ class ForemanItem(dict):
         @param attribute: The data
         @return RETURN: The API result
         """
-        # if key is 'puppetclass':
-            # payload = {"puppetclass_id": attributes,
-                       # self.payloadObj + "_class":
-                           # {"puppetclass_id": attributes}}
-            # return self.api.create("{}/{}/{}"
-                                   # .format(self.objName,
-                                           # self.key,
-                                           # "puppetclass_ids"),
-                                   # payload)
-        # elif key is 'parameters':
-            # payload = {"parameter": attributes}
-            # return self.api.create("{}/{}/{}"
-                                   # .format(self.objName,
-                                           # self.key,
-                                           # "parameters"),
-                                   # payload)
-        # else:
+        payload = {self.payloadObj: {key: attributes}}
+        return self.api.set(self.objName, self.key, payload)
+
+    def __setitem__(self, key, attributes):
+        """ Function __setitem__
+        Set a parameter of a foreman object as a dict
+
+        @param key: The key to modify
+        @param attribute: The data
+        @return RETURN: The API result
+        """
         payload = {self.payloadObj: {key: attributes}}
         return self.api.set(self.objName, self.key, payload)
 
@@ -112,7 +125,8 @@ class ForemanItem(dict):
         actual_classes = self['puppetclasses'].keys()
         for v in classes:
             if v not in actual_classes:
-                self['puppetclass_ids'] = v
+                self['puppetclass_ids'] += v
+        self.reload()
         return list(classes).sort() is\
             list(self['puppetclasses'].keys()).sort()
 
@@ -124,8 +138,9 @@ class ForemanItem(dict):
         @param params: The params dict
         @return RETURN: boolean
         """
-        actual_params = self['param_ids']
+        actual_params = self['parameters'].keys()
         for k, v in params.items():
             if k not in actual_params:
-                self['parameters'] = {"name": k, "value": v}
-        return self['param_ids'].sort() == list(params.values()).sort()
+                self['parameters'] += {"name": k, "value": v}
+        self.reload()
+        return self['parameters'].keys() == params.keys()

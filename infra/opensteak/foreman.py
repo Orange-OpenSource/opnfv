@@ -27,6 +27,7 @@ from opensteak.foreman_objects.subnets import Subnets
 from opensteak.foreman_objects.puppetClasses import PuppetClasses
 from opensteak.foreman_objects.compute_resources import ComputeResources
 from opensteak.foreman_objects.smartClassParameters import SmartClassParameters
+from opensteak.foreman_objects.environments import Environments
 
 
 class OpenSteakForeman:
@@ -52,11 +53,9 @@ class OpenSteakForeman:
         self.architectures = Architectures(self.api)
         self.subnets = Subnets(self.api)
         self.hostgroups = HostGroups(self.api)
-        # self.hosts = Hosts(self.api)
-        # self.computeResources = ComputeResources(self.api)
-        self.environments =  ForemanObjects(self.api,
-                                            'environments',
-                                            'environment')
+        self.hosts = Hosts(self.api)
+        self.computeResources = ComputeResources(self.api)
+        self.environments =  Environments(self.api)
         self.smartClassParameters = SmartClassParameters(self.api)
         self.settings =  ForemanObjects(self.api,
                                         'settings',

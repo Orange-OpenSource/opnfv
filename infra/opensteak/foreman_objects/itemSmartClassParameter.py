@@ -18,7 +18,8 @@
 
 
 from opensteak.foreman_objects.item import ForemanItem
-from opensteak.foreman_objects.subItemOverrideValues import SubItemOverrideValues
+from opensteak.foreman_objects.subItemOverrideValues\
+    import SubItemOverrideValues
 from opensteak.foreman_objects.subDict import SubDict
 from pprint import pprint as pp
 
@@ -31,26 +32,17 @@ class ItemSmartClassParameter(ForemanItem):
 
     objName = 'smart_class_parameters'
     payloadObj = 'smart_class_parameter'
+    index = 'id'
 
-
-    def __init__(self, api, key,
-                 objName, payloadObj,
-                 *args, **kwargs):
-        """ Function __init__
-        Represent the content of a foreman object as a dict
-
-        @param api: The foreman api
-        @param key: The object Key
-        @param *args, **kwargs: the dict representation
-        @return RETURN: Itself
+    def enhance(self):
+        """ Function enhance
+        Enhance the object with new item or enhanced items
         """
-        self.key = key
-        ForemanItem.__init__(self, api, key,
-                             self.objName, self.payloadObj,
-                             *args, **kwargs)
         self.update({'override_values':
-                     SubDict(self.api, self.objName,
-                             self.payloadObj, self.key,
+                     SubDict(self.api,
+                             'smart_class_parameters',
+                             'smart_class_parameter',
+                             self.key,
                              SubItemOverrideValues)})
 
     def __setitem__(self, key, attributes):

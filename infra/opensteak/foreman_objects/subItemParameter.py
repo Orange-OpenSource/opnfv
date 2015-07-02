@@ -28,4 +28,4 @@ class SubItemParameter(SubItem):
 
     objName = 'parameters'
     payloadObj = 'parameter'
-    index = 'id'
+    index = 'name'

@@ -16,10 +16,8 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-from opensteak.foreman_objects.item import ForemanItem
 
-
-class SubItem(ForemanItem):
+class SubItem(dict):
     """
     ItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
@@ -38,22 +36,16 @@ class SubItem(ForemanItem):
         """
         self.parentName = parentName
         self.parentKey = parentKey
-        ForemanItem.__init__(self, api, key,
-                             self.objName, self.payloadObj,
-                             *args, **kwargs)
+        if args[0]:
+            self.update(dict(*args, **kwargs))
 
-    def __setitem__(self, key, attributes):
-        """ Function __setitem__
-        Set a parameter of a foreman object as a dict
+    def getPayloadStruct(self, attributes, objType=None):
+        """ Function getPayloadStruct
+        Get the payload structure to do a creation or a modification
 
         @param key: The key to modify
         @param attribute: The data
+        @param objType: NOT USED in this class
         @return RETURN: The API result
         """
-        payload = {self.payloadObj: {'id': self['id'],
-                                     'type': self['type'] }}
-        payload[self.payloadObj][key] = attributes
-        return self.api.set('{}/{}/{}'.format(self.parentName,
-                                              self.parentKey,
-                                              self.objName),
-                            self.key, payload)
+        return {self.payloadObj: attributes}

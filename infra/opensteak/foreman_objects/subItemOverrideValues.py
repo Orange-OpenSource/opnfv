@@ -18,7 +18,6 @@
 
 
 from opensteak.foreman_objects.subItem import SubItem
-from pprint import pprint as pp
 
 class SubItemOverrideValues(SubItem):
     """

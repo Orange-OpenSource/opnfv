@@ -20,6 +20,7 @@ import json
 import requests
 from requests_futures.sessions import FuturesSession
 from pprint import pformat
+from pprint import pprint as pp
 
 
 class Api:
@@ -42,6 +43,7 @@ class Api:
                         'Content-Type': 'application/json; charset=UTF-8'}
         self.auth = (login, password)
         self.errorMsg = ''
+        self.payload = ''
         self.printErrors = printErrors
 
     def list(self, obj, filter=False, only_id=False, limit=20):
@@ -192,8 +194,9 @@ class Api:
                 print(self.errorMsg)
             return False
         self.res = json.loads(self.resp.text)
-        if 'results' in self.res.keys():
-            return self.res['results']
+        if self.res:
+            if 'results' in self.res.keys():
+                return self.res['results']
         return self.res
 
     def __str__(self):

@@ -18,6 +18,7 @@
 
 from opensteak.foreman_objects.objects import ForemanObjects
 from opensteak.foreman_objects.itemHostsGroup import ItemHostsGroup
+from pprint import pprint as pp
 
 
 class HostGroups(ForemanObjects):
@@ -79,8 +80,10 @@ class HostGroups(ForemanObjects):
 
         # Create Hostgroup classes
         if 'classes' in hostgroupConf.keys():
-            hostgroupClassIds = self[key]['puppetclasses'].keys()
-            if not self[key].checkAndCreateClasses(hostgroupClassIds.values()):
+            classList = list()
+            for c in hostgroupConf['classes']:
+                classList.append(puppetClassesId[c])
+            if not self[key].checkAndCreateClasses(classList):
                 print("Failed in classes")
                 return False
 

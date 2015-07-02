@@ -18,8 +18,12 @@
 
 from opensteak.foreman_objects.item import ForemanItem
 from opensteak.foreman_objects.subItemParameter import SubItemParameter
-from opensteak.foreman_objects.subItemPuppetClass import SubItemPuppetClass
+from opensteak.foreman_objects.subItemPuppetClasses import SubItemPuppetClasses
+from opensteak.foreman_objects.subItemPuppetClassIds\
+    import SubItemPuppetClassIds
 from opensteak.foreman_objects.subDict import SubDict
+from opensteak.foreman_objects.itemSmartClassParameter\
+    import ItemSmartClassParameter
 
 
 class ItemHostsGroup(ForemanItem):
@@ -31,25 +35,23 @@ class ItemHostsGroup(ForemanItem):
     objName = 'hostgroups'
     payloadObj = 'hostgroup'
 
-    def __init__(self, api, key,
-                 objName, payloadObj,
-                 *args, **kwargs):
-        """ Function __init__
-        Represent the content of a foreman object as a dict
-
-        @param api: The foreman api
-        @param key: The object Key
-        @param *args, **kwargs: the dict representation
-        @return RETURN: Itself
+    def enhance(self):
+        """ Function enhance
+        Enhance the object with new item or enhanced items
         """
-        ForemanItem.__init__(self, api, key,
-                             self.objName, self.payloadObj,
-                             *args, **kwargs)
+        self.update({'puppetclass_ids':
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemPuppetClassIds)})
         self.update({'puppetclasses':
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
-                             SubItemPuppetClass)})
+                             SubItemPuppetClasses)})
         self.update({'parameters':
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
                              SubItemParameter)})
+        self.update({'smart_class_parameters':
+                    SubDict(self.api, self.objName,
+                            self.payloadObj, self.key,
+                            ItemSmartClassParameter)})

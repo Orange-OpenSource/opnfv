@@ -28,6 +28,7 @@ class ForemanObjects(dict):
     searchLimit = 99
     index = 'name'
     itemType = ForemanItem
+    forceFullSync = False
 
     def __init__(self, api, objName=None, payloadObj=None,
                  index=None, searchLimit=None):
@@ -81,7 +82,8 @@ class ForemanObjects(dict):
         Decorator to ensure local dict is sync with remote foreman
         """
         def _updateBeforeDecorator(self, *args, **kwargs):
-            self.reload()
+            if self.forceFullSync:
+                self.reload()
             return function(self, *args, **kwargs)
         return _updateBeforeDecorator
 
@@ -120,7 +122,7 @@ class ForemanObjects(dict):
             return self.api.create(self.objName, payload, async=self.async)
         return False
 
-    # @updateAfterDecorator
+    @updateAfterDecorator
     def __delitem__(self, key):
         """ Function __delitem__
 
@@ -150,7 +152,7 @@ class ForemanObjects(dict):
                 for x in self.api.list(self.objName,
                                        limit=self.searchLimit)}
 
-    # @updateBeforeDecorator
+    @updateBeforeDecorator
     def listName(self):
         """ Function listName
         Get the list of all objects name with Ids

@@ -16,16 +16,29 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-
 from opensteak.foreman_objects.subItem import SubItem
 
 
-class SubItemPuppetClass(SubItem):
+class SubItemPuppetClassIds(SubItem):
     """
     ItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
     """
 
-    objName = 'puppetclasses'
-    payloadObj = 'puppetClass'
+    objName = 'puppetclass_ids'
+    payloadObj = 'puppetclass_id'
     index = 'id'
+
+
+    def getPayloadStruct(self, attributes, objType):
+        """ Function getPayloadStruct
+        Get the payload structure to do a creation or a modification
+
+        @param attribute: The data
+        @param objType: SubItem type (e.g: hostgroup for hostgroup_class)
+        @return RETURN: the payload
+        """
+        payload = {"puppetclass_id": attributes,
+                   objType + "_class":
+                       {"puppetclass_id": attributes}}
+        return payload

@@ -39,10 +39,11 @@ class SubDict(dict):
         self.parentKey = parentKey
         self.objType = objType
         self.objName = objType.objName
+        self.payloadObj = objType.payloadObj
         self.index = objType.index
-        dict.__init__(self, self.get())
+        dict.__init__(self, self.load())
 
-    def get(self, limit=9999):
+    def load(self, limit=9999):
         """ Function list
         Get the list of all interfaces
 
@@ -55,6 +56,8 @@ class SubDict(dict):
                                                       self.objName,
                                                       ),
                                     limit=limit)
+        if self.objName == 'puppetclass_ids':
+            subItemList = list(map(lambda x: {'id': x}, subItemList))
         if self.objName == 'puppetclasses':
             sil_tmp = subItemList.values()
             subItemList = []
@@ -62,6 +65,49 @@ class SubDict(dict):
                 subItemList.extend(i)
         return {x[self.index]: self.objType(self.api, x['id'],
                                             self.parentObjName,
-                                            self.parentPayloadObj,
+                                            self.parentKey,
                                             x)
                 for x in subItemList}
+
+    def __setitem__(self, key, attributes):
+        """ Function __setitem__
+        Set a parameter of a foreman object as a dict
+
+        @param key: The key to modify
+        @param attribute: The data
+        @return RETURN: The API result
+        """
+
+        return self.api.set('{}/{}/{}'.format(self.parentName,
+                                              self.parentKey,
+                                              self.objName),
+                            key,
+                            self.getPayloadStruct(attributes))
+
+    def __delitem__(self, key):
+        """ Function __delitem__
+        Delete a parameter of a foreman object
+
+        @param key: The key to modify
+        @return RETURN: The API result
+        """
+        print("delete")
+        return self.api.delete('{}/{}/{}'.format(self.parentObjName,
+                                                 self.parentKey,
+                                                 self.objName),
+                               key)
+
+    def __iadd__(self, payload):
+        """ Function __iadd__
+
+        @param payload: The payload corresponding to the object to add
+        @return RETURN: A ForemanItem
+        """
+        newSubItem = self.objType(self.api, 0,
+                                  self.parentObjName, self.parentKey, {})
+        payload = newSubItem.getPayloadStruct(payload, self.parentPayloadObj)
+        pp(payload)
+        return self.api.create("{}/{}/{}".format(self.parentObjName,
+                                                 self.parentKey,
+                                                 self.objName),
+                               payload)
