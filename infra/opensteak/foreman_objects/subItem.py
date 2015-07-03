@@ -34,6 +34,8 @@ class SubItem(dict):
         @param *args, **kwargs: the dict representation
         @return RETURN: Itself
         """
+        self.key = key
+        self.api = api
         self.parentName = parentName
         self.parentKey = parentKey
         if args[0]:

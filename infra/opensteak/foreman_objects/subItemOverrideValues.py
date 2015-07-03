@@ -19,6 +19,7 @@
 
 from opensteak.foreman_objects.subItem import SubItem
 
+
 class SubItemOverrideValues(SubItem):
     """
     SubItemOverrideValues class
@@ -28,3 +29,19 @@ class SubItemOverrideValues(SubItem):
     objName = 'override_values'
     payloadObj = 'override_value'
     index = 'id'
+
+    def __setitem__(self, key, attributes):
+        """ Function __setitem__
+        Set a parameter of a foreman object as a dict
+
+        @param key: The key to modify
+        @param attribute: The data
+        @return RETURN: The API result
+        """
+        payload = {key: attributes}
+        ret = self.api.set('{}/{}/{}'.format(self.parentName,
+                                             self.parentKey,
+                                             self.objName),
+                           self.key,
+                           self.getPayloadStruct(payload))
+        return ret
