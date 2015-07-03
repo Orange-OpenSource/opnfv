@@ -22,14 +22,18 @@ class SubItem(dict):
     ItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
     """
+    setInParentPayload = False
 
-    def __init__(self, api, key, parentName, parentKey, *args, **kwargs):
+    def __init__(self, api, key, parentName, parentPayloadObject,
+                 parentKey, *args, **kwargs):
         """ Function __init__
         Represent the content of a foreman object as a dict
 
         @param api: The foreman api
         @param key: The object Key
-        @param parentName: The object parent name (eg: smart_class_parameter)
+        @param parentName: The object parent name (eg: smart_class_parameters)
+        @param parentPayloadObject: The object parent
+                                    payload object (eg: smart_class_parameter)
         @param parentKey: The object parent key
         @param *args, **kwargs: the dict representation
         @return RETURN: Itself
@@ -37,6 +41,7 @@ class SubItem(dict):
         self.key = key
         self.api = api
         self.parentName = parentName
+        self.parentPayloadObject = parentPayloadObject
         self.parentKey = parentKey
         if args[0]:
             self.update(dict(*args, **kwargs))
@@ -50,4 +55,8 @@ class SubItem(dict):
         @param objType: NOT USED in this class
         @return RETURN: The API result
         """
-        return {self.payloadObj: attributes}
+        if self.setInParentPayload:
+            return {self.parentPayloadObject:
+                    {self.payloadObj: attributes}}
+        else:
+            return {self.payloadObj: attributes}

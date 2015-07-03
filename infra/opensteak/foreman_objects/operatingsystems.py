@@ -18,6 +18,7 @@
 
 from opensteak.foreman_objects.objects import ForemanObjects
 from opensteak.foreman_objects.item import ForemanItem
+from opensteak.foreman_objects.itemOperatingSystem import ItemOperatingSystem
 
 
 class OperatingSystems(ForemanObjects):
@@ -26,6 +27,7 @@ class OperatingSystems(ForemanObjects):
     """
     objName = 'operatingsystems'
     payloadObj = 'operatingsystem'
+    itemType = ItemOperatingSystem
     index = 'title'
     searchLimit = 20
 
@@ -38,8 +40,29 @@ class OperatingSystems(ForemanObjects):
         ret = self.api.list(self.objName,
                             filter='title = "{}"'.format(key))
         if len(ret):
-            return ForemanItem(self.api, key,
-                               self.objName, self.payloadObj,
-                               ret[0])
+            return self.itemType(self.api,
+                                 ret[0]['id'],
+                                 self.objName,
+                                 self.payloadObj,
+                                 ret[0])
         else:
             return None
+
+    def checkAndCreate(self, key, payload):
+        """ Function checkAndCreate
+        Check if an object exists and create it if not
+
+        @param key: The targeted object
+        @param payload: The targeted object description
+        @return RETURN: The id of the object
+        """
+        if key not in self:
+            if 'templates' in payload:
+                templates = payload.pop('templates')
+            self[key] = payload
+            self.reload()
+            for tpl in templates:
+                if tpl is dict:
+                    if "config_template_id" in tpl.keys():
+                        self[key]['os_default_templates'] += tpl
+        return self[key]['id']

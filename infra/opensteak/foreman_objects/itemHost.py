@@ -42,10 +42,6 @@ class ItemHost(ForemanItem):
         """ Function enhance
         Enhance the object with new item or enhanced items
         """
-        self.update({'puppetclass_ids':
-                     SubDict(self.api, self.objName,
-                             self.payloadObj, self.key,
-                             SubItemPuppetClassIds)})
         self.update({'puppetclasses':
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
@@ -54,11 +50,6 @@ class ItemHost(ForemanItem):
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
                              SubItemParameter)})
-        self.update({'param_ids':
-                     list(self.api.list('{}/{}/parameters'
-                                        .format(self.objName, self.key),
-                                        only_id=True)
-                          .keys())})
         self.update({'interfaces':
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
@@ -67,6 +58,24 @@ class ItemHost(ForemanItem):
                     SubDict(self.api, self.objName,
                             self.payloadObj, self.key,
                             ItemSmartClassParameter)})
+
+    def __setitem__(self, key, attributes):
+        """ Function __setitem__
+        Set a parameter of a foreman object as a dict
+
+        @param key: The key to modify
+        @param attribute: The data
+        @return RETURN: The API result
+        """
+        if key in ['parameters', 'interfaces', 'smart_class_parameters']:
+            print('Can not assign {} directly, use +='.format(key))
+            return False
+        elif key in ['puppetclasses']:
+            return ForemanItem.__setitem__(self,
+                                           self[key].objType.payloadObj,
+                                           attributes)
+        else:
+            return ForemanItem.__setitem__(self, key, attributes)
 
     def getStatus(self):
         """ Function getStatus

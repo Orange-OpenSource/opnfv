@@ -17,40 +17,49 @@
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
 from opensteak.foreman_objects.item import ForemanItem
-from opensteak.foreman_objects.subItemParameter import SubItemParameter
-from opensteak.foreman_objects.subItemPuppetClasses import SubItemPuppetClasses
-from opensteak.foreman_objects.subItemPuppetClassIds\
-    import SubItemPuppetClassIds
 from opensteak.foreman_objects.subDict import SubDict
-from opensteak.foreman_objects.itemSmartClassParameter\
-    import ItemSmartClassParameter
+from opensteak.foreman_objects.subItemOsDefaultTemplate\
+    import SubItemOsDefaultTemplate
+from opensteak.foreman_objects.subItemPTable import SubItemPTable
+from opensteak.foreman_objects.subItemMedia import SubItemMedia
+from opensteak.foreman_objects.subItemArchitecture import SubItemArchitecture
+from opensteak.foreman_objects.subItemConfigTemplate\
+    import SubItemConfigTemplate
 
 
-class ItemHostsGroup(ForemanItem):
+class ItemOperatingSystem(ForemanItem):
     """
-    ItemHostsGroup class
+    ItemHost class
     Represent the content of a foreman hostgroup as a dict
     """
 
-    objName = 'hostgroups'
-    payloadObj = 'hostgroup'
+    objName = 'operatingsystems'
+    payloadObj = 'operatingsystem'
 
     def enhance(self):
         """ Function enhance
         Enhance the object with new item or enhanced items
         """
-        self.update({'puppetclasses':
+        self.update({'os_default_templates':
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
-                             SubItemPuppetClasses)})
-        self.update({'parameters':
+                             SubItemOsDefaultTemplate)})
+        self.update({'config_templates':
                      SubDict(self.api, self.objName,
                              self.payloadObj, self.key,
-                             SubItemParameter)})
-        self.update({'smart_class_parameters':
-                    SubDict(self.api, self.objName,
-                            self.payloadObj, self.key,
-                            ItemSmartClassParameter)})
+                             SubItemConfigTemplate)})
+        self.update({'ptables':
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemPTable)})
+        self.update({'media':
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemMedia)})
+        self.update({'architectures':
+                     SubDict(self.api, self.objName,
+                             self.payloadObj, self.key,
+                             SubItemArchitecture)})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__
@@ -60,10 +69,14 @@ class ItemHostsGroup(ForemanItem):
         @param attribute: The data
         @return RETURN: The API result
         """
-        if key in ['parameters', 'smart_class_parameters']:
+
+        if key in ['os_default_templates']:
             print('Can not assign {} directly, use +='.format(key))
             return False
-        elif key in ['puppetclasses']:
+        elif key in ['config_templates',
+                   'ptables',
+                   'media',
+                   'architectures']:
             return ForemanItem.__setitem__(self,
                                            self[key].objType.payloadObj,
                                            attributes)

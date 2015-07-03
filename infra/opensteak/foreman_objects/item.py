@@ -88,17 +88,6 @@ class ForemanItem(dict):
         payload = {self.payloadObj: {key: attributes}}
         return self.api.set(self.objName, self.key, payload)
 
-    def __setitem__(self, key, attributes):
-        """ Function __setitem__
-        Set a parameter of a foreman object as a dict
-
-        @param key: The key to modify
-        @param attribute: The data
-        @return RETURN: The API result
-        """
-        payload = {self.payloadObj: {key: attributes}}
-        return self.api.set(self.objName, self.key, payload)
-
     def getParam(self, name=None):
         """ Function getParam
         Return a dict of parameters or a parameter value

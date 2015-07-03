@@ -65,6 +65,7 @@ class SubDict(dict):
                 subItemList.extend(i)
         return {x[self.index]: self.objType(self.api, x['id'],
                                             self.parentObjName,
+                                            self.parentPayloadObj,
                                             self.parentKey,
                                             x)
                 for x in subItemList}
@@ -77,7 +78,6 @@ class SubDict(dict):
         @param attribute: The data
         @return RETURN: The API result
         """
-
         return self.api.set('{}/{}/{}'.format(self.parentName,
                                               self.parentKey,
                                               self.objName),
@@ -103,11 +103,24 @@ class SubDict(dict):
         @param payload: The payload corresponding to the object to add
         @return RETURN: A ForemanItem
         """
-        newSubItem = self.objType(self.api, 0,
-                                  self.parentObjName, self.parentKey, {})
-        payload = newSubItem.getPayloadStruct(payload, self.parentPayloadObj)
-        pp(payload)
-        return self.api.create("{}/{}/{}".format(self.parentObjName,
-                                                 self.parentKey,
-                                                 self.objName),
-                               payload)
+        if self.objType.setInParentPayload:
+            print('Error, {} is not elibible to addition, but only set'
+                  .format(self.objName))
+            return False
+        pp(self.getPayloadStruct(payload))
+        ret = self.api.create("{}/{}/{}".format(self.parentObjName,
+                                                self.parentKey,
+                                                self.objName),
+                              self.getPayloadStruct(payload))
+        pp(self.api.__dict__)
+        return ret
+
+    def getPayloadStruct(self, payload):
+        """ Function getPayloadStruct
+
+        @param payload: The payload structure to the object to add
+        @return RETURN: A dict
+        """
+        newSubItem = self.objType(self.api, 0, self.parentObjName,
+                                  self.parentPayloadObj, self.parentKey, {})
+        return newSubItem.getPayloadStruct(payload, self.parentPayloadObj)

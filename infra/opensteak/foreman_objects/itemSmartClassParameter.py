@@ -70,8 +70,12 @@ class ItemSmartClassParameter(ForemanItem):
         @param attribute: The data
         @return RETURN: The API result
         """
-        payload = {self.payloadObj: {key: attributes}}
-        return self.api.set(self.objName, self.key, payload)
+        if key in ['override_values']:
+            print('Can not assign {} directly, use +='.format(key))
+            return False
+        else:
+            return ForemanItem.__setitem__(self, key, attributes)
+
 
     def getOverrideValueForHost(self, hostname):
         for sc in self['override_values'].values():

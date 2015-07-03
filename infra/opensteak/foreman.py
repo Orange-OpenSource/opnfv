@@ -28,6 +28,7 @@ from opensteak.foreman_objects.puppetClasses import PuppetClasses
 from opensteak.foreman_objects.compute_resources import ComputeResources
 from opensteak.foreman_objects.smartClassParameters import SmartClassParameters
 from opensteak.foreman_objects.environments import Environments
+from opensteak.foreman_objects.configTemplates import ConfigTemplates
 
 
 class OpenSteakForeman:
@@ -56,6 +57,7 @@ class OpenSteakForeman:
         self.hosts = Hosts(self.api)
         self.computeResources = ComputeResources(self.api)
         self.environments =  Environments(self.api)
+        self.configTemplates =  ConfigTemplates(self.api)
         self.smartClassParameters = SmartClassParameters(self.api)
         self.settings =  ForemanObjects(self.api,
                                         'settings',

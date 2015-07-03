@@ -16,15 +16,27 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-from opensteak.foreman_objects.subItem import SubItem
+from opensteak.foreman_objects.objects import ForemanObjects
+from opensteak.foreman_objects.itemConfigTemplate import ItemConfigTemplate
 
 
-class SubItemPuppetClasses(SubItem):
+class ConfigTemplates(ForemanObjects):
     """
-    ItemOverrideValues class
-    Represent the content of a foreman smart class parameter as a dict
+    Environments class
     """
+    objName = 'config_templates'
+    payloadObj = 'config_template'
+    index = 'name'
+    searchLimit = 999
+    itemType = ItemConfigTemplate
 
-    objName = 'puppetclasses'
-    payloadObj = 'puppetclass_ids'
-    index = 'id'
+
+    template_kind_ids = {
+        'PXELinux': 1,
+        'PXEGrub': 2,
+        'iPXE': 3,
+        'provision': 4,
+        'finish': 5,
+        'script': 6,
+        'user_data': 7,
+        'ZTP': 8 }

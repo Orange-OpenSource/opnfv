@@ -16,15 +16,17 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
+
 from opensteak.foreman_objects.subItem import SubItem
 
 
-class SubItemPuppetClasses(SubItem):
+class SubItemConfigTemplate(SubItem):
     """
     ItemOverrideValues class
     Represent the content of a foreman smart class parameter as a dict
     """
 
-    objName = 'puppetclasses'
-    payloadObj = 'puppetclass_ids'
+    objName = 'config_templates'
+    payloadObj = 'config_template'
     index = 'id'
+    setInParentPayload = True
