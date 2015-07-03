@@ -230,16 +230,15 @@ for k, v in conf['foreman']['classes'][className].items():
                 v.append(subn['domain'])
                 revZone = subn['data']['network'].split('.')[::-1]
                 while revZone[0] is '0':
-                    revZone=revZone[1::]
+                    revZone = revZone[1::]
                 v.append('.'.join(revZone) + '.in-addr.arpa')
     scp_id = scp[k]
-    # foreman.hosts[hostName][
-        # 'smart_class_parameters_dict'][
-        # '{}::{}'.format(className, k)].setOverrideValue(v, hostName)
+    foreman.hosts[hostName]['smart_class_parameters'][scp_id]\
+        .setOverrideValue(v, hostName)
 
 foremanSCP = set([x['parameter']
                  for x in foreman.hosts[hostName]
-                 ['smart_class_parameters_dict'].values()])
+                 ['smart_class_parameters'].values()])
 awaitedSCP = set(conf['foreman']['classes'][className].keys())
 p.status(awaitedSCP.issubset(foremanSCP),
          "Add smart class parameters to class {} on foreman host"
@@ -258,13 +257,16 @@ p.status(bool(foreman.hosts[hostName].puppetRun()),
 ## macAddress = '40:f2:e9:2a:4d:e3'
 ## pTableName = "Preseed default"
 ## mediaName = "Ubuntu mirror"
-## osName = "Ubuntu 14.04.1 LTS"
+## osName = "Ubuntu 14.04.2 LTS"
 ## password = "opnfv123"
 ##
 ## domainId = foreman.domains[conf['domains']]['id']
 ## environmentId = foreman.environments[conf['environments']]['id']
 ## architectureId = foreman.architectures[conf['architectures']]['id']
 ## smartProxyId = foreman.smartProxies[conf['smart_proxies']]['id']
+## hostGroupId = foreman.hostgroups['{}_{}'.format(
+##         conf['hostgroupTop']['name'],
+##         conf['hostgroups']['hostgroupController']['name'])]['id']
 ## payload = {
 ##   "host": {
 ##     "name": controllerName,
@@ -276,8 +278,7 @@ p.status(bool(foreman.hosts[hostName].puppetRun()),
 ##     "architecture_id": architectureId,
 ##     "operatingsystem_id": foreman.operatingSystems[osName]['id'],
 ##     "puppet_proxy_id": smartProxyId,
-##     "hostgroup_id": foreman.hostgroups[
-##         conf['hostgroups']['hostgroupController']['name']]['id'],
+##     "hostgroup_id": hostGroupId,
 ##     "root_pass": password,
 ##   }
 ## }

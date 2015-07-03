@@ -19,6 +19,7 @@
 from opensteak.foreman_objects.objects import ForemanObjects
 from opensteak.foreman_objects.itemHost import ItemHost
 import time
+from pprint import pprint as pp
 
 
 class Hosts(ForemanObjects):
@@ -61,10 +62,11 @@ class Hosts(ForemanObjects):
             self.__printProgression__('In progress',
                                       key + ' creation: push in Foreman', eol='\r')
             self.api.create('hosts', attributes, async=self.async)
+            pp(self.api.__dict__)
 
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)
-
+        self.reload()
         return self[key]['id']
 
     def waitPuppetCatalogToBeApplied(self, key):

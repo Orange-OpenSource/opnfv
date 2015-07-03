@@ -21,7 +21,6 @@ from opensteak.foreman_objects.item import ForemanItem
 from opensteak.foreman_objects.subItemOverrideValues\
     import SubItemOverrideValues
 from opensteak.foreman_objects.subDict import SubDict
-from pprint import pprint as pp
 
 
 class ItemSmartClassParameter(ForemanItem):
@@ -34,16 +33,34 @@ class ItemSmartClassParameter(ForemanItem):
     payloadObj = 'smart_class_parameter'
     index = 'id'
 
+    def __init__(self, api, key,
+                 objName, payloadObj,
+                 *args, **kwargs):
+        """ Function __init__
+        Represent the content of a foreman object as a dict
+
+        @param api: The foreman api
+        @param key: The object Key
+        @param objName: NO USED HERE
+        @param payloadObj: NO USED HERE
+        @param *args, **kwargs: the dict representation
+        @return RETURN: Itself
+        """
+        self.api = api
+        self.key = key
+        self.store = dict()
+        if args[0]:
+            self.load(dict(*args, **kwargs))
+        # We get the smart class parameters for the good items
+
     def enhance(self):
         """ Function enhance
         Enhance the object with new item or enhanced items
         """
         self.update({'override_values':
-                     SubDict(self.api,
-                             'smart_class_parameters',
-                             'smart_class_parameter',
-                             self.key,
-                             SubItemOverrideValues)})
+                    SubDict(self.api, self.objName,
+                            self.payloadObj, self.key,
+                            SubItemOverrideValues)})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__
@@ -57,7 +74,7 @@ class ItemSmartClassParameter(ForemanItem):
         return self.api.set(self.objName, self.key, payload)
 
     def getOverrideValueForHost(self, hostname):
-        for sc in self['override_values']:
+        for sc in self['override_values'].values():
             if sc['match'] == 'fqdn=' + hostname:
                 return sc
         return False

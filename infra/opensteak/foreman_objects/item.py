@@ -34,6 +34,8 @@ class ForemanItem(dict):
 
         @param api: The foreman api
         @param key: The object Key
+        @param objName: The object name to override the default one
+        @param payloadObj: The payload object name to override the default one
         @param *args, **kwargs: the dict representation
         @return RETURN: Itself
         """
