@@ -93,7 +93,7 @@ subnets:
 foreman:
  ip: "192.168.1.4"
  admin: "admin"
- password: "B1ng0!42"
+ password: "password"
  cpu: "2"
  ram: "2097152"
  iso: "trusty-server-cloudimg-amd64-disk1.img"
