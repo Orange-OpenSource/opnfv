@@ -9,9 +9,9 @@ ptables: "Preseed default"
 architectures: "x86_64"
 
 operatingsystems:
- "Ubuntu 14.04.1 LTS":
+ "Ubuntu 14.04.2 LTS":
   name: "Ubuntu"
-  description: "Ubuntu 14.04.1 LTS"
+  description: "Ubuntu 14.04.2 LTS"
   major: "14"
   minor: "04"
   family: "Debian"
