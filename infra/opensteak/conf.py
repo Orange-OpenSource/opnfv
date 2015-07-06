@@ -23,7 +23,7 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-class OpenSteakConfig:
+class OpenSteakConfig(dict):
     """OpenSteak config class
     Use this object as a dict
     """
@@ -44,28 +44,20 @@ class OpenSteakConfig:
         self.config_file = config_file
         self.autosave = autosave
         with open(self.config_file, 'r') as stream:
-            self._data = load(stream, Loader=Loader)
-
-    def __getitem__(self, index):
-        """Get an item of the configuration"""
-        return self._data[index]
-
-    def __setitem__(self, index, value):
-        """Set an item of the configuration"""
-        self._data[index] = value
+            dict.__init__(self, load(stream, Loader=Loader))
 
     def list(self):
         """Set an item of the configuration"""
-        return self._data.keys()
+        return self.keys()
 
     def dump(self):
         """Dump the configuration"""
-        return dump(self._data, Dumper=Dumper)
+        return dump(self, Dumper=Dumper)
 
     def save(self):
         """Save the configuration to the file"""
         with open(self.config_file, 'w') as f:
-            f.write(dump(self._data, Dumper=Dumper))
+            f.write(dump(self, Dumper=Dumper))
 
     def __del__(self):
         if self.autosave:

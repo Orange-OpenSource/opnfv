@@ -147,9 +147,7 @@ class Api:
         """
         self.url = self.base_url + obj
         self.method = 'POST'
-        pp(payload)
         self.payload = json.dumps(payload)
-        pp(self.payload)
         if async:
             session = FuturesSession()
             return session.post(url=self.url, auth=self.auth,

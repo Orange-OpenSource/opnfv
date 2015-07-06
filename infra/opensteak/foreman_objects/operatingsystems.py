@@ -61,8 +61,4 @@ class OperatingSystems(ForemanObjects):
                 templates = payload.pop('templates')
             self[key] = payload
             self.reload()
-            for tpl in templates:
-                if tpl is dict:
-                    if "config_template_id" in tpl.keys():
-                        self[key]['os_default_templates'] += tpl
         return self[key]['id']

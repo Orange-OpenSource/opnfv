@@ -22,6 +22,7 @@ from opensteak.foreman_objects.subItemOperatingSystem\
     import SubItemOperatingSystem
 from opensteak.foreman_objects.subItemOsDefaultTemplate\
     import SubItemOsDefaultTemplate
+from pprint import pprint as pp
 
 
 class ItemConfigTemplate(ForemanItem):
@@ -56,6 +57,7 @@ class ItemConfigTemplate(ForemanItem):
         """
 
         if key in ['os_default_templates']:
+            pp(attributes)
             print('Can not assign {} directly, use +='.format(key))
             return False
         elif key in ['operatingsystems']:
@@ -64,3 +66,12 @@ class ItemConfigTemplate(ForemanItem):
                                            attributes)
         else:
             return ForemanItem.__setitem__(self, key, attributes)
+
+    def checkOrAddOS(self, osName, osId):
+        if osName not in self['operatingsystems']:
+            osL = list(map(lambda x: x['id'],
+                           self['operatingsystems'].values()))
+            osL.append(osId)
+            self['operatingsystems'] = osL
+            self.reload()
+        return osName in self['operatingsystems']

@@ -25,8 +25,8 @@ from opensteak.foreman_objects.subItemPuppetClasses import SubItemPuppetClasses
 from opensteak.foreman_objects.subItemPuppetClassIds\
     import SubItemPuppetClassIds
 from opensteak.foreman_objects.subDict import SubDict
-from opensteak.foreman_objects.itemSmartClassParameter\
-    import ItemSmartClassParameter
+from opensteak.foreman_objects.subItemSmartClassParameter\
+    import SubItemSmartClassParameter
 
 
 class ItemHost(ForemanItem):
@@ -57,7 +57,7 @@ class ItemHost(ForemanItem):
         self.update({'smart_class_parameters':
                     SubDict(self.api, self.objName,
                             self.payloadObj, self.key,
-                            ItemSmartClassParameter)})
+                            SubItemSmartClassParameter)})
 
     def __setitem__(self, key, attributes):
         """ Function __setitem__

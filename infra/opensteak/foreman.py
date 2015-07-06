@@ -59,12 +59,6 @@ class OpenSteakForeman:
         self.environments =  Environments(self.api)
         self.configTemplates =  ConfigTemplates(self.api)
         self.smartClassParameters = SmartClassParameters(self.api)
-        self.settings =  ForemanObjects(self.api,
-                                        'settings',
-                                        'setting')
-        self.ptables =  ForemanObjects(self.api,
-                                       'ptables',
-                                       'ptable')
-        self.media =  ForemanObjects(self.api,
-                                      'media',
-                                      'medium')
+        self.settings =  ForemanObjects(self.api, 'settings', 'setting')
+        self.ptables =  ForemanObjects(self.api, 'ptables', 'ptable')
+        self.media =  ForemanObjects(self.api, 'media', 'medium')

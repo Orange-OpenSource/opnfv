@@ -21,6 +21,7 @@ from opensteak.foreman_objects.item import ForemanItem
 from opensteak.foreman_objects.subItemOverrideValues\
     import SubItemOverrideValues
 from opensteak.foreman_objects.subDict import SubDict
+from pprint import pprint as pp
 
 
 class ItemSmartClassParameter(ForemanItem):
@@ -51,7 +52,6 @@ class ItemSmartClassParameter(ForemanItem):
         self.store = dict()
         if args[0]:
             self.load(dict(*args, **kwargs))
-        # We get the smart class parameters for the good items
 
     def enhance(self):
         """ Function enhance

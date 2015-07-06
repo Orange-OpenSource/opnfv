@@ -91,7 +91,6 @@ class SubDict(dict):
         @param key: The key to modify
         @return RETURN: The API result
         """
-        print("delete")
         return self.api.delete('{}/{}/{}'.format(self.parentObjName,
                                                  self.parentKey,
                                                  self.objName),
@@ -107,12 +106,10 @@ class SubDict(dict):
             print('Error, {} is not elibible to addition, but only set'
                   .format(self.objName))
             return False
-        pp(self.getPayloadStruct(payload))
         ret = self.api.create("{}/{}/{}".format(self.parentObjName,
                                                 self.parentKey,
                                                 self.objName),
                               self.getPayloadStruct(payload))
-        pp(self.api.__dict__)
         return ret
 
     def getPayloadStruct(self, payload):

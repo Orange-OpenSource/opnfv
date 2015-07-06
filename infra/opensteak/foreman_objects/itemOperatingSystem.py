@@ -25,6 +25,7 @@ from opensteak.foreman_objects.subItemMedia import SubItemMedia
 from opensteak.foreman_objects.subItemArchitecture import SubItemArchitecture
 from opensteak.foreman_objects.subItemConfigTemplate\
     import SubItemConfigTemplate
+from pprint import pprint as pp
 
 
 class ItemOperatingSystem(ForemanItem):
@@ -71,14 +72,21 @@ class ItemOperatingSystem(ForemanItem):
         """
 
         if key in ['os_default_templates']:
-            print('Can not assign {} directly, use +='.format(key))
             return False
         elif key in ['config_templates',
-                   'ptables',
-                   'media',
-                   'architectures']:
+                     'ptables',
+                     'media',
+                     'architectures']:
             return ForemanItem.__setitem__(self,
                                            self[key].objType.payloadObj,
                                            attributes)
         else:
             return ForemanItem.__setitem__(self, key, attributes)
+
+    def checkOrAddDefaultTemplate(self, tpl):
+        if tpl['name'] not in self['os_default_templates']:
+            self['os_default_templates'] += {
+                "config_template_id": tpl['id'],
+                "template_kind_id": tpl['template_kind_id']}
+            self.reload()
+        return tpl['name'] in self['os_default_templates']
