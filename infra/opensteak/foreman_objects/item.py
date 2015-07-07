@@ -107,19 +107,18 @@ class ForemanItem(dict):
 
     def checkAndCreateClasses(self, classes):
         """ Function checkAndCreateClasses
-        Check and add puppet classe
+        Check and add puppet class
 
-        @param key: The parameter name
         @param classes: The classes ids list
         @return RETURN: boolean
         """
         actual_classes = self['puppetclasses'].keys()
-        for v in classes:
-            if v not in actual_classes:
-                self['puppetclass_ids'] += v
+        for i in classes:
+            if i not in actual_classes:
+                self['puppetclasses'] += i
         self.reload()
-        return list(classes).sort() is\
-            list(self['puppetclasses'].keys()).sort()
+        return list(sorted(classes)) is\
+            list(sorted(self['puppetclasses'].keys()))
 
     def checkAndCreateParams(self, params):
         """ Function checkAndCreateParams

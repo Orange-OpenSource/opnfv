@@ -155,7 +155,7 @@ for os, data in operatingSystems.items():
     foreman.operatingSystems[os]['ptables'] = ptables_ids
     p.status(list(foreman.operatingSystems[os]
                   ['ptables'].keys()) == ptables,
-             'PTables for perating system ' + os)
+             'PTables for operating system ' + os)
     # Set templates
     # - First check OS is added in the template
     for tpl in templates:
@@ -166,44 +166,49 @@ for os, data in operatingSystems.items():
                  foreman.configTemplates[tpl]),
                  'Add template "{}" to Operating system {}'.format(tpl, os))
 
-sys.exit()
+##############################################
+p.header("Check and create - Architecture")
+##############################################
 
-## ##############################################
-## p.header("Check and create - Architecture")
-## ##############################################
-##
-## architecture = conf['architectures']
-## architectureId = foreman.architectures.checkAndCreate(architecture, {}, osIds)
-## p.status(bool(architectureId), 'Architecture ' + architecture)
-##
-## ##############################################
-## p.header("Check and create - Domains")
-## ##############################################
-##
-## domain = conf['domains']
-## domainId = foreman.domains.checkAndCreate(domain, {})
-## p.status(bool(domainId), 'Domain ' + domain)
-##
-## ##############################################
-## p.header("Check and create - Subnets")
-## ##############################################
-##
-## confSubnets = conf['subnets']
-## for name, data in confSubnets.items():
-##     payload = data['data']
-##     if 'dhcp_id' not in data['data'].keys():
-##         payload['dhcp_id'] = smartProxyId
-##     if 'tftp_id' not in data['data'].keys():
-##         payload['tftp_id'] = smartProxyId
-##     if 'dns_id' not in data['data'].keys():
-##         payload['dns_id'] = smartProxyId
-##     subnetId = foreman.subnets.checkAndCreate(name, payload, domainId)
-##     p.status(bool(subnetId), 'Subnet ' + name)
-##
+architecture = conf['architectures']
+architectureId = foreman.architectures.checkAndCreate(architecture, {}, osIds)
+p.status(bool(architectureId), 'Architecture ' + architecture)
+
+##############################################
+p.header("Check and create - Domains")
+##############################################
+
+domain = conf['domains']
+domainId = foreman.domains.checkAndCreate(domain, {})
+p.status(bool(domainId), 'Domain ' + domain)
+
+##############################################
+p.header("Check and create - Subnets")
+##############################################
+
+confSubnets = conf['subnets']
+for name, data in confSubnets.items():
+    payload = data['data']
+    if 'dhcp_id' not in data['data'].keys():
+        payload['dhcp_id'] = smartProxyId
+    if 'tftp_id' not in data['data'].keys():
+        payload['tftp_id'] = smartProxyId
+    if 'dns_id' not in data['data'].keys():
+        payload['dns_id'] = smartProxyId
+    subnetId = foreman.subnets.checkAndCreate(name, payload, domainId)
+    netmaskshort = sum([bin(int(x)).count('1')
+                            for x in data['data']['mask']
+                            .split('.')])
+    p.status(bool(subnetId), 'Subnet {} ({}/{})'.format(name,
+                                data['data']['network'],
+                                netmaskshort))
+
+sys.exit(0)
+
 ## ##############################################
 ## p.header("Check and create - Hostgroups")
 ## ##############################################
-##
+## 
 ## hg_parent = conf['hostgroupTop']['name']
 ## payload = {"environment_name": conf['environments'],
 ##         "subnet_name": conf['hostgroupTop']['subnet'],
@@ -216,7 +221,7 @@ sys.exit()
 ##     puppetClassesId['hostgroupTop']
 ## )
 ## p.status(bool(hg_parentId), 'Hostgroup {}'.format(hg_parent))
-##
+## 
 ## for hg in conf['hostgroups'].keys():
 ##     key = hg_parent + '_' + conf['hostgroups'][hg]['name']
 ##     payload = {"title": hg_parent + '/' + conf['hostgroups'][hg]['name'],
@@ -226,8 +231,8 @@ sys.exit()
 ##                                                     hg_parent,
 ##                                                     puppetClassesId[hg])),
 ##             'Sub Hostgroup {}'.format(conf['hostgroups'][hg]['name']))
-##
-##
+
+
 ## ##############################################
 ## p.header("Authorize Foreman to do puppet runs")
 ## ##############################################
