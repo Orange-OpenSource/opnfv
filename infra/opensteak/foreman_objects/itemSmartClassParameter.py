@@ -31,6 +31,7 @@ class ItemSmartClassParameter(ForemanItem):
     """
 
     objName = 'smart_class_parameters'
+    objNameSet = 'smart_class_parameters'
     payloadObj = 'smart_class_parameter'
     index = 'id'
 
@@ -71,7 +72,7 @@ class ItemSmartClassParameter(ForemanItem):
         @return RETURN: The API result
         """
         if key in ['override_values']:
-            print('Can not assign {} directly, use +='.format(key))
+            print('Can not assign {} directly, use .append()'.format(key))
             return False
         else:
             return ForemanItem.__setitem__(self, key, attributes)

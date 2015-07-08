@@ -27,6 +27,7 @@ class SubItemConfigTemplate(SubItem):
     """
 
     objName = 'config_templates'
+    objNameSet = 'config_templates'
     payloadObj = 'config_template'
     index = 'id'
     setInParentPayload = True

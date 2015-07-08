@@ -60,12 +60,9 @@ class ItemHostsGroup(ForemanItem):
         @param attribute: The data
         @return RETURN: The API result
         """
-        if key in ['parameters', 'smart_class_parameters']:
-            print('Can not assign {} directly, use +='.format(key))
+        print('*'*10+' setitem hostgroup')
+        if key in ['parameters', 'smart_class_parameters', 'puppetclasses']:
+            print('Can not assign {} directly, use .append()'.format(key))
             return False
-        elif key in ['puppetclasses']:
-            return ForemanItem.__setitem__(self,
-                                           self[key].objType.payloadObj,
-                                           attributes)
         else:
             return ForemanItem.__setitem__(self, key, attributes)

@@ -27,6 +27,7 @@ class SubItemOverrideValues(SubItem):
     """
 
     objName = 'override_values'
+    objNameSet = 'override_values'
     payloadObj = 'override_value'
     index = 'id'
 

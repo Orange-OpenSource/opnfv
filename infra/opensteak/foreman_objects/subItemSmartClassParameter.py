@@ -26,6 +26,7 @@ class SubItemSmartClassParameter(ItemSmartClassParameter):
     Represent the content of a foreman smart class parameter as a dict
     """
     setInParentPayload = False
+    objNameSet = 'smart_class_parameters'
 
     def __init__(self, api, key, parentName, parentPayloadObject,
                  parentKey, *args, **kwargs):

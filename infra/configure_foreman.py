@@ -203,34 +203,32 @@ for name, data in confSubnets.items():
                                 data['data']['network'],
                                 netmaskshort))
 
-sys.exit(0)
+##############################################
+p.header("Check and create - Hostgroups")
+##############################################
 
-## ##############################################
-## p.header("Check and create - Hostgroups")
-## ##############################################
-## 
-## hg_parent = conf['hostgroupTop']['name']
-## payload = {"environment_name": conf['environments'],
-##         "subnet_name": conf['hostgroupTop']['subnet'],
-##         "domain_name": domain}
-## hg_parentId = foreman.hostgroups.checkAndCreate(
-##     hg_parent,
-##     payload,
-##     conf['hostgroupTop'],
-##     False,
-##     puppetClassesId['hostgroupTop']
-## )
-## p.status(bool(hg_parentId), 'Hostgroup {}'.format(hg_parent))
-## 
-## for hg in conf['hostgroups'].keys():
-##     key = hg_parent + '_' + conf['hostgroups'][hg]['name']
-##     payload = {"title": hg_parent + '/' + conf['hostgroups'][hg]['name'],
-##             "parent_id": hg_parentId}
-##     p.status(bool(foreman.hostgroups.checkAndCreate(key, payload,
-##                                                     conf['hostgroups'][hg],
-##                                                     hg_parent,
-##                                                     puppetClassesId[hg])),
-##             'Sub Hostgroup {}'.format(conf['hostgroups'][hg]['name']))
+hg_parent = conf['hostgroupTop']['name']
+payload = {"environment_name": conf['environments'],
+        "subnet_name": conf['hostgroupTop']['subnet'],
+        "domain_name": domain}
+hg_parentId = foreman.hostgroups.checkAndCreate(
+    hg_parent,
+    payload,
+    conf['hostgroupTop'],
+    False,
+    puppetClassesId['hostgroupTop']
+)
+p.status(bool(hg_parentId), 'Hostgroup {}'.format(hg_parent))
+
+for hg in conf['hostgroups'].keys():
+    key = hg_parent + '_' + conf['hostgroups'][hg]['name']
+    payload = {"title": hg_parent + '/' + conf['hostgroups'][hg]['name'],
+            "parent_id": hg_parentId}
+    p.status(bool(foreman.hostgroups.checkAndCreate(key, payload,
+                                                    conf['hostgroups'][hg],
+                                                    hg_parent,
+                                                    puppetClassesId[hg])),
+            'Sub Hostgroup {}'.format(conf['hostgroups'][hg]['name']))
 
 
 ## ##############################################

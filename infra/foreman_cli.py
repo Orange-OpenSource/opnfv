@@ -56,3 +56,12 @@ del a
 foreman = OpenSteakForeman(login=args["admin"],
                            password=args["password"],
                            ip=args["ip"])
+
+# from opensteak.foreman_objects.operatingsystems import OperatingSystems
+# from opensteak.foreman_objects.api import Api
+# from opensteak.foreman_objects.configTemplates import ConfigTemplates
+# api = Api(login=args["admin"], password=args["password"], ip=args["ip"],
+               # printErrors=False)
+# operatingSystems = OperatingSystems(api)
+# configTemplates =  ConfigTemplates(api)
+# osName = "Ubuntu 14.04.2 LTS"

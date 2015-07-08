@@ -27,5 +27,6 @@ class SubItemInterface(SubItem):
     """
 
     objName = 'interfaces'
+    objNameSet = 'interfaces'
     payloadObj = 'interface'
     index = 'identifier'

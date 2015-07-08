@@ -27,6 +27,6 @@ class SubItemPTable(SubItem):
     """
 
     objName = 'ptables'
+    objNameSet = 'ptables'
     payloadObj = 'ptable_ids'
     index = 'name'
-    setInParentPayload = True

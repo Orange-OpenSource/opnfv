@@ -27,5 +27,6 @@ class SubItemParameter(SubItem):
     """
 
     objName = 'parameters'
+    objNameSet = 'parameters'
     payloadObj = 'parameter'
     index = 'name'

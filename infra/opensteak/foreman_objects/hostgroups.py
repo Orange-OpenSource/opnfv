@@ -80,6 +80,7 @@ class HostGroups(ForemanObjects):
 
         # Create Hostgroup classes
         if 'classes' in hostgroupConf.keys():
+            print('add classes')
             classList = list()
             for c in hostgroupConf['classes']:
                 classList.append(puppetClassesId[c])

@@ -68,7 +68,7 @@ class ItemHost(ForemanItem):
         @return RETURN: The API result
         """
         if key in ['parameters', 'interfaces', 'smart_class_parameters']:
-            print('Can not assign {} directly, use +='.format(key))
+            print('Can not assign {} directly, use .append()'.format(key))
             return False
         elif key in ['puppetclasses']:
             return ForemanItem.__setitem__(self,

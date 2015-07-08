@@ -9,15 +9,23 @@ ptables: "Preseed default"
 architectures: "x86_64"
 
 operatingsystems:
- "Ubuntu 14.04.2 LTS":
+ Ubuntu 14.04.1 LTS:
   name: "Ubuntu"
-  description: "Ubuntu 14.04.2 LTS"
+  description: "Ubuntu 14.04.1 LTS"
   major: "14"
   minor: "04"
   family: "Debian"
   release_name: "trusty"
   password_hash: "MD5"
- "Ubuntu 14.04 Cloud":
+  templates:
+   - Preseed default
+   - Preseed default PXELinux
+   - Preseed default finish
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+ Ubuntu 14.04 Cloud:
   name: "Ubuntu14.04Cloud"
   description: "Ubuntu 14.04 Cloud"
   major: "14"
@@ -25,6 +33,13 @@ operatingsystems:
   family: "Debian"
   release_name: "trusty"
   password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default user data
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
 
 hostgroupTop:
  name: 'test'
@@ -93,7 +108,7 @@ subnets:
 foreman:
  ip: "192.168.1.4"
  admin: "admin"
- password: "password"
+ password: "B1ng0!42"
  cpu: "2"
  ram: "2097152"
  iso: "trusty-server-cloudimg-amd64-disk1.img"

@@ -27,5 +27,6 @@ class SubItemOsDefaultTemplate(SubItem):
     """
 
     objName = 'os_default_templates'
+    objNameSet = 'os_default_templates'
     payloadObj = 'os_default_template'
     index = 'config_template_name'

@@ -41,6 +41,7 @@ class SubDict(dict):
         self.objName = objType.objName
         self.payloadObj = objType.payloadObj
         self.index = objType.index
+        self.objNameSet = objType.objNameSet
         dict.__init__(self, self.load())
 
     def load(self, limit=9999):
@@ -80,7 +81,7 @@ class SubDict(dict):
         """
         return self.api.set('{}/{}/{}'.format(self.parentName,
                                               self.parentKey,
-                                              self.objName),
+                                              self.objNameSet),
                             key,
                             self.getPayloadStruct(attributes))
 
@@ -93,10 +94,10 @@ class SubDict(dict):
         """
         return self.api.delete('{}/{}/{}'.format(self.parentObjName,
                                                  self.parentKey,
-                                                 self.objName),
+                                                 self.objNameSet),
                                key)
 
-    def __iadd__(self, payload):
+    def append(self, payload):
         """ Function __iadd__
 
         @param payload: The payload corresponding to the object to add
@@ -108,7 +109,7 @@ class SubDict(dict):
             return False
         ret = self.api.create("{}/{}/{}".format(self.parentObjName,
                                                 self.parentKey,
-                                                self.objName),
+                                                self.objNameSet),
                               self.getPayloadStruct(payload))
         return ret
 

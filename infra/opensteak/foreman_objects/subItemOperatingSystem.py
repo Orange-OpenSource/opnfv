@@ -27,6 +27,7 @@ class SubItemOperatingSystem(SubItem):
     """
 
     objName = 'operatingsystems'
+    objNameSet = 'operatingsystems'
     payloadObj = 'operatingsystem_ids'
     index = 'title'
     setInParentPayload = True

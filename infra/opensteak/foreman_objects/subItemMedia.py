@@ -27,6 +27,7 @@ class SubItemMedia(SubItem):
     """
 
     objName = 'media'
+    objNameSet = 'media'
     payloadObj = 'medium_ids'
     index = 'name'
     setInParentPayload = True

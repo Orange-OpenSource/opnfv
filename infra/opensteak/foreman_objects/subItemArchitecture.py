@@ -27,5 +27,6 @@ class SubItemArchitecture(SubItem):
     """
 
     objName = 'architectures'
+    objNameSet = 'architectures'
     payloadObj = 'architecture_ids'
     index = 'name'
