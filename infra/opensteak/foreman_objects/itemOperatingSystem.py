@@ -85,8 +85,8 @@ class ItemOperatingSystem(ForemanItem):
 
     def checkOrAddDefaultTemplate(self, tpl):
         if tpl['name'] not in self['os_default_templates']:
-            self['os_default_templates'] += {
+            self['os_default_templates'].append({
                 "config_template_id": tpl['id'],
-                "template_kind_id": tpl['template_kind_id']}
+                "template_kind_id": tpl['template_kind_id']})
             self.reload()
         return tpl['name'] in self['os_default_templates']
