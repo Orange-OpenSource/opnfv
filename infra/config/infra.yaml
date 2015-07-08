@@ -9,7 +9,7 @@ ptables: "Preseed default"
 architectures: "x86_64"
 
 operatingSystemsList:
- Ubuntu 14.04.1 LTS:
+ "Ubuntu 14.04.1 LTS":
   name: "Ubuntu"
   description: "Ubuntu 14.04.1 LTS"
   major: "14"
@@ -25,7 +25,7 @@ operatingSystemsList:
    - Ubuntu mirror
   ptables:
    - Preseed default
- Ubuntu 14.04 Cloud:
+ "Ubuntu 14.04 Cloud":
   name: "Ubuntu14.04Cloud"
   description: "Ubuntu 14.04 Cloud"
   major: "14"
@@ -41,6 +41,11 @@ operatingSystemsList:
   ptables:
    - Preseed default
 
+configTemplatesList:
+ Preseed default: "templates_config/preseed_default.tpl"
+ Preseed default finish: "templates_config/preseed_default_finish.tpl"
+ Preseed default PXELinux: "templates_config/preseed_default_pxelinux.tpl"
+
 hostgroupTop:
  name: 'test'
  classes:
@@ -48,6 +53,7 @@ hostgroupTop:
  subnet: "Admin"
  params:
   password: 'toto'
+
 hostgroupsList:
  hostgroupController:
   name: 'controller'
@@ -130,11 +136,11 @@ foreman:
 
 controllersList:
  controller1:
-  controllerName: 'controller1.infra.opensteak.fr'
+  controllerName: "controller1.infra.opensteak.fr"
   operatingSystem: "Ubuntu 14.04.1 LTS"
-  macAddress: '40:f2:e9:2a:4d:e3'
-  password: "opnfv123"
-  ipmiMacAddress: '40:f2:e9:2a:4d:e6'
+  macAddress: "40:f2:e9:2a:4d:e3"
+  password: "password"
+  ipmiMacAddress: "40:f2:e9:2a:4d:e6"
   impiIpAddress: "192.168.1.199"
-  impiUser: 'user'
+  impiUser: "user"
   impiPassword: "password"

@@ -102,9 +102,9 @@ for pclass in conf['hostgroupTop']['classes']:
             foreman.puppetClasses[pclass]['id']
         p.status(bool(puppetClassesId['hostgroupTop'][pclass]),
                  'Puppet Class "{}"'.format(pclass))
-for name in conf['hostgroups']:
+for name in conf['hostgroupsList']:
     puppetClassesId[name] = {}
-    for pclass in conf['hostgroups'][name]['classes']:
+    for pclass in conf['hostgroupsList'][name]['classes']:
         puppetClassesId[name][pclass] = foreman.puppetClasses[pclass]['id']
         p.status(bool(puppetClassesId[name][pclass]),
                  'Puppet Class "{}"'.format(pclass))
@@ -120,7 +120,7 @@ p.header("Check templates")
 ##############################################
 
 tplList = []
-for data in conf['operatingsystems'].values():
+for data in conf['operatingSystemsList'].values():
     if 'templates' in data.keys():
         tplList.extend(data['templates'])
 tplList = set(tplList)
@@ -144,7 +144,7 @@ for templateName, templateFile in conf['configTemplatesList'].items():
 p.header("Check and create - OS")
 ##############################################
 
-operatingSystems = conf['operatingsystems']
+operatingSystems = conf['operatingSystemsList']
 osIds = set()
 for os, data in operatingSystems.items():
     templates = media = ptables = []
@@ -200,7 +200,7 @@ p.status(bool(domainId), 'Domain ' + domain)
 p.header("Check and create - Subnets")
 ##############################################
 
-confSubnets = conf['subnets']
+confSubnets = conf['subnetsList']
 for name, data in confSubnets.items():
     payload = data['data']
     if 'dhcp_id' not in data['data'].keys():
@@ -234,15 +234,15 @@ hg_parentId = foreman.hostgroups.checkAndCreate(
 )
 p.status(bool(hg_parentId), 'Hostgroup {}'.format(hg_parent))
 
-for hg in conf['hostgroups'].keys():
-    key = hg_parent + '_' + conf['hostgroups'][hg]['name']
-    payload = {"title": hg_parent + '/' + conf['hostgroups'][hg]['name'],
+for hg in conf['hostgroupsList'].keys():
+    key = hg_parent + '_' + conf['hostgroupsList'][hg]['name']
+    payload = {"title": hg_parent + '/' + conf['hostgroupsList'][hg]['name'],
             "parent_id": hg_parentId}
     p.status(bool(foreman.hostgroups.checkAndCreate(key, payload,
-                                                    conf['hostgroups'][hg],
+                                                    conf['hostgroupsList'][hg],
                                                     hg_parent,
                                                     puppetClassesId[hg])),
-            'Sub Hostgroup {}'.format(conf['hostgroups'][hg]['name']))
+            'Sub Hostgroup {}'.format(conf['hostgroupsList'][hg]['name']))
 
 
 ##############################################
@@ -273,7 +273,7 @@ for k, v in conf['foreman']['classes'][className].items():
     if v is None:
         if k == 'pools':
             v = {'pools': dict()}
-            for subn in conf['subnets'].values():
+            for subn in conf['subnetsList'].values():
                 v['pools'][subn['domain']] = dict()
                 v['pools'][subn['domain']]['network'] = subn['data']['network']
                 v['pools'][subn['domain']]['netmask'] = subn['data']['mask']
@@ -284,7 +284,7 @@ for k, v in conf['foreman']['classes'][className].items():
                         subn['data']['gateway']
         elif k == 'dnsdomain':
             v = list()
-            for subn in conf['subnets'].values():
+            for subn in conf['subnetsList'].values():
                 v.append(subn['domain'])
                 revZone = subn['data']['network'].split('.')[::-1]
                 while revZone[0] is '0':
@@ -320,7 +320,7 @@ for c in conf['controllersList']:
         "environment_id": foreman.environments[conf['environments']]['id'],
         "mac": cConf['macAddress'],
         "domain_id": foreman.domains[conf['domains']]['id'],
-        "subnet_id": foreman.subnets[conf['subnets']]['id'],
+        "subnet_id": foreman.subnets[conf['subnetsList']]['id'],
         "ptable_id": foreman.ptables[conf['ptables']]['id'],
         "medium_id": foreman.media[conf['media']]['id'],
         "architecture_id": foreman.architectures[conf['architectures']]['id'],
@@ -353,11 +353,11 @@ p.header("Clean")
 ##############################################
 
 ## # Delete Sub Hostgroups
-## for hg in conf['hostgroups'].keys():
-##     key = hg_parent + '_' + conf['hostgroups'][hg]['name']
+## for hg in conf['hostgroupsList'].keys():
+##     key = hg_parent + '_' + conf['hostgroupsList'][hg]['name']
 ##     del(foreman.hostgroups[key])
 ##     p.status(bool(key not in foreman.hostgroups),
-##              'Delete sub hostgroup {}'.format(conf['hostgroups'][hg]['name']))
+##              'Delete sub hostgroup {}'.format(conf['hostgroupsList'][hg]['name']))
 ##
 ## # Delete Top hostgroup
 ## hg_parent = conf['hostgroupTop']['name']
