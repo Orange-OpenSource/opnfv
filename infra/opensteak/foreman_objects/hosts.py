@@ -43,7 +43,7 @@ class Hosts(ForemanObjects):
         if self.printHostProgress:
             self.__printProgression__(status, msg, eol=eol)
 
-    def createController(self, key, attributes, printHostProgress=False):
+    def createController(self, key, attributes, ipmi, printHostProgress=False):
         """ Function createController
         Create a controller node
 
@@ -60,13 +60,13 @@ class Hosts(ForemanObjects):
             self.async = False
             # Create the VM in foreman
             self.__printProgression__('In progress',
-                                      key + ' creation: push in Foreman', eol='\r')
+                                      key + ' creation: push in Foreman',
+                                      eol='\r')
             self.api.create('hosts', attributes, async=self.async)
-            pp(self.api.__dict__)
-
+            self[key]['interfaces'].append(ipmi)
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)
-        self.reload()
+            self.reload()
         return self[key]['id']
 
     def waitPuppetCatalogToBeApplied(self, key):

@@ -30,3 +30,4 @@ class SubItemInterface(SubItem):
     objNameSet = 'interfaces'
     payloadObj = 'interface'
     index = 'identifier'
+    setInParentPayload = False

@@ -1,14 +1,14 @@
 domains: "infra.opensteak.fr"
 media: "Ubuntu mirror"
 environments: "production"
-operatingsystems: "Ubuntu14.04Cloud"
+operatingsystems: "Ubuntu 14.04 Cloud"
 subnets: "Admin"
 compute_profiles: "Test"
 smart_proxies: "foreman.infra.opensteak.fr"
 ptables: "Preseed default"
 architectures: "x86_64"
 
-operatingsystems:
+operatingSystemsList:
  Ubuntu 14.04.1 LTS:
   name: "Ubuntu"
   description: "Ubuntu 14.04.1 LTS"
@@ -48,7 +48,7 @@ hostgroupTop:
  subnet: "Admin"
  params:
   password: 'toto'
-hostgroups:
+hostgroupsList:
  hostgroupController:
   name: 'controller'
   classes:
@@ -68,7 +68,8 @@ hostgroups:
   classes:
    - "opensteak::neutron-compute"
    - "opensteak::nova-compute"
-subnets:
+
+subnetsList:
  Admin:
   domain: 'infra.opensteak.fr'
   shared: False
@@ -108,7 +109,7 @@ subnets:
 foreman:
  ip: "192.168.1.4"
  admin: "admin"
- password: "B1ng0!42"
+ password: "password"
  cpu: "2"
  ram: "2097152"
  iso: "trusty-server-cloudimg-amd64-disk1.img"
@@ -126,3 +127,14 @@ foreman:
     - "eth2"
    # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
    # pools: #Build with the other parameters
+
+controllersList:
+ controller1:
+  controllerName: 'controller1.infra.opensteak.fr'
+  operatingSystem: "Ubuntu 14.04.1 LTS"
+  macAddress: '40:f2:e9:2a:4d:e3'
+  password: "opnfv123"
+  ipmiMacAddress: '40:f2:e9:2a:4d:e6'
+  impiIpAddress: "192.168.1.199"
+  impiUser: 'user'
+  impiPassword: "password"

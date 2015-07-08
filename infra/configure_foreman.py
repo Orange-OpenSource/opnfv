@@ -231,123 +231,108 @@ for hg in conf['hostgroups'].keys():
             'Sub Hostgroup {}'.format(conf['hostgroups'][hg]['name']))
 
 
-## ##############################################
-## p.header("Authorize Foreman to do puppet runs")
-## ##############################################
-##
-## foreman.settings['puppetrun']['value'] = 'true'
-## p.status(foreman.settings['puppetrun']['value'],
-##         'Set puppetrun parameter to True')
-##
-## ##############################################
-## p.header("Configure Foreman host")
-## ##############################################
-##
-## hostName = "foreman.{}".format(conf['domains'])
-## foremanHost = foreman.hosts[hostName]
-##
-## # Add puppet classes to foreman
-## p.status(foreman.hosts[hostName].checkAndCreateClasses(
-##         puppetClassesId['foreman'].values()),
-##         "Add puppet classes to foreman host")
-##
-## # Add smart class parameters of opensteak::dhcp to foreman
-## className = 'opensteak::dhcp'
-## scp = {x['parameter']: x['id'] for x in
-##     foreman.puppetClasses[className]['smart_class_parameters']}
-## for k, v in conf['foreman']['classes'][className].items():
-##     if v is None:
-##         if k == 'pools':
-##             v = {'pools': dict()}
-##             for subn in conf['subnets'].values():
-##                 v['pools'][subn['domain']] = dict()
-##                 v['pools'][subn['domain']]['network'] = subn['data']['network']
-##                 v['pools'][subn['domain']]['netmask'] = subn['data']['mask']
-##                 v['pools'][subn['domain']]['range'] =\
-##                     subn['data']['from'] + ' ' + subn['data']['to']
-##                 if 'gateway' in subn['data'].keys():
-##                     v['pools'][subn['domain']]['gateway'] =\
-##                         subn['data']['gateway']
-##         elif k == 'dnsdomain':
-##             v = list()
-##             for subn in conf['subnets'].values():
-##                 v.append(subn['domain'])
-##                 revZone = subn['data']['network'].split('.')[::-1]
-##                 while revZone[0] is '0':
-##                     revZone = revZone[1::]
-##                 v.append('.'.join(revZone) + '.in-addr.arpa')
-##     scp_id = scp[k]
-##     foreman.hosts[hostName]['smart_class_parameters'][scp_id]\
-##         .setOverrideValue(v, hostName)
-##
-## foremanSCP = set([x['parameter']
-##                 for x in foreman.hosts[hostName]
-##                 ['smart_class_parameters'].values()])
-## awaitedSCP = set(conf['foreman']['classes'][className].keys())
-## p.status(awaitedSCP.issubset(foremanSCP),
-##         "Add smart class parameters to class {} on foreman host"
-##         .format(className))
-##
-## # Run puppet on foreman
-## p.status(bool(foreman.hosts[hostName].puppetRun()),
-##         'Run puppet on foreman host')
-##
+##############################################
+p.header("Authorize Foreman to do puppet runs")
+##############################################
+
+foreman.settings['puppetrun']['value'] = 'true'
+p.status(foreman.settings['puppetrun']['value'],
+        'Set puppetrun parameter to True')
+
+##############################################
+p.header("Configure Foreman host")
+##############################################
+
+hostName = "foreman.{}".format(conf['domains'])
+foremanHost = foreman.hosts[hostName]
+
+# Add puppet classes to foreman
+p.status(foreman.hosts[hostName].checkAndCreateClasses(
+        puppetClassesId['foreman'].values()),
+        "Add puppet classes to foreman host")
+
+# Add smart class parameters of opensteak::dhcp to foreman
+className = 'opensteak::dhcp'
+scp = {x['parameter']: x['id'] for x in
+    foreman.puppetClasses[className]['smart_class_parameters']}
+for k, v in conf['foreman']['classes'][className].items():
+    if v is None:
+        if k == 'pools':
+            v = {'pools': dict()}
+            for subn in conf['subnets'].values():
+                v['pools'][subn['domain']] = dict()
+                v['pools'][subn['domain']]['network'] = subn['data']['network']
+                v['pools'][subn['domain']]['netmask'] = subn['data']['mask']
+                v['pools'][subn['domain']]['range'] =\
+                    subn['data']['from'] + ' ' + subn['data']['to']
+                if 'gateway' in subn['data'].keys():
+                    v['pools'][subn['domain']]['gateway'] =\
+                        subn['data']['gateway']
+        elif k == 'dnsdomain':
+            v = list()
+            for subn in conf['subnets'].values():
+                v.append(subn['domain'])
+                revZone = subn['data']['network'].split('.')[::-1]
+                while revZone[0] is '0':
+                    revZone = revZone[1::]
+                v.append('.'.join(revZone) + '.in-addr.arpa')
+    scp_id = scp[k]
+    foreman.hosts[hostName]['smart_class_parameters'][scp_id]\
+        .setOverrideValue(v, hostName)
+
+foremanSCP = set([x['parameter']
+                for x in foreman.hosts[hostName]
+                ['smart_class_parameters'].values()])
+awaitedSCP = set(conf['foreman']['classes'][className].keys())
+p.status(awaitedSCP.issubset(foremanSCP),
+        "Add smart class parameters to class {} on foreman host"
+        .format(className))
+
+# Run puppet on foreman
+p.status(bool(foreman.hosts[hostName].puppetRun()),
+        'Run puppet on foreman host')
+
 
 ##############################################
 p.header("Add controller nodes")
 ##############################################
 
-controllerName = 'controller1.infra.opensteak.fr'
-macAddress = '40:f2:e9:2a:4d:e3'
-pTableName = "Preseed default"
-mediaName = "Ubuntu mirror"
-osName = "Ubuntu 14.04.2 LTS"
-password = "opnfv123"
+for c in conf['controllersList']:
 
-domainId = foreman.domains[conf['domains']]['id']
-environmentId = foreman.environments[conf['environments']]['id']
-architectureId = foreman.architectures[conf['architectures']]['id']
-smartProxyId = foreman.smartProxies[conf['smart_proxies']]['id']
-hostGroupId = foreman.hostgroups['{}_{}'.format(
-        conf['hostgroupTop']['name'],
-        conf['hostgroups']['hostgroupController']['name'])]['id']
-payload = {
-  "host": {
-    "name": controllerName,
-    "environment_id": environmentId,
-    "mac": macAddress,
-    "domain_id": domainId,
-    "ptable_id": foreman.ptables[pTableName]['id'],
-    "medium_id": foreman.media[mediaName]['id'],
-    "architecture_id": architectureId,
-    "operatingsystem_id": foreman.operatingSystems[osName]['id'],
-    "puppet_proxy_id": smartProxyId,
-    "hostgroup_id": hostGroupId,
-    "root_pass": password,
-  }
-}
-pp(payload)
-controllerId = foreman.hosts.createController(controllerName, payload)
-pp(foreman.api.url)
-pp(foreman.api.payload)
-pp(foreman.api.errorMsg)
+    cConf = conf['controllersList'][c]
+    payload = {
+      "host": {
+        "name": cConf['controllerName'],
+        "environment_id": foreman.environments[conf['environments']]['id'],
+        "mac": cConf['macAddress'],
+        "domain_id": foreman.domains[conf['domains']]['id'],
+        "subnet_id": foreman.subnets[conf['subnets']]['id'],
+        "ptable_id": foreman.ptables[conf['ptables']]['id'],
+        "medium_id": foreman.media[conf['media']]['id'],
+        "architecture_id": foreman.architectures[conf['architectures']]['id'],
+        "operatingsystem_id": foreman.operatingSystems[
+                                    cConf['operatingSystem']]['id'],
+        "puppet_proxy_id": foreman.smartProxies[conf['smart_proxies']]['id'],
+        "hostgroup_id": foreman.hostgroups['{}_{}'.format(
+            conf['hostgroupTop']['name'],
+            conf['hostgroupsList']['hostgroupController']['name'])]['id'],
+        "root_pass": cConf['password'],
+      }
+    }
+    payloadBMC = {
+                "ip": cConf['impiIpAddress'],
+                "mac": cConf['ipmiMacAddress'],
+                "type": "bmc",
+                "managed": False,
+                "identifier": "ipmi",
+                "username": cConf['impiUser'],
+                "password": cConf['impiPassword'],
+                "provider": "IPMI",
+                "virtual": False
+            }
+    controllerId = foreman.hosts.createController(cConf['controllerName'],
+                                                  payload, payloadBMC)
 
-##
-## bmcIp = '192.168.1.199'
-## payload = {
-##             "ip": "192.168.1.199",
-##             "type": "bmc",
-##             "managed": False,
-##             "identifier": "ipmi",
-##             "username": "user",
-##             "password": "B1ng0!",
-##             "provider": "IPMI",
-##             "virtual": False
-##         }
-## foreman.hosts[controllerId]['interfaces'] = payload
-## pp(foreman.api.url)
-## pp(foreman.api.payload)
-## pp(foreman.api.errorMsg)
 
 ##############################################
 p.header("Clean")
