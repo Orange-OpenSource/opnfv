@@ -128,6 +128,18 @@ for tpl in tplList:
     p.status(tpl in foreman.configTemplates,
         'Template "{}" is present'.format(tpl))
 
+# Overwrite some provisioning templates with files
+for templateName, templateFile in conf['configTemplatesList'].items():
+    # Overwrite only if template exists in foreman
+    if templateName in foreman.configTemplates:
+        with open(templateFile) as f:
+            data = f.read()
+            # Set
+            foreman.configTemplates[templateName]['template'] = data
+            # Check
+            p.status(foreman.configTemplates[templateName]['template'] == data,
+             'Template "{}" is set'.format(templateName))
+
 ##############################################
 p.header("Check and create - OS")
 ##############################################
@@ -165,6 +177,8 @@ for os, data in operatingSystems.items():
         p.status(foreman.operatingSystems[os].checkOrAddDefaultTemplate(
                  foreman.configTemplates[tpl]),
                  'Add template "{}" to Operating system {}'.format(tpl, os))
+
+sys.exit(0)
 
 ##############################################
 p.header("Check and create - Architecture")

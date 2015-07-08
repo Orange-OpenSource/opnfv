@@ -1,0 +1,131 @@
+domains: "infra.opensteak.fr"
+media: "Ubuntu mirror"
+environments: "production"
+operatingsystems: "Ubuntu 14.04 Cloud"
+subnets: "Admin"
+compute_profiles: "Test"
+smart_proxies: "foreman.infra.opensteak.fr"
+ptables: "Preseed default"
+architectures: "x86_64"
+
+operatingsystems:
+ "Ubuntu 14.04.2 LTS":
+  name: "Ubuntu"
+  description: "Ubuntu 14.04.2 LTS"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default PXELinux
+   - Preseed default finish
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+ "Ubuntu 14.04 Cloud":
+  name: "Ubuntu14.04Cloud"
+  description: "Ubuntu 14.04 Cloud"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default user data
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+
+configTemplatesList:
+ Preseed default: "templates_config/preseed_default.tpl"
+ Preseed default finish: "templates_config/preseed_default_finish.tpl"
+ Preseed default PXELinux: "templates_config/preseed_default_pxelinux.tpl"
+
+hostgroupTop:
+ name: 'test'
+ classes:
+ - "ntp"
+ subnet: "Admin"
+ params:
+  password: 'toto'
+hostgroups:
+ hostgroupController:
+  name: 'controller'
+  classes:
+   - "opensteak::base-network"
+   - "opensteak::libvirt"
+  params:
+   foreman_sshkey: 'xxxx'
+ hostgroupControllerVM:
+  name: 'controller_VM'
+  classes:
+   - "opensteak::apt"
+  params:
+   foreman_sshkey: 'xxxx'
+   password: 'toto'
+ hostgroupCompute:
+  name: 'compute'
+  classes:
+   - "opensteak::neutron-compute"
+   - "opensteak::nova-compute"
+subnets:
+ Admin:
+  domain: 'infra.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.4.0"
+   mask: "255.255.255.0"
+   vlanid:
+   gateway: "192.168.4.1"
+   dns_primary: "192.168.4.4"
+   from: "192.168.4.20"
+   to: "192.168.4.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ Storage:
+  domain: 'storage.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.0.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.0.20"
+   to: "192.168.0.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ VM:
+  domain: 'vm.storage.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.2.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.2.20"
+   to: "192.168.2.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+
+foreman:
+ ip: "192.168.4.4"
+ admin: "admin"
+ password: "password"
+ cpu: "2"
+ ram: "2097152"
+ iso: "trusty-server-cloudimg-amd64-disk1.img"
+ disksize: "5G"
+ force: True
+ dns: "8.8.8.8"
+ bridge: "br-libvirt"
+ bridge_type: "openvswitch"
+ classes:
+  "opensteak::dhcp":
+   dnsdomain: #Build with the other parameters
+   interfaces:
+    - "eth0"
+   # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
+   # pools: #Build with the other parameters
