@@ -112,16 +112,12 @@ class ForemanItem(dict):
         @param classes: The classes ids list
         @return RETURN: boolean
         """
-        print('*'*10+' add classes')
         actual_classes = self['puppetclasses'].keys()
         for i in classes:
             if i not in actual_classes:
                 self['puppetclasses'].append(i)
         self.reload()
-        pp(list(sorted(classes)))
-        pp(list(sorted(self['puppetclasses'].keys())))
-        return list(sorted(classes)) ==\
-            list(sorted(self['puppetclasses'].keys()))
+        return set(classes).issubset(set((self['puppetclasses'].keys())))
 
     def checkAndCreateParams(self, params):
         """ Function checkAndCreateParams
@@ -131,7 +127,6 @@ class ForemanItem(dict):
         @param params: The params dict
         @return RETURN: boolean
         """
-        print('*'*10+' add parameters')
         actual_params = self['parameters'].keys()
         for k, v in params.items():
             if k not in actual_params:
