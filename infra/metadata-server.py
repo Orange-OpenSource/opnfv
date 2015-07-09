@@ -20,12 +20,13 @@ import tornado.ioloop
 import tornado.web
 import socket
 import sys
+import argparse
 from opensteak.conf import OpenSteakConfig
 from opensteak.foreman import OpenSteakForeman
 from opensteak.printer import OpenSteakPrinter
 
 
-DEFAULT_PASSWORD = 'xxxxxx'
+DEFAULT_PASSWORD = 'password'
 
 
 class UserDataHandler(tornado.web.RequestHandler):
@@ -102,14 +103,42 @@ application = tornado.web.Application([
 ])
 
 if __name__ == "__main__":
-    if len(sys.argv) == 4:
-        foreman = OpenSteakForeman(login=sys.argv[1],
-                                   password=sys.argv[2],
-                                   ip=sys.argv[3])
-        conf = OpenSteakConfig(config_file='config/infra.yaml')
-        p = OpenSteakPrinter()
-        application.listen(8888)
-        tornado.ioloop.IOLoop.instance().start()
-    else:
-        print('Error: Usage\npython3 {} foreman_user \
-              foreman_password foreman_IP'.format(sys.argv[0]))
+    p = OpenSteakPrinter()
+
+    #
+    # Check for params
+    #
+    p.header("Check parameters")
+    args = {}
+
+    # Update args with values from CLI
+    parser = argparse.ArgumentParser(description='This script will run a '
+                                                 'metadata server connected '
+                                                 'to a foreman server.',
+                                     usage='%(prog)s [options]')
+    parser.add_argument('-c', '--config',
+                        help='YAML config file to use (default is '
+                              'config/infra.yaml).',
+                        default='config/infra.yaml')
+    args.update(vars(parser.parse_args()))
+
+    # Open config file
+    conf = OpenSteakConfig(config_file=args["config"])
+
+    a = {}
+    a["admin"] = conf["foreman"]["admin"]
+    a["password"] = conf["foreman"]["password"]
+    a["ip"] = conf["foreman"]["ip"]
+    # Update args with values from config file
+    args.update(a)
+    del a
+
+    # p.list_id(args)
+
+    foreman = OpenSteakForeman( login=args["admin"],
+                                password=args["password"],
+                                ip=args["ip"])
+
+    p.header("Run server")
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
