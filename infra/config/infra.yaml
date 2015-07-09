@@ -101,7 +101,7 @@ subnetsList:
    ipam: "DHCP"
    boot_mode: "DHCP"
  VM:
-  domain: 'vm.storage.opensteak.fr'
+  domain: 'vm.opensteak.fr'
   shared: False
   data:
    network: "192.168.2.0"
