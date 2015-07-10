@@ -44,6 +44,7 @@ echo "$${IP} $${NAME}.$${DOMAIN} $${NAME}" >> /etc/hosts
 
 ### Dependencies
 echo "* Install dependencies"
+apt-get update
 apt-get -y install ca-certificates wget git isc-dhcp-server
 
 ### Set AppArmor
@@ -129,15 +130,15 @@ foreman-rake templates:sync
 
 ### Get and install OpenSteak files
 
-echo "* Get OpenSteak repos"
-if [ -d /usr/local/opensteak ] ; then
-    cd /usr/local/opensteak
-    git pull
-else
-    cd /usr/local/
-    git clone https://github.com/Orange-OpenSource/opnfv.git -b foreman opensteak
-fi
-cd /usr/local/opensteak/infra/puppet_master
+#echo "* Get OpenSteak repos"
+#if [ -d /usr/local/opensteak ] ; then
+#    cd /usr/local/opensteak
+#    git pull
+#else
+#    cd /usr/local/
+#    git clone https://github.com/Orange-OpenSource/opnfv.git -b foreman opensteak
+#fi
+#cd /usr/local/opensteak/infra/puppet_master
 
 echo "* Set puppet auth"
 echo "*.$$DOMAIN" > /etc/puppet/autosign.conf
@@ -145,7 +146,7 @@ if [ -e /etc/puppet/auth.conf ] ; then
   # Make a backup
   mv /etc/puppet/auth.conf /etc/puppet/auth.conf.$$DATEE
 fi
-cp etc/puppet/auth.conf /etc/puppet/auth.conf
+cp /mnt/puppet_master/etc/puppet/auth.conf /etc/puppet/auth.conf
 perl -i -pe "s/__FOREMAN_HOST__/$${NAME}.$${DOMAIN}/" /etc/puppet/auth.conf
 
 # Set Hiera Conf
@@ -154,15 +155,15 @@ if [ -e /etc/puppet/hiera.yaml ] ; then
   # Make a backup
   mv /etc/puppet/hiera.yaml /etc/puppet/hiera.yaml.$$DATEE
 fi
-cp etc/puppet/hiera.yaml /etc/puppet/hiera.yaml
+cp /mnt/puppet_master/etc/puppet/hiera.yaml /etc/puppet/hiera.yaml
 if [ -e /etc/hiera.yaml ] ; then
   rm /etc/hiera.yaml
 fi
 ln -s /etc/puppet/hiera.yaml /etc/hiera.yaml
-cp -rf etc/puppet/hieradata /etc/puppet/
+cp -rf /mnt/puppet_master/etc/puppet/hieradata /etc/puppet/
 rename s/DOMAIN/$$DOMAIN/ /etc/puppet/hieradata/production/nodes/*.yaml
-cp etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
-cp ../config/common.yaml /etc/puppet/hieradata/production/common.yaml
+cp /mnt/puppet_master/etc/puppet/manifests/site.pp /etc/puppet/manifests/site.pp
+cp /mnt/*.yaml /etc/puppet/hieradata/production/
 chgrp puppet /etc/puppet/hieradata/production/*.yaml
 
 # Install and config r10k
@@ -174,11 +175,11 @@ if [ -e /etc/r10k.yaml ] ; then
   # Make a backup
   mv /etc/r10k.yaml /etc/r10k.yaml.$$DATEE
 fi
-cp etc/r10k.yaml /etc/r10k.yaml
+cp /mnt/puppet_master/etc/r10k.yaml /etc/r10k.yaml
 
 # Install opensteak-r10k-update script
 echo "* Install opensteak-r10k-update script into /usr/local/bin"
-cp usr/local/bin/opensteak-r10k-update /usr/local/bin/opensteak-r10k-update
+cp /mnt/puppet_master/usr/local/bin/opensteak-r10k-update /usr/local/bin/opensteak-r10k-update
 chmod +x /usr/local/bin/opensteak-r10k-update
 
 echo "* Run R10k. You can re-run r10k by calling:"

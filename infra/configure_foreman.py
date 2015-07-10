@@ -178,8 +178,6 @@ for os, data in operatingSystems.items():
                  foreman.configTemplates[tpl]),
                  'Add template "{}" to Operating system {}'.format(tpl, os))
 
-sys.exit(0)
-
 ##############################################
 p.header("Check and create - Architecture")
 ##############################################
@@ -320,7 +318,7 @@ for c in conf['controllersList']:
         "environment_id": foreman.environments[conf['environments']]['id'],
         "mac": cConf['macAddress'],
         "domain_id": foreman.domains[conf['domains']]['id'],
-        "subnet_id": foreman.subnets[conf['subnetsList']]['id'],
+        "subnet_id": foreman.subnets[next(iter(conf['subnetsList'].keys()))]['id'],
         "ptable_id": foreman.ptables[conf['ptables']]['id'],
         "medium_id": foreman.media[conf['media']]['id'],
         "architecture_id": foreman.architectures[conf['architectures']]['id'],

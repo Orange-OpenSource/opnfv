@@ -9,9 +9,9 @@ ptables: "Preseed default"
 architectures: "x86_64"
 
 operatingSystemsList:
- "Ubuntu 14.04.1 LTS":
+ "Ubuntu 14.04.2 LTS":
   name: "Ubuntu"
-  description: "Ubuntu 14.04.1 LTS"
+  description: "Ubuntu 14.04.2 LTS"
   major: "14"
   minor: "04"
   family: "Debian"
@@ -80,13 +80,13 @@ subnetsList:
   domain: 'infra.opensteak.fr'
   shared: False
   data:
-   network: "192.168.1.0"
+   network: "192.168.4.0"
    mask: "255.255.255.0"
    vlanid:
-   gateway: "192.168.1.1"
-   dns_primary: "192.168.1.2"
-   from: "192.168.1.20"
-   to: "192.168.1.170"
+   gateway: "192.168.4.1"
+   dns_primary: "192.168.4.4"
+   from: "192.168.4.20"
+   to: "192.168.4.170"
    ipam: "DHCP"
    boot_mode: "DHCP"
  Storage:
@@ -113,7 +113,7 @@ subnetsList:
    boot_mode: "DHCP"
 
 foreman:
- ip: "192.168.1.4"
+ ip: "192.168.4.4"
  admin: "admin"
  password: "password"
  cpu: "2"
@@ -122,7 +122,7 @@ foreman:
  disksize: "5G"
  force: True
  dns: "8.8.8.8"
- bridge: "virbr0"
+ bridge: "br-libvirt"
  bridge_type: "openvswitch"
  templatesFolder: "foreman/templates"
  filesFolder: "foreman/files"
@@ -131,15 +131,13 @@ foreman:
    dnsdomain: #Build with the other parameters
    interfaces:
     - "eth0"
-    - "eth1"
-    - "eth2"
    # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
-   # pools: #Build with the other parameters
+   pools: #Build with the other parameters
 
 controllersList:
  controller1:
   controllerName: "controller1.infra.opensteak.fr"
-  operatingSystem: "Ubuntu 14.04.1 LTS"
+  operatingSystem: "Ubuntu 14.04.2 LTS"
   macAddress: "40:f2:e9:2a:4d:e3"
   password: "password"
   ipmiMacAddress: "40:f2:e9:2a:4d:e6"

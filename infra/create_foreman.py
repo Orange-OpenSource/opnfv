@@ -55,13 +55,13 @@ conf = OpenSteakConfig(config_file=args["config"])
 a = {}
 a["name"] = "foreman"
 a["ip"] = conf["foreman"]["ip"]
-a["netmask"] = conf["subnets"]["Admin"]["data"]["mask"]
+a["netmask"] = conf["subnetsList"]["Admin"]["data"]["mask"]
 a["netmaskshort"] = sum([bin(int(x)).count('1')
-                            for x in conf["subnets"]["Admin"]
+                            for x in conf["subnetsList"]["Admin"]
                                                     ["data"]["mask"]
                             .split('.')])
-a["gateway"] = conf["subnets"]["Admin"]["data"]["gateway"]
-a["network"] = conf["subnets"]["Admin"]["data"]["network"]
+a["gateway"] = conf["subnetsList"]["Admin"]["data"]["gateway"]
+a["network"] = conf["subnetsList"]["Admin"]["data"]["network"]
 a["admin"] = conf["foreman"]["admin"]
 a["password"] = conf["foreman"]["password"]
 a["cpu"] = conf["foreman"]["cpu"]
@@ -69,9 +69,9 @@ a["ram"] = conf["foreman"]["ram"]
 a["iso"] = conf["foreman"]["iso"]
 a["disksize"] = conf["foreman"]["disksize"]
 a["force"] = conf["foreman"]["force"]
-a["dhcprange"] = "{0} {1}".format(conf["subnets"]["Admin"]
+a["dhcprange"] = "{0} {1}".format(conf["subnetsList"]["Admin"]
                                                     ["data"]["from"],
-                                     conf["subnets"]["Admin"]
+                                     conf["subnetsList"]["Admin"]
                                                     ["data"]["to"])
 a["domain"] = conf["domains"]
 reverse_octets = str(conf["foreman"]["ip"]).split('.')[-2::-1]
@@ -104,23 +104,30 @@ p.header("Initiate configuration")
 tempFolder = tempfile.mkdtemp(dir="/tmp")
 tempFiles = {}
 
-for f in os.listdir("templates_foreman/"):
+for f in os.listdir(conf["foreman"]["templatesFolder"]):
     tempFiles[f] = "{0}/{1}".format(tempFolder, f)
     try:
-        OpenSteakTemplateParser("templates_foreman/{0}".format(f),
-                                tempFiles[f], args)
+        OpenSteakTemplateParser("{0}/{1}".format(
+                        conf["foreman"]["templatesFolder"], f),
+                        tempFiles[f], args)
     except Exception as err:
         p.status(False, msg=("Something went wrong when trying to create "
                              "the file {0} from the template "
-                             "templates_foreman/{1}").format(tempFiles[f], f),
+                             "{1}/{2}").format(tempFiles[f],
+                             conf["foreman"]["templatesFolder"],
+                             f),
                  failed="{0}".format(err))
 
 ###
 # Work on files
 ###
-for f in os.listdir("files_foreman/"):
+for f in os.listdir(conf["foreman"]["filesFolder"]):
     tempFiles[f] = "{0}/{1}".format(tempFolder, f)
-    shutil.copyfile("files_foreman/{0}".format(f), tempFiles[f])
+    fFullPath = "{0}/{1}".format(conf["foreman"]["filesFolder"], f)
+    if os.path.isdir(fFullPath):
+        shutil.copytree(fFullPath, "{0}/{1}".format(tempFiles[f], f))
+    else:
+        shutil.copyfile(fFullPath, tempFiles[f])
 
 p.status(True, msg="Temporary files created:")
 p.list_id(tempFiles)

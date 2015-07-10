@@ -17,7 +17,7 @@ cinder_password: "password"
 keystone_admin_token: "password"
 horizon_secret_key: "12345"
 
-domain: "infra.opensteak.fr"
+domain: "${domain}"
 
 ###
 ## Class parameters

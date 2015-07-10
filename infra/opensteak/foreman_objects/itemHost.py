@@ -130,7 +130,7 @@ class ItemHost(ForemanItem):
                     defaultPwd='',
                     defaultSshKey='',
                     proxyHostname='',
-                    tplFolder='templates_metadata/'):
+                    tplFolder='metadata/templates/'):
         """ Function getUserData
         Generate a userdata script for metadata server from Foreman API
 
