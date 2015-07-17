@@ -74,6 +74,18 @@ class ItemHost(ForemanItem):
             return ForemanItem.__setitem__(self,
                                            self[key].objType.payloadObj,
                                            attributes)
+        elif key in ['power']:
+            return self.api.set(self.objName,
+                                '{}/{}'.format(
+                                               self.key,
+                                               'power'),
+                                {"power_action": attributes,"host": {}})
+        elif key in ['boot']:
+            return self.api.set(self.objName,
+                                '{}/{}'.format(
+                                               self.key,
+                                               'boot'),
+                                {"device": attributes,"host": {}})
         else:
             return ForemanItem.__setitem__(self, key, attributes)
 

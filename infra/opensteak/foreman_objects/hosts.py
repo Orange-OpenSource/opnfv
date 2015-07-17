@@ -67,8 +67,7 @@ class Hosts(ForemanObjects):
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)
             self.reload()
-        #return self[key]['id']
-        pp(self[key])
+        self[key]['build']='true'
         return self[key]
 
     def waitPuppetCatalogToBeApplied(self, key):
