@@ -20,7 +20,6 @@ from opensteak.conf import OpenSteakConfig
 from opensteak.foreman import OpenSteakForeman
 from opensteak.printer import OpenSteakPrinter
 import argparse
-import sys
 from pprint import pprint as pp
 
 
@@ -126,7 +125,7 @@ for data in conf['operatingSystemsList'].values():
 tplList = set(tplList)
 for tpl in tplList:
     p.status(tpl in foreman.configTemplates,
-        'Template "{}" is present'.format(tpl))
+             'Template "{}" is present'.format(tpl))
 
 # Overwrite some provisioning templates with files
 for templateName, templateFile in conf['configTemplatesList'].items():
@@ -138,7 +137,7 @@ for templateName, templateFile in conf['configTemplatesList'].items():
             foreman.configTemplates[templateName]['template'] = data
             # Check
             p.status(foreman.configTemplates[templateName]['template'] == data,
-             'Template "{}" is set'.format(templateName))
+                     'Template "{}" is set'.format(templateName))
 
 ##############################################
 p.header("Check and create - OS")
@@ -209,11 +208,11 @@ for name, data in confSubnets.items():
         payload['dns_id'] = smartProxyId
     subnetId = foreman.subnets.checkAndCreate(name, payload, domainId)
     netmaskshort = sum([bin(int(x)).count('1')
-                            for x in data['data']['mask']
-                            .split('.')])
-    p.status(bool(subnetId), 'Subnet {} ({}/{})'.format(name,
-                                data['data']['network'],
-                                netmaskshort))
+                       for x in data['data']['mask'].split('.')])
+    p.status(bool(subnetId),
+             'Subnet {} ({}/{})'.format(name,
+                                        data['data']['network'],
+                                        netmaskshort))
 
 ##############################################
 p.header("Check and create - Hostgroups")
@@ -221,8 +220,8 @@ p.header("Check and create - Hostgroups")
 
 hg_parent = conf['hostgroupTop']['name']
 payload = {"environment_name": conf['environments'],
-        "subnet_name": conf['hostgroupTop']['subnet'],
-        "domain_name": domain}
+           "subnet_name": conf['hostgroupTop']['subnet'],
+           "domain_name": domain}
 hg_parentId = foreman.hostgroups.checkAndCreate(
     hg_parent,
     payload,
@@ -235,12 +234,12 @@ p.status(bool(hg_parentId), 'Hostgroup {}'.format(hg_parent))
 for hg in conf['hostgroupsList'].keys():
     key = hg_parent + '_' + conf['hostgroupsList'][hg]['name']
     payload = {"title": hg_parent + '/' + conf['hostgroupsList'][hg]['name'],
-            "parent_id": hg_parentId}
+               "parent_id": hg_parentId}
     p.status(bool(foreman.hostgroups.checkAndCreate(key, payload,
                                                     conf['hostgroupsList'][hg],
                                                     hg_parent,
                                                     puppetClassesId[hg])),
-            'Sub Hostgroup {}'.format(conf['hostgroupsList'][hg]['name']))
+             'Sub Hostgroup {}'.format(conf['hostgroupsList'][hg]['name']))
 
 
 ##############################################
@@ -249,7 +248,7 @@ p.header("Authorize Foreman to do puppet runs")
 
 foreman.settings['puppetrun']['value'] = 'true'
 p.status(foreman.settings['puppetrun']['value'],
-        'Set puppetrun parameter to True')
+         'Set puppetrun parameter to True')
 
 ##############################################
 p.header("Configure Foreman host")
@@ -260,13 +259,13 @@ foremanHost = foreman.hosts[hostName]
 
 # Add puppet classes to foreman
 p.status(foreman.hosts[hostName].checkAndCreateClasses(
-        puppetClassesId['foreman'].values()),
-        "Add puppet classes to foreman host")
+         puppetClassesId['foreman'].values()),
+         "Add puppet classes to foreman host")
 
 # Add smart class parameters of opensteak::dhcp to foreman
 className = 'opensteak::dhcp'
 scp = {x['parameter']: x['id'] for x in
-    foreman.puppetClasses[className]['smart_class_parameters']}
+       foreman.puppetClasses[className]['smart_class_parameters']}
 for k, v in conf['foreman']['classes'][className].items():
     if v is None:
         if k == 'pools':
@@ -285,24 +284,25 @@ for k, v in conf['foreman']['classes'][className].items():
             for subn in conf['subnetsList'].values():
                 v.append(subn['domain'])
                 revZone = subn['data']['network'].split('.')[::-1]
-                while revZone[0] is '0':
+                revMask = subn['data']['mask'].split('.')[::-1]
+                while revMask[0] is not '255':
                     revZone = revZone[1::]
+                    revMask = revMask[1::]
                 v.append('.'.join(revZone) + '.in-addr.arpa')
     scp_id = scp[k]
-    foreman.hosts[hostName]['smart_class_parameters'][scp_id]\
-        .setOverrideValue(v, hostName)
+    foreman.smartClassParameters[scp_id].setOverrideValue(v, hostName)
 
 foremanSCP = set([x['parameter']
-                for x in foreman.hosts[hostName]
-                ['smart_class_parameters'].values()])
+                 for x in foreman.hosts[hostName]
+                 ['smart_class_parameters'].values()])
 awaitedSCP = set(conf['foreman']['classes'][className].keys())
 p.status(awaitedSCP.issubset(foremanSCP),
-        "Add smart class parameters to class {} on foreman host"
-        .format(className))
+         "Add smart class parameters to class {} on foreman host"
+         .format(className))
 
 # Run puppet on foreman
 p.status(bool(foreman.hosts[hostName].puppetRun()),
-        'Run puppet on foreman host')
+         'Run puppet on foreman host')
 
 
 ##############################################
@@ -313,35 +313,36 @@ for c in conf['controllersList']:
 
     cConf = conf['controllersList'][c]
     payload = {
-      "host": {
-        "name": cConf['controllerName'],
-        "environment_id": foreman.environments[conf['environments']]['id'],
-        "mac": cConf['macAddress'],
-        "domain_id": foreman.domains[conf['domains']]['id'],
-        "subnet_id": foreman.subnets[next(iter(conf['subnetsList'].keys()))]['id'],
-        "ptable_id": foreman.ptables[conf['ptables']]['id'],
-        "medium_id": foreman.media[conf['media']]['id'],
-        "architecture_id": foreman.architectures[conf['architectures']]['id'],
-        "operatingsystem_id": foreman.operatingSystems[
-                                    cConf['operatingSystem']]['id'],
-        "puppet_proxy_id": foreman.smartProxies[conf['smart_proxies']]['id'],
-        "hostgroup_id": foreman.hostgroups['{}_{}'.format(
-            conf['hostgroupTop']['name'],
-            conf['hostgroupsList']['hostgroupController']['name'])]['id'],
-        "root_pass": cConf['password'],
-      }
-    }
-    payloadBMC = {
-                "ip": cConf['impiIpAddress'],
-                "mac": cConf['ipmiMacAddress'],
-                "type": "bmc",
-                "managed": False,
-                "identifier": "ipmi",
-                "username": cConf['impiUser'],
-                "password": cConf['impiPassword'],
-                "provider": "IPMI",
-                "virtual": False
+        "host": {
+            "name": cConf['controllerName'],
+            "environment_id": foreman.environments[conf['environments']]['id'],
+            "mac": cConf['macAddress'],
+            "domain_id": foreman.domains[conf['domains']]['id'],
+            "subnet_id": foreman.subnets[
+                next(iter(conf['subnetsList'].keys()))]['id'],
+            "ptable_id": foreman.ptables[conf['ptables']]['id'],
+            "medium_id": foreman.media[conf['media']]['id'],
+            "architecture_id": foreman.architectures[
+                conf['architectures']]['id'],
+            "operatingsystem_id": foreman.operatingSystems[
+                cConf['operatingSystem']]['id'],
+            "puppet_proxy_id": foreman.smartProxies[
+                conf['smart_proxies']]['id'],
+            "hostgroup_id": foreman.hostgroups['{}_{}'.format(
+                conf['hostgroupTop']['name'],
+                conf['hostgroupsList']['hostgroupController']['name'])]['id'],
+            "root_pass": cConf['password']
             }
+    }
+    payloadBMC = {"ip": cConf['impiIpAddress'],
+                  "mac": cConf['ipmiMacAddress'],
+                  "type": "bmc",
+                  "managed": False,
+                  "identifier": "ipmi",
+                  "username": cConf['impiUser'],
+                  "password": cConf['impiPassword'],
+                  "provider": "IPMI",
+                  "virtual": False}
     controllerId = foreman.hosts.createController(cConf['controllerName'],
                                                   payload, payloadBMC)
 
