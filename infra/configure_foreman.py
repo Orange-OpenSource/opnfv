@@ -318,7 +318,7 @@ for c in conf['controllersList']:
             "environment_id": foreman.environments[conf['environments']]['id'],
             "mac": cConf['macAddress'],
             "domain_id": foreman.domains[conf['domains']]['id'],
-            "subnet_id": foreman.subnets[subnets]['id'],
+            "subnet_id": foreman.subnets[conf['subnets']]['id'],
             "ptable_id": foreman.ptables[conf['ptables']]['id'],
             "medium_id": foreman.media[conf['media']]['id'],
             "architecture_id": foreman.architectures[
