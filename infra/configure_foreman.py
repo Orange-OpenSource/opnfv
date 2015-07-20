@@ -285,7 +285,7 @@ for k, v in conf['foreman']['classes'][className].items():
                 v.append(subn['domain'])
                 revZone = subn['data']['network'].split('.')[::-1]
                 revMask = subn['data']['mask'].split('.')[::-1]
-                while revMask[0] is not '255':
+                while revMask[0] != '255':
                     revZone = revZone[1::]
                     revMask = revMask[1::]
                 v.append('.'.join(revZone) + '.in-addr.arpa')
