@@ -68,6 +68,8 @@ class Hosts(ForemanObjects):
             # self.waitPuppetCatalogToBeApplied(key)
             self.reload()
         self[key]['build']='true'
+        self[key]['boot']='pxe'
+        self[key]['power']='cycle'
         return self[key]
 
     def waitPuppetCatalogToBeApplied(self, key):
