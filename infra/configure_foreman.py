@@ -264,8 +264,7 @@ p.status(foreman.hosts[hostName].checkAndCreateClasses(
 
 # Add smart class parameters of opensteak::dhcp to foreman
 className = 'opensteak::dhcp'
-scp = {x['parameter']: x['id'] for x in
-       foreman.puppetClasses[className]['smart_class_parameters']}
+scp = foreman.puppetClasses[className].smartClassParametersList()
 for k, v in conf['foreman']['classes'][className].items():
     if v is None:
         if k == 'pools':
@@ -312,9 +311,10 @@ p.header("Add controller nodes")
 for c in conf['controllersList']:
 
     cConf = conf['controllersList'][c]
+    hostName = cConf['controllerName']
     payload = {
         "host": {
-            "name": cConf['controllerName'],
+            "name": hostName,
             "environment_id": foreman.environments[conf['environments']]['id'],
             "mac": cConf['macAddress'],
             "domain_id": foreman.domains[conf['domains']]['id'],
@@ -342,8 +342,19 @@ for c in conf['controllersList']:
                   "password": cConf['impiPassword'],
                   "provider": "IPMI",
                   "virtual": False}
-    controllerId = foreman.hosts.createController(cConf['controllerName'],
+    controllerId = foreman.hosts.createController(hostName,
                                                   payload, payloadBMC)
+    # Configure OVS - for opensteak::base-network
+    ovs_config = cConf['params']['ovs_config']
+    pClass = 'opensteak::base-network'
+    scp = foreman.puppetClasses[pClass].smartClassParametersList()
+    scp_id = scp['ovs_config']
+    foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config, hostName)
+    # Configure OVS - for opensteak::libvirt
+    pClass = 'opensteak::libvirt'
+    scp = foreman.puppetClasses[pClass].smartClassParametersList()
+    scp_id = scp['ovs_config']
+    foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config, hostName)
 
 
 ##############################################

@@ -54,7 +54,9 @@ class Hosts(ForemanObjects):
                                 progression of the host creation
         @return RETURN: The API result
         """
-
+        pp(key)
+        pp(attributes)
+        pp(ipmi)
         if key not in self:
             self.printHostProgress = printHostProgress
             self.async = False
@@ -63,6 +65,7 @@ class Hosts(ForemanObjects):
                                       key + ' creation: push in Foreman',
                                       eol='\r')
             self.api.create('hosts', attributes, async=self.async)
+            pp(self.api.__dict__)
             self[key]['interfaces'].append(ipmi)
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)

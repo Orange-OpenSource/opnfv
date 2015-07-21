@@ -16,30 +16,28 @@
 # @author: David Blaisonneau <david.blaisonneau@orange.com>
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
-from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.itemPuppetClass import ItemPuppetClass
+from opensteak.foreman_objects.item import ForemanItem
+from pprint import pprint as pp
 
 
-class PuppetClasses(ForemanObjects):
+class ItemPuppetClass(ForemanItem):
     """
-    OperatingSystems class
+    ItemPuppetClass class
+    Represent the content of a foreman PuppetClass as a dict
     """
+
     objName = 'puppetclasses'
     payloadObj = 'puppetclass'
-    itemType = ItemPuppetClass
-    searchLimit = 100000
+    objNameSet = 'puppetclasses'
 
-    def load(self):
-        """ Function load
-        Get the list of all objects
 
-        @return RETURN: A ForemanItem list
-        """
-        cl_tmp = self.api.list(self.objName, limit=self.searchLimit).values()
-        cl = []
-        for i in cl_tmp:
-            cl.extend(i)
-        return {x[self.index]: ItemPuppetClass(self.api, x['id'],
-                                               self.objName, self.payloadObj,
-                                               x)
-                for x in cl}
+    def __init__(self, api, key,
+                 objName, payloadObj,
+                 *args, **kwargs):
+        ForemanItem.__init__(self, api, key,
+                             objName, payloadObj,
+                             *args, **kwargs)
+
+    def smartClassParametersList(self):
+        return {x['parameter']: x['id'] for x in
+                self['smart_class_parameters']}
