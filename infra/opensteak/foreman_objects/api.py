@@ -20,7 +20,6 @@ import json
 import requests
 from requests_futures.sessions import FuturesSession
 from pprint import pformat
-from pprint import pprint as pp
 
 
 class Api:
@@ -28,6 +27,8 @@ class Api:
     Api class
     Class to deal with the foreman API v2
     """
+    maxHistory = 16
+
     def __init__(self, password, login='admin', ip='127.0.0.1',
                  printErrors=False):
         """ Function __init__
@@ -42,10 +43,42 @@ class Api:
         self.headers = {'Accept': 'version=2',
                         'Content-Type': 'application/json; charset=UTF-8'}
         self.auth = (login, password)
-        self.errorMsg = ''
-        self.payload = ''
-        self.printErrors = printErrors
+        self.hist = []
 
+    def log(function):
+        """ Function log
+        Decorator to log lasts request before sending a new one
+
+        @return RETURN: None
+        """
+        def _log(self, *args, **kwargs):
+            ret = function(self, *args, **kwargs)
+            self.hist.insert(0, {'errorMsg': self.errorMsg,
+                                 'payload': self.payload,
+                                 'url': self.url,
+                                 'resp': self.resp,
+                                 'res': self.res,
+                                 'method': self.method})
+            if len(self.hist) > self.maxHistory:
+                self.hist = self.hist[:self.maxHistory]
+            self.clearHistVars()
+            return ret
+        return _log
+
+    def clearHistVars(self):
+        """ Function clearHistVars
+        Clear the variables used to get history of all vars
+
+        @return RETURN: None
+        """
+        self.errorMsg = None
+        self.payload = None
+        self.url = None
+        self.resp = None
+        self.res = None
+        self.method = None
+
+    @log
     def list(self, obj, filter=False, only_id=False, limit=20):
         """ Function list
         Get the list of an object
@@ -77,6 +110,7 @@ class Api:
         else:
             return self.__process_resp__(obj)
 
+    @log
     def get(self, obj, id, sub_object=None):
         """ Function get
         Get an object by id
@@ -95,6 +129,7 @@ class Api:
             return self.res
         return False
 
+    @log
     def get_id_by_name(self, obj, name):
         """ Function get_id_by_name
         Get the id of an object
@@ -107,6 +142,7 @@ class Api:
                          only_id=True, limit=1)
         return list[name] if name in list.keys() else False
 
+    @log
     def set(self, obj, id, payload, action='', async=False):
         """ Function set
         Set an object by id
@@ -135,6 +171,7 @@ class Api:
                 return self.res
             return False
 
+    @log
     def create(self, obj, payload, async=False):
         """ Function create
         Create an new object
@@ -158,6 +195,7 @@ class Api:
                                       data=self.payload)
             return self.__process_resp__(obj)
 
+    @log
     def delete(self, obj, id):
         """ Function delete
         Delete an object by id
@@ -200,7 +238,4 @@ class Api:
         return self.res
 
     def __str__(self):
-        ret = pformat(self.base_url) + "\n"
-        ret += pformat(self.headers) + "\n"
-        ret += pformat(self.auth) + "\n"
-        return ret
+        return pformat(self.hist)

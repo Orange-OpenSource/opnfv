@@ -139,11 +139,9 @@ class ForemanObjects(dict):
         return bool(key in self.listName().keys())
 
     def load(self):
-        """ Function list
+        """ Function load
         Get the list of all objects
 
-        @param key: The targeted object
-        @param limit: The limit of items to return
         @return RETURN: A ForemanItem list
         """
         return {x[self.index]: self.itemType(self.api, x['id'],
