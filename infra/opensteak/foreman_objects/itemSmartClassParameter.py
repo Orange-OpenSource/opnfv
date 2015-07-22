@@ -93,7 +93,6 @@ class ItemSmartClassParameter(ForemanItem):
         @return RETURN: The API result
         """
         self['override'] = True
-        self['default_value'] = None
         attrType = type(attributes)
         if attrType is list:
             self['parameter_type'] = 'array'

@@ -236,8 +236,11 @@ for hg in conf['hostgroupsList'].keys():
     payload = {"title": hg_parent + '/' + conf['hostgroupsList'][hg]['name'],
                "parent_id": hg_parentId}
     # Get back SSH key from foreman/files/id_rsa.pub file
-    if 'params' in conf['hostgroupsList'][hg] and 'global_sshkey' in conf['hostgroupsList'][hg]['params'] and conf['hostgroupsList'][hg]['params']['global_sshkey'] is None:
-        with open("{0}/id_rsa.pub".format(conf['foreman']['filesFolder']), 'r') as content_file:
+    if ('params' in conf['hostgroupsList'][hg] and
+            'global_sshkey' in conf['hostgroupsList'][hg]['params'] and
+            conf['hostgroupsList'][hg]['params']['global_sshkey'] is None):
+        with open("{0}/id_rsa.pub".format(conf['foreman']['filesFolder']),
+                  'r') as content_file:
             fullKeyString = content_file.read()
             keyParts = fullKeyString.strip().split(None, 3)
             conf['hostgroupsList'][hg]['params']['global_sshkey'] = keyParts[1]
@@ -273,6 +276,7 @@ className = 'opensteak::dhcp'
 scp = foreman.puppetClasses[className].smartClassParametersList()
 for k, v in conf['foreman']['classes'][className].items():
     if v is None:
+        # Construct the var pools if no value
         if k == 'pools':
             v = {'pools': dict()}
             for subn in conf['subnetsList'].values():
@@ -284,6 +288,8 @@ for k, v in conf['foreman']['classes'][className].items():
                 if 'gateway' in subn['data'].keys():
                     v['pools'][subn['domain']]['gateway'] =\
                         subn['data']['gateway']
+            pp(v)
+        # Construct the var dnsdomain if no value
         elif k == 'dnsdomain':
             v = list()
             for subn in conf['subnetsList'].values():
@@ -294,6 +300,18 @@ for k, v in conf['foreman']['classes'][className].items():
                     revZone = revZone[1::]
                     revMask = revMask[1::]
                 v.append('.'.join(revZone) + '.in-addr.arpa')
+    scp_id = scp[k]
+    foreman.smartClassParameters[scp_id].setOverrideValue(v, hostName)
+
+# Add smart class parameters of opensteak::known hosts to foreman
+className = "opensteak::known-hosts"
+scp = foreman.puppetClasses[className].smartClassParametersList()
+for k, v in conf['foreman']['classes'][className].items():
+    if v is None:
+        # Construct the var hosts if no value
+        if k == 'hosts':
+            v = ','.join(list(map(lambda x: x['controllerName'],
+                                  conf['controllersList'].values())))
     scp_id = scp[k]
     foreman.smartClassParameters[scp_id].setOverrideValue(v, hostName)
 
