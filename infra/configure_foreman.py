@@ -235,6 +235,10 @@ for hg in conf['hostgroupsList'].keys():
     key = hg_parent + '_' + conf['hostgroupsList'][hg]['name']
     payload = {"title": hg_parent + '/' + conf['hostgroupsList'][hg]['name'],
                "parent_id": hg_parentId}
+    # Get back SSH key from foreman/files/id_rsa.pub file
+    if 'params' in conf['hostgroupsList'][hg] and 'global_sshkey' in conf['hostgroupsList'][hg]['params'] and conf['hostgroupsList'][hg]['params']['global_sshkey'] is None:
+        with open("{0}/id_rsa.pub".format(conf['foreman']['filesFolder']), 'r') as content_file:
+            conf['hostgroupsList'][hg]['params']['global_sshkey'] = content_file.read()
     p.status(bool(foreman.hostgroups.checkAndCreate(key, payload,
                                                     conf['hostgroupsList'][hg],
                                                     hg_parent,
