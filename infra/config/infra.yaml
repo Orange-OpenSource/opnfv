@@ -38,6 +38,7 @@ operatingSystemsList:
   templates:
    - Preseed default
    - Preseed default user data
+   - Preseed default finish
   media:
    - Ubuntu mirror
   ptables:
