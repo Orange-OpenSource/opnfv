@@ -59,9 +59,9 @@ class Api:
                                     'url': self.url,
                                     'resp': self.resp,
                                     'res': self.res,
+                                    'printErrors': self.printErrors,
                                     'method': self.method})
-            if len(self.history) > self.maxHistory:
-                self.history = self.history[:self.maxHistory]
+            self.history = self.history[:self.maxHistory]
             self.clearReqVars()
             return ret
         return _log
@@ -78,6 +78,7 @@ class Api:
         self.resp = None
         self.res = None
         self.method = None
+        self.printErrors = None
 
     @log
     def list(self, obj, filter=False, only_id=False, limit=20):
