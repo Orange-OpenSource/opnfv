@@ -113,7 +113,8 @@ for name in conf['opensteak']['vm_list']:
                         "_delete": "",
                         "bridge": "",
                         "model": 'virtio',
-                        "network": conf['controllersAttributes']['adminBridge'],
+                        "network": conf['controllersAttributes'][
+                            'adminBridge'],
                         "type": 'network',
                     },
                     "new_nics": {
@@ -141,7 +142,8 @@ for name in conf['opensteak']['vm_list']:
                     },
                 },
             },
-            "compute_resource_id":  conf['defaultController'],
+            "compute_resource_id":  foreman.computeRessources[
+                conf['defaultController']]['id'],
             "domain_id": conf['domains'],
             "build": "true",
             "enabled": 1,
@@ -165,7 +167,6 @@ for name in conf['opensteak']['vm_list']:
                     "identifier": "",
                     "ip": "",
                     "mac": "",
-                    "managed": 0,
                     "managed": 1,
                     "name": "",
                     "subnet_id": "",

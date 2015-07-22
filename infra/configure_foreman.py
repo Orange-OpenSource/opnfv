@@ -356,6 +356,8 @@ for c in conf['controllersList']:
     scp_id = scp['ovs_config']
     foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config, hostName)
 
+    # Add the controller to the list of computeRessources
+
 
 ##############################################
 p.header("Clean")

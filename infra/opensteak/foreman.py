@@ -18,14 +18,14 @@
 
 from opensteak.foreman_objects.api import Api
 from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.smart_proxies import SmartProxies
+from opensteak.foreman_objects.smartProxies import SmartProxies
 from opensteak.foreman_objects.operatingsystems import OperatingSystems
 from opensteak.foreman_objects.hostgroups import HostGroups
 from opensteak.foreman_objects.hosts import Hosts
 from opensteak.foreman_objects.architectures import Architectures
 from opensteak.foreman_objects.subnets import Subnets
 from opensteak.foreman_objects.puppetClasses import PuppetClasses
-from opensteak.foreman_objects.compute_resources import ComputeResources
+from opensteak.foreman_objects.computeResources import ComputeResources
 from opensteak.foreman_objects.smartClassParameters import SmartClassParameters
 from opensteak.foreman_objects.environments import Environments
 from opensteak.foreman_objects.configTemplates import ConfigTemplates
