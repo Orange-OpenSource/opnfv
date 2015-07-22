@@ -44,6 +44,7 @@ class Api:
                         'Content-Type': 'application/json; charset=UTF-8'}
         self.auth = (login, password)
         self.hist = []
+        self.clearHistVars()
 
     def log(function):
         """ Function log
