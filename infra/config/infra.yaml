@@ -151,3 +151,21 @@ controllersList:
     - "br-adm:em3:dhcp"
     - "br-vm:em5:dhcp"
     - "br-ex:em2:none"
+ controller2:
+  controllerName: 'controller2.infra.opensteak.fr'
+  operatingSystem: "Ubuntu 14.04.1 LTS"
+  macAddress: '00:1a:64:c8:a9:7c'
+  password: "password"
+  ipmiMacAddress: '00:1a:64:cc:66:4d'
+  impiIpAddress: "192.168.1.194"
+  impiUser: 'user'
+  impiPassword: "password"
+ controller3:
+  controllerName: 'controller3.infra.opensteak.fr'
+  operatingSystem: "Ubuntu 14.04.1 LTS"
+  macAddress: 'a0:36:9f:4e:90:96'
+  password: "password"
+  ipmiMacAddress: '00:1a:64:cc:66:3d'
+  impiIpAddress: "192.168.1.192"
+  impiUser: 'user'
+  impiPassword: "password"
