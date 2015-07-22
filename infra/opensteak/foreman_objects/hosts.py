@@ -70,9 +70,9 @@ class Hosts(ForemanObjects):
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)
             self.reload()
-        self[key]['build']='true'
-        self[key]['boot']='pxe'
-        self[key]['power']='cycle'
+        self[key]['build'] = 'true'
+        self[key]['boot'] = 'pxe'
+        self[key]['power'] = 'cycle'
         return self[key]
 
     def waitPuppetCatalogToBeApplied(self, key):
