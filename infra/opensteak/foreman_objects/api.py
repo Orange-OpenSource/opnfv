@@ -43,8 +43,8 @@ class Api:
         self.headers = {'Accept': 'version=2',
                         'Content-Type': 'application/json; charset=UTF-8'}
         self.auth = (login, password)
-        self.hist = []
-        self.clearHistVars()
+        self.history = []
+        self.clearReqVars()
 
     def log(function):
         """ Function log
@@ -54,19 +54,19 @@ class Api:
         """
         def _log(self, *args, **kwargs):
             ret = function(self, *args, **kwargs)
-            self.hist.insert(0, {'errorMsg': self.errorMsg,
-                                 'payload': self.payload,
-                                 'url': self.url,
-                                 'resp': self.resp,
-                                 'res': self.res,
-                                 'method': self.method})
-            if len(self.hist) > self.maxHistory:
-                self.hist = self.hist[:self.maxHistory]
-            self.clearHistVars()
+            self.history.insert(0, {'errorMsg': self.errorMsg,
+                                    'payload': self.payload,
+                                    'url': self.url,
+                                    'resp': self.resp,
+                                    'res': self.res,
+                                    'method': self.method})
+            if len(self.history) > self.maxHistory:
+                self.history = self.history[:self.maxHistory]
+            self.clearReqVars()
             return ret
         return _log
 
-    def clearHistVars(self):
+    def clearReqVars(self):
         """ Function clearHistVars
         Clear the variables used to get history of all vars
 
