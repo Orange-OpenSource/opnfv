@@ -18,6 +18,7 @@
 
 from opensteak.foreman_objects.objects import ForemanObjects
 from opensteak.foreman_objects.item import ForemanItem
+from pprint import pprint as pp
 
 
 class ComputeResources(ForemanObjects):
@@ -35,11 +36,10 @@ class ComputeResources(ForemanObjects):
         @param key: The hostgroup name or ID
         @return RETURN: The ForemanItem object of an host
         """
-        # Because Hostgroup did not support get by name we need to do it by id
         if type(key) is not int:
-            key = self[key]['id']
+            key = self.listName()[key]
         ret = self.api.get(self.objName, key)
-        return ForemanItem(self.api, key, ret)
+        return ForemanItem(self.api, key, self.objName, self.payloadObj, ret)
 
     def __delitem__(self, key):
         """ Function __delitem__

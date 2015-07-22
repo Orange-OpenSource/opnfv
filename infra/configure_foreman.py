@@ -357,7 +357,14 @@ for c in conf['controllersList']:
     foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config, hostName)
 
     # Add the controller to the list of computeRessources
-
+    foreman.computeResources.checkAndCreate(
+        hostName,
+        {'description': 'OpenSteak compute ressource',
+         'display_type': 'SPICE',
+         'name': hostName,
+         'provider': 'Libvirt',
+         'set_console_password': True,
+         'url': 'qemu+ssh://ubuntu@{}/system'.format(hostName)})
 
 ##############################################
 p.header("Clean")
