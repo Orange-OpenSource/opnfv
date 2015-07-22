@@ -210,6 +210,8 @@ echo "* SSH Key"
 cp /mnt/id_rsa /usr/share/foreman/.ssh/
 cp /mnt/id_rsa.pub /usr/share/foreman/.ssh/
 chown foreman:foreman /usr/share/foreman/.ssh/ -R
+chmod 700 /usr/share/foreman/.ssh/
+chmod 600 /usr/share/foreman/.ssh/id_rsa
 
 ### Run puppet
 puppet agent -t -v

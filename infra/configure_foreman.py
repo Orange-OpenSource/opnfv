@@ -241,8 +241,9 @@ for hg in conf['hostgroupsList'].keys():
             conf['hostgroupsList'][hg]['params']['global_sshkey'] is None):
         with open("{0}/id_rsa.pub".format(conf['foreman']['filesFolder']),
                   'r') as content_file:
-            conf['hostgroupsList'][hg]['params'][
-                'global_sshkey'] = content_file.read()
+            fullKeyString = content_file.read()
+            keyParts = fullKeyString.strip().split(None, 3)
+            conf['hostgroupsList'][hg]['params']['global_sshkey'] = keyParts[1]
     p.status(bool(foreman.hostgroups.checkAndCreate(key, payload,
                                                     conf['hostgroupsList'][hg],
                                                     hg_parent,
