@@ -63,13 +63,13 @@ hostgroupsList:
    - "opensteak::base-network"
    - "opensteak::libvirt"
   params:
-   foreman_sshkey: 'xxxx'
+   global_sshkey: #Build in the configure_foreman.py
  hostgroupControllerVM:
   name: 'controller_VM'
   classes:
    - "opensteak::apt"
   params:
-   foreman_sshkey: 'xxxx'
+   global_sshkey: #Build in the configure_foreman.py
    password: 'password'
  hostgroupCompute:
   name: 'compute'
@@ -146,6 +146,11 @@ controllersList:
   impiIpAddress: "192.168.1.199"
   impiUser: "user"
   impiPassword: "password"
+  params:
+   ovs_config:
+    - "br-adm:eth0:dhcp"
+    - "br-vm:eth1:dhcp"
+    - "br-ex:eth2:none"
 
 controllersAttributes:
  cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
