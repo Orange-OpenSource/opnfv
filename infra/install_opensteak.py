@@ -150,8 +150,8 @@ for name in conf['opensteak']['vm_list']:
             "hostgroup_id": conf['hostgroups'],
             "medium_id": conf['media'],
             "ptable_id": conf['ptables'],
-            "architecture_id": foreman.architectures[conf['architectures']]['id']
-            "name":  name + '.' + conf['domains'],
+            "architecture_id": foreman.architectures[conf['architectures']]['id'],
+            "name": "{0}.{1}".format(name,conf['domains']),
             "operatingsystem_id": conf['operatingsystems'],
             "provision_method": 'image',
             "puppet_ca_proxy_id": conf['smart_proxies'],
@@ -177,5 +177,4 @@ for name in conf['opensteak']['vm_list']:
             },
         }
     }
-    name += '.'+conf['domains']
-    foreman.hosts.createVM(name, payload, False)
+    foreman.hosts.createVM("{0}.{1}".format(name,conf['domains']), payload, False)
