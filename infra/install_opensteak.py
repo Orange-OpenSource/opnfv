@@ -92,7 +92,7 @@ p.header("List of VM to create")
 for name in conf['opensteak']['vm_list']:
     p.list(name)
 print()
-p.ask_validation()
+#p.ask_validation()
 
 #~
 #~ VM creation routine
@@ -101,7 +101,6 @@ p.header("VM creation")
 sleep = 5
 for name in conf['opensteak']['vm_list']:
     payload = {
-        "capabilities": "build image",
         "host": {
             "comment": conf['vm'][name]['description'],
             "compute_attributes": {
@@ -142,7 +141,7 @@ for name in conf['opensteak']['vm_list']:
                     },
                 },
             },
-            "compute_resource_id":  foreman.computeRessources[
+            "compute_resource_id":  foreman.computeResources[
                 conf['defaultController']]['id'],
             "domain_id": conf['domains'],
             "build": "true",
@@ -151,6 +150,7 @@ for name in conf['opensteak']['vm_list']:
             "hostgroup_id": conf['hostgroups'],
             "medium_id": conf['media'],
             "ptable_id": conf['ptables'],
+            "architecture_id": foreman.architectures[conf['architectures']]['id']
             "name":  name + '.' + conf['domains'],
             "operatingsystem_id": conf['operatingsystems'],
             "provision_method": 'image',
@@ -175,9 +175,7 @@ for name in conf['opensteak']['vm_list']:
                     "virtual": 0,
                 },
             },
-        },
-        "provider": "Libvirt",
-        "utf8": "✓"
+        }
     }
     name += '.'+conf['domains']
     foreman.hosts.createVM(name, payload, False)

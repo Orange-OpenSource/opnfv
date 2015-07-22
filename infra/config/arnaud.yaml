@@ -38,6 +38,7 @@ operatingSystemsList:
   templates:
    - Preseed default
    - Preseed default user data
+   - Preseed default finish
   media:
    - Ubuntu mirror
   ptables:
@@ -148,9 +149,9 @@ controllersList:
   impiPassword: "password"
   params:
    ovs_config:
-    - "br-adm:eth0:dhcp"
+    - "br-adm:eth2:dhcp"
     - "br-vm:eth1:dhcp"
-    - "br-ex:eth2:none"
+    - "br-ex:eth0:none"
 
 controllersAttributes:
  cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
