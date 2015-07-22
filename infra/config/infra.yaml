@@ -61,13 +61,13 @@ hostgroupsList:
    - "opensteak::base-network"
    - "opensteak::libvirt"
   params:
-   foreman_sshkey: 'xxxx'
+   global_sshkey: #Build in the configure_foreman.py
  hostgroupControllerVM:
   name: 'controller_VM'
   classes:
    - "opensteak::apt"
   params:
-   foreman_sshkey: 'xxxx'
+   global_sshkey: #Build in the configure_foreman.py
    password: 'password'
  hostgroupCompute:
   name: 'compute'
