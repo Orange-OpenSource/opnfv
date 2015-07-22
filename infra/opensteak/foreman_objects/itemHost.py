@@ -115,7 +115,7 @@ class ItemHost(ForemanItem):
         """
         return self.api.set('hosts', self.key,
                             {"power_action": "start"},
-                            'power', async=self.async)
+                            'power', async=False)
 
     def getParamFromEnv(self, var, default=''):
         """ Function getParamFromEnv

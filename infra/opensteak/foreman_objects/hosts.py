@@ -64,6 +64,7 @@ class Hosts(ForemanObjects):
             self.__printProgression__('In progress',
                                       key + ' creation: push in Foreman',
                                       eol='\r')
+            pp(attributes)
             self.api.create('hosts', attributes, async=self.async)
             pp(self.api.__dict__)
             self[key]['interfaces'].append(ipmi)

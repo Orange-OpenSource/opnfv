@@ -60,11 +60,11 @@ foreman = OpenSteakForeman(login=args["admin"],
 #~
 #~ Check all requesists are ok
 #~
-p.header("Check configuration")
-ids = {}
-for k, v in conf['environment'].items():
-    ids[k] = foreman.api.get_id_by_name(k, v)
-    p.config(k, v, ids[k])
+#p.header("Check configuration")
+#ids = {}
+#for k, v in conf['environment'].items():
+#    ids[k] = foreman.api.get_id_by_name(k, v)
+#    p.config(k, v, ids[k])
 
 #~
 #~ Check all puppet classes are ok
@@ -75,14 +75,14 @@ for name in conf['opensteak']['vm_list']:
     p_ids[name] = {}
     if conf['vm'][name]['puppet_classes']:
         for pclass in conf['vm'][name]['puppet_classes']:
-            p_ids[name][pclass] = foreman.api.puppetclasses.pclass['id']
+            p_ids[name][pclass] = foreman.puppetClasses[pclass]['id']
             p.config('Puppet Class', pclass, p_ids[name][pclass])
 
 #~
 #~ Print controller specifics parameters
 #~
-p.header("Controller parameters")
-for k, v in conf['controller'].items():
+p.header("Controllers attributes")
+for k, v in conf['controllersAttributes'].items():
     p.config(k, v)
 
 #~
@@ -106,14 +106,14 @@ for name in conf['opensteak']['vm_list']:
             "comment": conf['vm'][name]['description'],
             "compute_attributes": {
                 "cpus": 2,
-                "image_id": conf['controller']['image_id'],
+                "image_id": conf['controllersAttributes']['cloudImagePath'],
                 "memory": '4194304000',
                 "nics_attributes": {
                     "0": {
                         "_delete": "",
                         "bridge": "",
                         "model": 'virtio',
-                        "network": conf['controller']['bridge'],
+                        "network": conf['controllersAttributes']['adminBridge'],
                         "type": 'network',
                     },
                     "new_nics": {
@@ -141,21 +141,21 @@ for name in conf['opensteak']['vm_list']:
                     },
                 },
             },
-            "compute_resource_id":  ids['compute_resources'],
-            "domain_id": ids['domains'],
+            "compute_resource_id":  conf['defaultController'],
+            "domain_id": conf['domains'],
             "build": "true",
             "enabled": 1,
-            "environment_id": ids['environments'],
-            "hostgroup_id": ids['hostgroups'],
-            "medium_id": ids['media'],
-            "ptable_id": ids['ptables'],
-            "name":  name+'.'+conf['environment']['domains'],
-            "operatingsystem_id": ids['operatingsystems'],
+            "environment_id": conf['environments'],
+            "hostgroup_id": conf['hostgroups'],
+            "medium_id": conf['media'],
+            "ptable_id": conf['ptables'],
+            "name":  name + '.' + conf['domains'],
+            "operatingsystem_id": conf['operatingsystems'],
             "provision_method": 'image',
-            "puppet_ca_proxy_id": ids['smart_proxies'],
-            "puppet_proxy_id": ids['smart_proxies'],
+            "puppet_ca_proxy_id": conf['smart_proxies'],
+            "puppet_proxy_id": conf['smart_proxies'],
             "puppetclass_ids": list(p_ids[name].values()),
-            "subnet_id": ids['subnets'],
+            "subnet_id": conf['subnets'],
             "type": "Host::Managed",
             "interfaces_attributes": {
                 "new_interfaces": {
@@ -178,5 +178,5 @@ for name in conf['opensteak']['vm_list']:
         "provider": "Libvirt",
         "utf8": "✓"
     }
-    name += '.'+conf['environment']['domains']
-    foreman.host.createVM(name, payload, True)
+    name += '.'+conf['domains']
+    foreman.hosts.createVM(name, payload, False)
