@@ -100,7 +100,6 @@ class ItemSmartClassParameter(ForemanItem):
             self['parameter_type'] = 'array'
         else:
             self['parameter_type'] = 'string'
-        print("{} - {} - {}".format(attributes, attrType, self['parameter_type']))
         orv = self.getOverrideValueForHost(hostName)
         if orv:
             orv['value'] = attributes

@@ -288,7 +288,6 @@ for k, v in conf['foreman']['classes'][className].items():
                 if 'gateway' in subn['data'].keys():
                     v['pools'][subn['domain']]['gateway'] =\
                         subn['data']['gateway']
-            pp(v)
         # Construct the var dnsdomain if no value
         elif k == 'dnsdomain':
             v = list()
