@@ -94,12 +94,13 @@ class ItemSmartClassParameter(ForemanItem):
         """
         self['override'] = True
         attrType = type(attributes)
-        if attrType is list:
-            self['parameter_type'] = 'array'
-        elif attrType is dict:
+        if attrType is dict:
             self['parameter_type'] = 'hash'
+        elif attrType is list:
+            self['parameter_type'] = 'array'
         else:
             self['parameter_type'] = 'string'
+        print("{} - {} - {}".format(attributes, attrType, self['parameter_type']))
         orv = self.getOverrideValueForHost(hostName)
         if orv:
             orv['value'] = attributes
