@@ -54,9 +54,6 @@ class Hosts(ForemanObjects):
                                 progression of the host creation
         @return RETURN: The API result
         """
-        pp(key)
-        pp(attributes)
-        pp(ipmi)
         if key not in self:
             self.printHostProgress = printHostProgress
             self.async = False
@@ -71,12 +68,12 @@ class Hosts(ForemanObjects):
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)
             self.reload()
-        self[key]['build'] = 'true'
-        self[key]['boot'] = 'pxe'
-        self[key]['power'] = 'cycle'
+        # self[key]['build'] = 'true'
+        # self[key]['boot'] = 'pxe'
+        # self[key]['power'] = 'cycle'
         return self[key]
 
-    def waitPuppetCatalogToBeApplied(self, key):
+    def waitPuppetCatalogToBeApplied(self, key, sleepTime=5):
         """ Function waitPuppetCatalogToBeApplied
         Wait for puppet catalog to be applied
 
@@ -102,7 +99,7 @@ class Hosts(ForemanObjects):
                                           key + ' creation: provisioning ({})'
                                           .format(status),
                                           eol='\r')
-            time.sleep(5)
+            time.sleep(sleepTime)
 
     def createVM(self, key, attributes, printHostProgress=False):
         """ Function createVM

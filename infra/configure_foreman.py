@@ -333,6 +333,7 @@ p.header("Add controller nodes")
 
 for c in conf['controllersList']:
 
+    # Create the controller
     cConf = conf['controllersList'][c]
     hostName = cConf['controllerName']
     payload = {
@@ -367,20 +368,28 @@ for c in conf['controllersList']:
                   "virtual": False}
     controllerId = foreman.hosts.createController(hostName,
                                                   payload, payloadBMC)
+    p.status(bool(controllerId), "Create controller {}".format(hostName))
+
     # Configure OVS - for opensteak::base-network
     ovs_config = cConf['params']['ovs_config']
     pClass = 'opensteak::base-network'
     scp = foreman.puppetClasses[pClass].smartClassParametersList()
     scp_id = scp['ovs_config']
-    foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config, hostName)
+    res = foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config,
+                                                                hostName)
+    p.status(bool(res),
+             "Configure {} for the controller {}".format(pClass, hostName))
     # Configure OVS - for opensteak::libvirt
     pClass = 'opensteak::libvirt'
     scp = foreman.puppetClasses[pClass].smartClassParametersList()
     scp_id = scp['ovs_config']
-    foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config, hostName)
+    res = foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config,
+                                                                hostName)
+    p.status(bool(res),
+             "Configure {} for the controller {}".format(pClass, hostName))
 
     # Add the controller to the list of computeRessources
-    foreman.computeResources.checkAndCreate(
+    res = foreman.computeResources.checkAndCreate(
         hostName,
         {'description': 'OpenSteak compute ressource',
          'display_type': 'SPICE',
@@ -388,33 +397,54 @@ for c in conf['controllersList']:
          'provider': 'Libvirt',
          'set_console_password': True,
          'url': 'qemu+ssh://ubuntu@{}/system'.format(hostName)})
+    p.status(bool(res),
+             'Set {} as a compute ressource'.format(hostName))
 
-##############################################
-p.header("Clean")
-##############################################
+    computeRessourcesId = foreman.computeResources[hostName]['id']
+    # Declare the cloud image to the controller
+    if 'UbuntuCloudImage' not in foreman.computeResources[
+            computeRessourcesId]['images'].keys():
+        image = {'architecture_id': foreman.architectures[
+                 conf['architectures']]['id'],
+                 'compute_resource_id': computeRessourcesId,
+                 'name': 'UbuntuCloudImage',
+                 'operatingsystem_id': foreman.operatingSystems[
+                 conf['operatingsystems']]['id'],
+                 'username': 'ubuntu',
+                 'uuid': conf['controllersAttributes']['cloudImagePath']}
+        p.status(bool(foreman.computeResources[foreman.computeResources[
+            hostName]['id']]['images'].append(image)),
+            'Add image "UbuntuCloudImage" in the compute '
+            'ressource {}'.format(hostName))
 
-## # Delete Sub Hostgroups
-## for hg in conf['hostgroupsList'].keys():
-##     key = hg_parent + '_' + conf['hostgroupsList'][hg]['name']
-##     del(foreman.hostgroups[key])
-##     p.status(bool(key not in foreman.hostgroups),
-##              'Delete sub hostgroup {}'.format(conf['hostgroupsList'][hg]['name']))
-##
-## # Delete Top hostgroup
-## hg_parent = conf['hostgroupTop']['name']
-## del(foreman.hostgroups[hg_parent])
-## p.status(bool(hg_parent not in foreman.hostgroups),
-##          'Delete top hostgroup {}'.format(hg_parent))
 
-## # Delete subnets or remove domain from its
-## for name, data in confSubnets.items():
-##     subnetId = foreman.subnets[name]['id']
-##     p.status(foreman.subnets.removeDomain(subnetId, domainId),
-##              'Remove domain {} from subnet {}'.format(domain, name))
-##     if not data['shared']:
-##         del(foreman.subnets[subnetId])
-##         p.status(name not in foreman.subnets, 'Delete subnet ' + name)
-##
-## # Delete domain
-## del(foreman.domains[domainId])
-## p.status(domainId not in foreman.domains, 'Delete domain ' + domain)
+# #############################################
+# p.header("Clean")
+# #############################################
+#
+# # Delete Sub Hostgroups
+# for hg in conf['hostgroupsList'].keys():
+#     key = hg_parent + '_' + conf['hostgroupsList'][hg]['name']
+#     del(foreman.hostgroups[key])
+#     p.status(bool(key not in foreman.hostgroups),
+#       'Delete sub hostgroup {}'.format(conf[
+#       'hostgroupsList'][hg]['name']))
+#
+# # Delete Top hostgroup
+# hg_parent = conf['hostgroupTop']['name']
+# del(foreman.hostgroups[hg_parent])
+# p.status(bool(hg_parent not in foreman.hostgroups),
+#          'Delete top hostgroup {}'.format(hg_parent))
+#
+# # Delete subnets or remove domain from its
+# for name, data in confSubnets.items():
+#     subnetId = foreman.subnets[name]['id']
+#     p.status(foreman.subnets.removeDomain(subnetId, domainId),
+#              'Remove domain {} from subnet {}'.format(domain, name))
+#     if not data['shared']:
+#         del(foreman.subnets[subnetId])
+#         p.status(name not in foreman.subnets, 'Delete subnet ' + name)
+#
+# # Delete domain
+# del(foreman.domains[domainId])
+# p.status(domainId not in foreman.domains, 'Delete domain ' + domain)

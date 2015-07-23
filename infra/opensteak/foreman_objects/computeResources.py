@@ -17,7 +17,7 @@
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
 from opensteak.foreman_objects.objects import ForemanObjects
-from opensteak.foreman_objects.item import ForemanItem
+from opensteak.foreman_objects.itemComputeRessource import ItemComputeRessource
 from pprint import pprint as pp
 
 
@@ -27,6 +27,7 @@ class ComputeResources(ForemanObjects):
     """
     objName = 'compute_resources'
     payloadObj = 'compute_resource'
+    itemType = ItemComputeRessource
     index = 'name'
 
     def __getitem__(self, key):
@@ -39,7 +40,8 @@ class ComputeResources(ForemanObjects):
         if type(key) is not int:
             key = self.listName()[key]
         ret = self.api.get(self.objName, key)
-        return ForemanItem(self.api, key, self.objName, self.payloadObj, ret)
+        return ItemComputeRessource(self.api, key, self.objName,
+                                    self.payloadObj, ret)
 
     def __delitem__(self, key):
         """ Function __delitem__
