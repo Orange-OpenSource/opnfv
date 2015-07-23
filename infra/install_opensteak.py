@@ -25,15 +25,18 @@ from pprint import pprint as pp
 
 p = OpenSteakPrinter()
 
-#~
-#~ Check for params
-#~
+# ###################
+# Check for params
+# ###################
 p.header("Check parameters")
 args = {}
 
 # Update args with values from CLI
-parser = argparse.ArgumentParser(description='This script will configure foreman.', usage='%(prog)s [options]')
-parser.add_argument('-c', '--config', help='YAML config file to use (default is config/infra.yaml).', default='config/infra.yaml')
+parser = argparse.ArgumentParser(description='This script will configure '
+                                 'foreman.', usage='%(prog)s [options]')
+parser.add_argument('-c', '--config', help='YAML config file to use '
+                    '(default is config/infra.yaml).',
+                    default='config/infra.yaml')
 args.update(vars(parser.parse_args()))
 
 # Open config file
@@ -50,25 +53,27 @@ del a
 
 # p.list_id(args)
 
-#~
-#~ Prepare classes
-#~
+# ###################
+# Prepare classes
+# ###################
 foreman = OpenSteakForeman(login=args["admin"],
                            password=args["password"],
                            ip=args["ip"])
 
-#~
-#~ Check all requesists are ok
-#~
-#p.header("Check configuration")
-#ids = {}
-#for k, v in conf['environment'].items():
-#    ids[k] = foreman.api.get_id_by_name(k, v)
-#    p.config(k, v, ids[k])
+# ###################
+# Check all requesists are ok
+# ###################
 
-#~
-#~ Check all puppet classes are ok
-#~
+# p.header("Check configuration")
+# ids = {}
+# for k, v in conf['environment'].items():
+#     ids[k] = foreman.api.get_id_by_name(k, v)
+#     p.config(k, v, ids[k])
+
+# ###################
+# Check all puppet classes are ok
+# ###################
+
 p.header("Check puppet classes")
 p_ids = {}
 for name in conf['opensteak']['vm_list']:
@@ -78,25 +83,26 @@ for name in conf['opensteak']['vm_list']:
             p_ids[name][pclass] = foreman.puppetClasses[pclass]['id']
             p.config('Puppet Class', pclass, p_ids[name][pclass])
 
-#~
-#~ Print controller specifics parameters
-#~
+# ###################
+# Print controller specifics parameters
+# ###################
 p.header("Controllers attributes")
 for k, v in conf['controllersAttributes'].items():
     p.config(k, v)
 
-#~
-#~ Wait for user input to continue
-#~
+# ###################
+# Wait for user input to continue
+# ###################
 p.header("List of VM to create")
 for name in conf['opensteak']['vm_list']:
     p.list(name)
 print()
-#p.ask_validation()
+# p.ask_validation()
 
-#~
-#~ VM creation routine
-#~
+# ###################
+# VM creation routine
+# ###################
+
 p.header("VM creation")
 sleep = 5
 for name in conf['opensteak']['vm_list']:
@@ -150,8 +156,9 @@ for name in conf['opensteak']['vm_list']:
             "hostgroup_id": conf['hostgroups'],
             "medium_id": conf['media'],
             "ptable_id": conf['ptables'],
-            "architecture_id": foreman.architectures[conf['architectures']]['id'],
-            "name": "{0}.{1}".format(name,conf['domains']),
+            "architecture_id": foreman.architectures[
+                conf['architectures']]['id'],
+            "name": "{0}.{1}".format(name, conf['domains']),
             "operatingsystem_id": conf['operatingsystems'],
             "provision_method": 'image',
             "puppet_ca_proxy_id": conf['smart_proxies'],
@@ -177,4 +184,5 @@ for name in conf['opensteak']['vm_list']:
             },
         }
     }
-    foreman.hosts.createVM("{0}.{1}".format(name,conf['domains']), payload, False)
+    foreman.hosts.createVM("{0}.{1}".format(name, conf['domains']),
+                           payload, False)
