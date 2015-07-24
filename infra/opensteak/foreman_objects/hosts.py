@@ -123,7 +123,7 @@ class Hosts(ForemanObjects):
         # Create the VM in foreman
         self.__printProgression__('In progress',
                                   key + ' creation: push in Foreman', eol='\r')
-        future1 = self.api.create('hosts', attributes, async=True)
+        future1 = self.api.create('hosts', attributes, async=False)
 
         #  Wait before asking to power on the VM
         sleep = 5
