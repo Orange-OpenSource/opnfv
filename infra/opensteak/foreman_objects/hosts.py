@@ -61,16 +61,14 @@ class Hosts(ForemanObjects):
             self.__printProgression__('In progress',
                                       key + ' creation: push in Foreman',
                                       eol='\r')
-            pp(attributes)
             self.api.create('hosts', attributes, async=self.async)
-            pp(self.api.__dict__)
             self[key]['interfaces'].append(ipmi)
             # Wait for puppet catalog to be applied
             # self.waitPuppetCatalogToBeApplied(key)
             self.reload()
-        # self[key]['build'] = 'true'
-        # self[key]['boot'] = 'pxe'
-        # self[key]['power'] = 'cycle'
+            self[key]['build'] = 'true'
+            self[key]['boot'] = 'pxe'
+            self[key]['power'] = 'cycle'
         return self[key]
 
     def waitPuppetCatalogToBeApplied(self, key, sleepTime=5):
