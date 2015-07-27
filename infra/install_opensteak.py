@@ -186,5 +186,82 @@ for name in conf['opensteak']['vm_list']:
             },
         }
     }
-    foreman.hosts.createVM("{0}.{1}".format(name, conf['domains']),
-                           payload, False)
+payload = {
+    "host": {
+        "name": name,
+        "comment": conf['vm'][name]['description'],
+        "enabled": True,
+        "build": True,
+        "managed": True,
+        "type": "Host::Managed",
+        "disk": "",
+        "environment_id": foreman.environments[
+            conf['environments']]['id'],
+        "operatingsystem_id": foreman.operatingSystems[
+            conf['operatingsystems']]['id'],
+        "compute_resource_id": foreman.computeResources[
+            conf['defaultController']]['id'],
+        "ptable_id": foreman.ptables[
+            conf['ptables']]['id'],
+        "medium_id": foreman.media[ 
+            conf['media']]['id'],
+        "architecture_id": foreman.architectures[
+            conf['architectures']]['id'],
+        "hostgroup_id": foreman.hostgroups[
+            "{0}_{1}".format(
+                conf['hostgroupTop']['name'],
+                conf['hostgroups'])]['id'],
+        "puppet_ca_proxy_id": foreman.smartProxies[
+            conf['smart_proxies']]['id'],
+        "puppet_proxy_id": foreman.smartProxies[
+            conf['smart_proxies']]['id'],
+        "puppetclass_ids": list(p_ids[name].values()),
+        "provision_method": "image",
+        "interfaces_attributes": {
+            "0": {
+                "identifier": "",
+                "mac": "",
+                "name": name,
+                "managed": True,
+                "primary": True,
+                "provision": True,
+                "type": "Nic::Managed",
+                "domain_id": foreman.domains[
+                    conf['domains']]['id'],
+                "subnet_id": foreman.subnets[
+                    conf['subnets']]['id'],
+                "virtual": False,
+                "compute_attributes": {
+                    "bridge": "",
+                    "model": "virtio",
+                    "network": conf['controllersAttributes'][
+                        'adminBridge'],
+                    "type": "network",
+                },
+            }
+        },
+        "compute_attributes": {
+            "cpus": 2,
+            "image_id": conf['controllersAttributes']['cloudImagePath'],
+            "memory": "4194304000",
+            "start": True,
+            "volumes_attributes": {
+                "0": {
+                    "allocation": '0G',
+                    "capacity": '10G',
+                    "format_type": 'qcow2',
+                    "pool_name": 'default',
+                }
+            },
+        },
+        "mac": "",
+        "root_pass": "password",
+    },
+    "provider": "Libvirt",
+    "capabilities": "build image",
+}
+
+foreman.hosts.createVM("{0}.{1}".format(name, conf['domains']),
+                       payload, False)
+
+pp(foreman.api.history)
