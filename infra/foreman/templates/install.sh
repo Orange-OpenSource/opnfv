@@ -45,8 +45,7 @@ echo "$${IP} $${NAME}.$${DOMAIN} $${NAME}" >> /etc/hosts
 ### Dependencies
 echo "* Install dependencies"
 apt-get update
-apt-get -y install ca-certificates wget git isc-dhcp-server python3-pip python3-tornado
-pip3 install beautifulsoup4 PyYAML requests requests-futures
+apt-get -y install ca-certificates wget git isc-dhcp-server
 
 ### Set AppArmor
 echo "* Set App armor"
@@ -129,17 +128,7 @@ foreman-installer \
 echo "* Sync community templates for last ubuntu versions"
 foreman-rake templates:sync
 
-### Get and install OpenSteak files
-
-#echo "* Get OpenSteak repos"
-#if [ -d /usr/local/opensteak ] ; then
-#    cd /usr/local/opensteak
-#    git pull
-#else
-#    cd /usr/local/
-#    git clone https://github.com/Orange-OpenSource/opnfv.git -b foreman opensteak
-#fi
-#cd /usr/local/opensteak/infra/puppet_master
+### Install OpenSteak files
 
 echo "* Set puppet auth"
 echo "*.$$DOMAIN" > /etc/puppet/autosign.conf
@@ -186,41 +175,6 @@ chmod +x /usr/local/bin/opensteak-r10k-update
 echo "* Run R10k. You can re-run r10k by calling:"
 echo "   opensteak-r10k-update"
 opensteak-r10k-update
-
-# Install metadata-server
-echo "* Install and setup opensteak-metadata-server into /usr/local/bin"
-cp /mnt/opensteak-metadata-server.py /usr/local/bin/opensteak-metadata-server.py
-chmod +x /usr/local/bin/opensteak-metadata-server.py
-cp -ar /mnt/metadata /opt/
-
-echo "* Run the Metadata-server. You can re-run it by calling:"
-echo "   opensteak-metadata-server"
-opensteak-metadata-server
-
-echo "* Configure foreman to handle metadata requests"
-if [ -e /etc/apache2/sites-available/05-foreman.conf ] ; then
-  # Check if we need to configure apache
-  grep -q 'Added by opensteak install script for metadata server' /etc/apache2/sites-available/05-foreman.conf
-  if [ $? = 1 ] ; then
-    # Make a backup
-    cp /etc/apache2/sites-available/05-foreman.conf /etc/apache2/sites-available/05-foreman.conf.$$DATEE
-    add="
-    ## Added by opensteak install script for metadata server
-    <Location /2009-04-04 >
-    ProxyPass http://127.0.0.1:8888/2009-04-04
-    </Location>
-    <Location /latest >
-    ProxyPass http://127.0.0.1:8888/latest
-    </Location>"
-
-    awk -v add="$add" '{print} \
-    /  ServerAlias/ { print add }' \
-    /etc/apache2/sites-available/05-foreman.conf.$$DATEE > /etc/apache2/sites-available/05-foreman.conf
-
-    a2enmod proxy_http
-    service apache2 restart
-  fi
-fi
 
 #### Install VIM puppet
 echo "* Install VIM puppet"
