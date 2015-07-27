@@ -22,7 +22,7 @@ import socket
 import sys
 import argparse
 from opensteak.conf import OpenSteakConfig
-from foreman import OpenSteakForeman
+from foreman import Foreman
 from opensteak.printer import OpenSteakPrinter
 
 DEFAULT_USERNAME = '${admin}'
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     # p.list_id(args)
 
-    foreman = OpenSteakForeman( login=args["admin"],
+    foreman = Foreman( login=args["admin"],
                                 password=args["password"],
                                 ip=args["ip"])
 

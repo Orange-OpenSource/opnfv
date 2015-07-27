@@ -17,7 +17,7 @@
 # @author: Arnaud Morin <arnaud1.morin@orange.com>
 
 from opensteak.conf import OpenSteakConfig
-from opensteak.foreman import OpenSteakForeman
+from foreman import Foreman
 from opensteak.printer import OpenSteakPrinter
 import argparse
 from pprint import pprint as pp
@@ -63,7 +63,7 @@ del a
 #
 # Prepare classes
 #
-foreman = OpenSteakForeman(login=args["admin"],
+foreman = Foreman(login=args["admin"],
                            password=args["password"],
                            ip=args["ip"])
 
