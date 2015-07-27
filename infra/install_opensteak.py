@@ -56,9 +56,9 @@ del a
 # ###################
 # Prepare classes
 # ###################
-foreman = Foreman(login=args["admin"],
-                           password=args["password"],
-                           ip=args["ip"])
+foreman = Foreman(  login=args["admin"],
+                    password=args["password"],
+                    ip=args["ip"])
 
 # ###################
 # Check all requesists are ok

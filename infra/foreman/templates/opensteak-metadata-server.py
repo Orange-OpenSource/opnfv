@@ -131,9 +131,9 @@ if __name__ == "__main__":
 
     # p.list_id(args)
 
-    foreman = Foreman( login=args["admin"],
-                                password=args["password"],
-                                ip=args["ip"])
+    foreman = Foreman(  login=args["admin"],
+                        password=args["password"],
+                        ip=args["ip"])
 
     p.header("Run server")
     application.listen(8888)
