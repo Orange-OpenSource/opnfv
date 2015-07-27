@@ -136,6 +136,10 @@ foreman:
     - "eth0"
    # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
    pools: #Build with the other parameters
+  "opensteak::known-hosts":
+   known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"
+   hosts: #Build with the controller list
+   owner: foreman
 
 controllersList:
  controller1:
