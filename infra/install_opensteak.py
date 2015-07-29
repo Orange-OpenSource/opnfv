@@ -112,7 +112,7 @@ for name in conf['opensteak']['vm_list']:
                 conf['defaultController']]['id'],
             "ptable_id": foreman.ptables[
                 conf['ptables']]['id'],
-            "medium_id": foreman.media[ 
+            "medium_id": foreman.media[
                 conf['media']]['id'],
             "architecture_id": foreman.architectures[
                 conf['architectures']]['id'],
@@ -170,7 +170,6 @@ for name in conf['opensteak']['vm_list']:
         "capabilities": "build image",
     }
 
-    foreman.hosts.createVM("{0}.{1}".format(name, conf['domains']),
-                           payload, False)
+    foreman.hosts.createVM("{0}.{1}".format(name, conf['domains']), payload, p)
 
 #pp(foreman.api.history)
