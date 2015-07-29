@@ -63,9 +63,9 @@ del a
 #
 # Prepare classes
 #
-foreman = Foreman(  login=args["admin"],
-                    password=args["password"],
-                    ip=args["ip"])
+foreman = Foreman(login=args["admin"],
+                  password=args["password"],
+                  ip=args["ip"])
 
 ##############################################
 p.header("Check smart proxy")
@@ -299,6 +299,21 @@ for k, v in conf['foreman']['classes'][className].items():
                     revZone = revZone[1::]
                     revMask = revMask[1::]
                 v.append('.'.join(revZone) + '.in-addr.arpa')
+    scp_id = scp[k]
+    foreman.smartClassParameters[scp_id].setOverrideValue(v, hostName)
+
+# Add smart class parameters of opensteak::metadata to foreman
+className = "opensteak::metadata"
+scp = foreman.puppetClasses[className].smartClassParametersList()
+for k, v in conf['foreman']['classes'][className].items():
+    if v is None:
+        # Construct the vars
+        if k == 'foreman_admin':
+            v = conf['foreman']['admin']
+        elif k == 'foreman_password':
+            v = conf['foreman']['password']
+        elif k == 'foreman_fqdn':
+            v = 'foreman.{}'.format(conf['domains'])
     scp_id = scp[k]
     foreman.smartClassParameters[scp_id].setOverrideValue(v, hostName)
 

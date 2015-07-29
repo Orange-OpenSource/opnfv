@@ -142,6 +142,10 @@ foreman:
    known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"
    hosts: #Build with the controller list
    owner: foreman
+  "opensteak::metadata":
+   foreman_admin: #Build from foreman::admin
+   foreman_password: #Build from foreman::password
+   foreman_fqdn: #Build from domain name
 
 controllersList:
  controller1:
