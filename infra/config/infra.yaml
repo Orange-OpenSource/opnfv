@@ -11,9 +11,9 @@ defaultController: "controller1.infra.opensteak.fr"
 hostgroups: "controller_VM"
 
 operatingSystemsList:
- "Ubuntu 14.04.1 LTS":
+ "Ubuntu 14.04.2 LTS":
   name: "Ubuntu"
-  description: "Ubuntu 14.04.1 LTS"
+  description: "Ubuntu 14.04.2 LTS"
   major: "14"
   minor: "04"
   family: "Debian"
@@ -126,7 +126,7 @@ foreman:
  force: True
  dns: "8.8.8.8"
  bridge: "virbr0"
- bridge_type: "openvswitch"
+ bridge_type: "linuxbridge" # set to openvswitch if you are Arnaud
  templatesFolder: "foreman/templates"
  filesFolder: "foreman/files"
  classes:
@@ -150,7 +150,7 @@ foreman:
 controllersList:
  controller1:
   controllerName: 'controller1.infra.opensteak.fr'
-  operatingSystem: "Ubuntu 14.04.1 LTS"
+  operatingSystem: "Ubuntu 14.04.2 LTS"
   macAddress: '40:f2:e9:2a:30:3b'
   password: "password"
   ipmiMacAddress: '40:f2:e9:2a:30:3e'
@@ -162,24 +162,6 @@ controllersList:
     - "br-adm:em3:dhcp"
     - "br-vm:em5:dhcp"
     - "br-ex:em2:none"
- controller2:
-  controllerName: 'controller2.infra.opensteak.fr'
-  operatingSystem: "Ubuntu 14.04.1 LTS"
-  macAddress: '00:1a:64:c8:a9:7c'
-  password: "password"
-  ipmiMacAddress: '00:1a:64:cc:66:4d'
-  impiIpAddress: "192.168.1.194"
-  impiUser: 'user'
-  impiPassword: "password"
- controller3:
-  controllerName: 'controller3.infra.opensteak.fr'
-  operatingSystem: "Ubuntu 14.04.1 LTS"
-  macAddress: 'a0:36:9f:4e:90:96'
-  password: "password"
-  ipmiMacAddress: '00:1a:64:cc:66:3d'
-  impiIpAddress: "192.168.1.192"
-  impiUser: 'user'
-  impiPassword: "password"
 
 controllersAttributes:
  cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'

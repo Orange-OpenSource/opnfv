@@ -52,17 +52,12 @@ del a
 
 # p.list_id(args)
 
+##############################################
+p.header("Load Foreman topology")
+##############################################
 foreman = Foreman(  login=args["admin"],
                     password=args["password"],
                     ip=args["ip"])
-
-##############################################
-# p.header("Check configuration")
-##############################################
-# ids = {}
-# for k, v in conf['environment'].items():
-#     ids[k] = foreman.api.get_id_by_name(k, v)
-#     p.config(k, v, ids[k])
 
 ##############################################
 p.header("Check puppet classes")
@@ -169,7 +164,6 @@ for name in conf['opensteak']['vm_list']:
         "provider": "Libvirt",
         "capabilities": "build image",
     }
-
     foreman.hosts.createVM("{0}.{1}".format(name, conf['domains']), payload, p)
 
 #pp(foreman.api.history)

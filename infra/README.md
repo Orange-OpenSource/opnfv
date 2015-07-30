@@ -1,62 +1,108 @@
 # OpenSteak install with Foreman
 
-## Pre requisits
+## Pre-requisite
 
-This part will be automatical in a futur version:
+1 medium server installed with > ubuntu 14.04 connected to the admin network
+1 controller server at least that will contain the Openstack VM
 
- 1. Foreman must be installed and prepared [(see INSTALL_FOREMAN.md)](INSTALL_FOREMAN.md)
- 2. Prepare the foreman configurations (names are examples):
-    * domains: "infra.myopensteak.com"
-    * subnets: "Admin"
-        * in domain "infra.myopensteak.com"
-        * with DHCP proxy: "foreman.infra.myopensteak.com"
-    * environments: "production"
-    * hostgroups: "controller_VM"
-        * with puppet classes:
-            * opensteak::apt
-        * with parameters:
-            * global::global_sshkey: an ssh key
-            * global::password: the password for user 'ubuntu'
-    * operatingsystems: "Ubuntu14.04Cloud"
-    * smart_proxies: "foreman.infra.myopensteak.com"
- 5. A physical node to host infra VM:
-    * hostgroups: "controller"
-        * with puppet classes:
-            * opensteak::base-network
-            * opensteak::libvirt
-        * with parameters:
-            * opensteak::base-network::ovs_config: the openvswitch bridge configuration (for example: ["br-adm:em3:dhcp","br-vm:em5:dhcp","br-ex:em2:none"])
-            * opensteak::libvirt::ovs_config: the openvswitch bridge configuration (for example: ["br-adm:em3:dhcp","br-vm:em5:dhcp","br-ex:em2:none"])
-            * global::global_sshkey: an ssh key
+## Get the code and configure
 
-## Configuration
+* Install dependancies:
 
-* Edit file config/infra.yaml to edit the infrastucture parameters
-* Edit file config/common.yaml to edit the openstack parameters
+```
+sudo aptitude install libvirt-bin git qemu-kvm genisoimage
+sudo service libvirt-bin restart
+```
 
-## Launch the metadata server
+* Get the code:
 
-[See INSTALL_METADATA_SERVER.md](INSTALL_METADATA_SERVER.md)
+```
+git clone https://github.com/Orange-OpenSource/opnfv.git
+```
 
-Metadata server must run
+* Configure, check the config, and check again
+Edit the file ```~/opnfv/infra/config/infra.yaml```
 
-## Install the infrastructure
+* Check again the config file...
 
-With foreman login/password:
+## Prepare libvirt
 
-```/home/ubuntu/opnfv/infra# python3 install_opensteak.py admin password```
+This part will be added in the script in the future release
+Set default pool for libvirt during the install not before
 
-* Launch
-* Check the printed parameters, all vars shall be OK. if no, check __config/infra.yaml__ parameters
-* Confirm the VM creation
+### Set the network
 
-## Add physical servers in a 'compute' hostgroup
-with puppet classes:
+We need to set the admin interface on a bridge.
 
-* opensteak::base-network
-* opensteak::libvirt
+If this interface is eth0 with ip 192.168.1.4 and gateway 192.168.1.1,
+and the default ip on the actual bridge (virbr0) is 192.168.122.1,
+this is the lines you need to execute.
 
-## Enjoy
-That all folks !
+```
+ubuntu@jumphost:~$ sudo ip a d 192.168.122.1/24 dev virbr0
+ubuntu@jumphost:~$ sudo ip a a 192.168.1.4/24 dev virbr0
+ubuntu@jumphost:~$ sudo ip a d 192.168.1.4/24 dev eth0 && sudo brctl addif virbr0 eth0
+ubuntu@jumphost:~$ sudo ip r a default dev virbr0 via 192.168.1.1
+```
+
+### Issue #9
+* Create the default_pool.xml file:
+
+```
+      <pool type="dir">
+        <name>default</name>
+        <target>
+          <path>/var/lib/libvirt/images</path>
+        </target>
+      </pool>
+```
+
+* Create the pool
+
+ ```sudo virsh pool-define default_pool.xml```
+
+* Start and Set autostart
+
+ ```
+ubuntu@jumphost:~$ sudo virsh pool-start default
+ubuntu@jumphost:~$ sudo virsh pool-autostart default
+```
+
+* Refresh and check
+
+```
+ubuntu@jumphost:~$ sudo virsh pool-refresh default
+ubuntu@jumphost:~$ sudo virsh pool-list --all
+```
+
+### Issue #10
+
+```
+ubuntu@jumphost:~$ sudo wget -O /var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img http://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img
+```
+
+## Install Foreman VM
+
+```
+ubuntu@jumphost:~$ cd opnfv/infra/
+ubuntu@jumphost:~/opnfv/infra$ sudo python3 create_foreman.py
+```
+
+When done, you can check the creation process with:
+
+```sudo tail /var/log/libvirt/qemu/foreman-serial.log```
 
 
+## Configure Foreman
+
+* Install python foreman api
+
+```
+ubuntu@jumphost:~/opnfv/infra$ sudo pip3 install foreman
+```
+
+* Configure Foreman
+
+```
+ubuntu@jumphost:~/opnfv/infra$ sudo python3 configure_foreman.py
+```
