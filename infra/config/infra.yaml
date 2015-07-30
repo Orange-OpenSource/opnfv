@@ -180,33 +180,41 @@ opensteak:
 vm:
  mysql:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::mysql
   description: "Opensteak infra MySQL"
  rabbitmq:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::rabbitmq
   description: "Opensteak infra RabbitMQ"
  keystone:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::keystone
    - opensteak::key
   description: "Opensteak infra Keystone"
  glance:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::glance
   description: "Opensteak infra Glance"
  nova:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::nova
   description: "Opensteak infra Nova Controller"
  neutron:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::neutron-controller
   description: "Opensteak infra Neutron Controller"
  cinder:
   puppet_classes:
+   - opensteak::puppet
    - opensteak::cinder
   description: "Opensteak infra Cinder"
  foreman2:
   puppet_classes:
   description: "Foreman test"
+
