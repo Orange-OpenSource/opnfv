@@ -22,6 +22,9 @@ domain: "${domain}"
 ###
 ## Class parameters
 ###
+# Puppet
+opensteak::puppet::foreman_fqdn: "foreman.%{hiera('domain')}"
+
 # Rabbit
 opensteak::rabbitmq::rabbitmq_password: "%{hiera('rabbitmq_password')}"
 
