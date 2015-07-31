@@ -1,0 +1,209 @@
+domains: "infra.opensteak.fr"
+media: "Ubuntu mirror"
+environments: "production"
+operatingsystems: "Ubuntu 14.04 Cloud"
+subnets: "Admin"
+compute_profiles: "Test"
+smart_proxies: "foreman.infra.opensteak.fr"
+ptables: "Preseed default"
+architectures: "x86_64"
+defaultController: "controller1.infra.opensteak.fr"
+hostgroups: "controller_VM"
+
+operatingSystemsList:
+ "Ubuntu 14.04.2 LTS":
+  name: "Ubuntu"
+  description: "Ubuntu 14.04.2 LTS"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default PXELinux
+   - Preseed default finish
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+ "Ubuntu 14.04 Cloud":
+  name: "Ubuntu14.04Cloud"
+  description: "Ubuntu 14.04 Cloud"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default user data
+   - Preseed default finish
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+
+configTemplatesList:
+ Preseed default: "foreman/provisioning_templates/preseed_default.tpl"
+ Preseed default finish: "foreman/provisioning_templates/preseed_default_finish.tpl"
+ Preseed default PXELinux: "foreman/provisioning_templates/preseed_default_pxelinux.tpl"
+
+hostgroupTop:
+ name: 'test'
+ classes:
+ - "ntp"
+ subnet: "Admin"
+ params:
+  password: 'password'
+
+hostgroupsList:
+ hostgroupController:
+  name: 'controller'
+  classes:
+   - "opensteak::base-network"
+   - "opensteak::libvirt"
+  params:
+   global_sshkey: #Build in the configure_foreman.py
+ hostgroupControllerVM:
+  name: 'controller_VM'
+  classes:
+   - "opensteak::apt"
+  params:
+   global_sshkey: #Build in the configure_foreman.py
+   password: 'password'
+ hostgroupCompute:
+  name: 'compute'
+  classes:
+   - "opensteak::neutron-compute"
+   - "opensteak::nova-compute"
+
+subnetsList:
+ Admin:
+  domain: 'infra.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.4.0"
+   mask: "255.255.255.0"
+   vlanid:
+   gateway: "192.168.4.1"
+   dns_primary: "192.168.4.4"
+   from: "192.168.4.20"
+   to: "192.168.4.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ Storage:
+  domain: 'storage.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.0.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.0.20"
+   to: "192.168.0.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ VM:
+  domain: 'vm.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.2.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.2.20"
+   to: "192.168.2.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+
+foreman:
+ ip: "192.168.4.4"
+ admin: "admin"
+ password: "password"
+ cpu: "2"
+ ram: "2097152"
+ iso: "trusty-server-cloudimg-amd64-disk1.img"
+ disksize: "5G"
+ force: True
+ dns: "8.8.8.8"
+ bridge: "br-libvirt"
+ bridge_type: "openvswitch"
+ templatesFolder: "foreman/templates"
+ filesFolder: "foreman/files"
+ classes:
+  "opensteak::dhcp":
+   dnsdomain: #Build with the other parameters
+   interfaces:
+    - "eth0"
+   # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
+   pools: #Build with the other parameters
+  "opensteak::known-hosts":
+   known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"
+   hosts: #Build with the controller list
+   owner: foreman
+  "opensteak::metadata":
+   #todo
+
+controllersList:
+ controller1:
+  controllerName: "controller1.infra.opensteak.fr"
+  operatingSystem: "Ubuntu 14.04.2 LTS"
+  macAddress: "00:1a:a0:cd:14:5a"
+  password: "password"
+  ipmiMacAddress: "40:f2:e9:2a:4d:e6"
+  impiIpAddress: "192.168.1.199"
+  impiUser: "user"
+  impiPassword: "password"
+  params:
+   ovs_config:
+    - "br-adm:eth2:dhcp"
+    - "br-vm:eth1:dhcp"
+    - "br-ex:eth0:none"
+
+controllersAttributes:
+ cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
+ adminBridge: 'br-adm'
+
+opensteak:
+ vm_list:
+  - mysql
+#  - rabbitmq
+#  - keystone
+#  - glance
+#  - nova
+#  - neutron
+#  - cinder
+
+vm:
+ mysql:
+  puppet_classes:
+   - opensteak::mysql
+  description: "Opensteak infra MySQL"
+ rabbitmq:
+  puppet_classes:
+   - opensteak::rabbitmq
+  description: "Opensteak infra RabbitMQ"
+ keystone:
+  puppet_classes:
+   - opensteak::keystone
+   - opensteak::key
+  description: "Opensteak infra Keystone"
+ glance:
+  puppet_classes:
+   - opensteak::glance
+  description: "Opensteak infra Glance"
+ nova:
+  puppet_classes:
+   - opensteak::nova
+  description: "Opensteak infra Nova Controller"
+ neutron:
+  puppet_classes:
+   - opensteak::neutron-controller
+  description: "Opensteak infra Neutron Controller"
+ cinder:
+  puppet_classes:
+   - opensteak::cinder
+  description: "Opensteak infra Cinder"
+ foreman2:
+  puppet_classes:
+  description: "Foreman test"
+

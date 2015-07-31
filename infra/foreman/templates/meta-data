@@ -1,0 +1,12 @@
+instance-id: ${name};
+network-interfaces: |
+  auto lo
+  iface lo inet loopback
+  auto eth0
+  iface eth0 inet static
+    address ${ip}
+    netmask ${netmaskshort}
+    gateway ${gateway}
+    dns-nameservers ${dns}
+    dns-search ${domain}
+local-hostname: ${name}

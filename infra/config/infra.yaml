@@ -1,0 +1,225 @@
+domains: "infra.opensteak.fr"
+media: "Ubuntu mirror"
+environments: "production"
+operatingsystems: "Ubuntu 14.04 Cloud"
+subnets: "Admin"
+compute_profiles: "Test"
+smart_proxies: "foreman.infra.opensteak.fr"
+ptables: "Preseed default"
+architectures: "x86_64"
+defaultController: "controller1.infra.opensteak.fr"
+hostgroups: "controller_VM"
+
+operatingSystemsList:
+ "Ubuntu 14.04.2 LTS":
+  name: "Ubuntu"
+  description: "Ubuntu 14.04.2 LTS"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default PXELinux
+   - Preseed default finish
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+ "Ubuntu 14.04 Cloud":
+  name: "Ubuntu14.04Cloud"
+  description: "Ubuntu 14.04 Cloud"
+  major: "14"
+  minor: "04"
+  family: "Debian"
+  release_name: "trusty"
+  password_hash: "MD5"
+  templates:
+   - Preseed default
+   - Preseed default user data
+   - Preseed default finish
+  media:
+   - Ubuntu mirror
+  ptables:
+   - Preseed default
+
+configTemplatesList:
+ Preseed default: "foreman/provisioning_templates/preseed_default.tpl"
+ Preseed default finish: "foreman/provisioning_templates/preseed_default_finish.tpl"
+ Preseed default PXELinux: "foreman/provisioning_templates/preseed_default_pxelinux.tpl"
+
+hostgroupTop:
+ name: 'opensteak'
+ classes:
+  - "ntp"
+  - "opensteak::puppet"
+ subnet: "Admin"
+ params:
+  password: "password"
+
+hostgroupsList:
+ hostgroupController:
+  name: 'controller'
+  classes:
+   - "opensteak::base-network"
+   - "opensteak::libvirt"
+  params:
+   global_sshkey: #Build in the configure_foreman.py
+ hostgroupControllerVM:
+  name: 'controller_VM'
+  classes:
+   - "opensteak::apt"
+  params:
+   global_sshkey: #Build in the configure_foreman.py
+   password: "password"
+ hostgroupCompute:
+  name: 'compute'
+  classes:
+   - "opensteak::neutron-compute"
+   - "opensteak::nova-compute"
+
+subnetsList:
+ Admin:
+  domain: 'infra.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.1.0"
+   mask: "255.255.255.0"
+   vlanid:
+   gateway: "192.168.1.1"
+   dns_primary: "192.168.1.2"
+   from: "192.168.1.20"
+   to: "192.168.1.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ Storage:
+  domain: 'storage.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.0.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.0.20"
+   to: "192.168.0.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+ VM:
+  domain: 'vm.opensteak.fr'
+  shared: False
+  data:
+   network: "192.168.2.0"
+   mask: "255.255.255.0"
+   vlanid:
+   from: "192.168.2.20"
+   to: "192.168.2.170"
+   ipam: "DHCP"
+   boot_mode: "DHCP"
+
+foreman:
+ ip: "192.168.1.5"
+ admin: "admin"
+ password: "password"
+ cpu: "2"
+ ram: "2097152"
+ iso: "trusty-server-cloudimg-amd64-disk1.img"
+ disksize: "5G"
+ force: True
+ dns: "8.8.8.8"
+ bridge: "virbr0"
+ bridge_type: "linuxbridge" # set to openvswitch if you are Arnaud
+ templatesFolder: "foreman/templates"
+ filesFolder: "foreman/files"
+ classes:
+  "opensteak::dhcp":
+   dnsdomain: #Build with the other parameters
+   interfaces:
+    - "eth0"
+    - "eth1"
+    - "eth2"
+   pools: #Build with the other parameters
+  "opensteak::known-hosts":
+   known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"
+   hosts: #Build with the controller list
+   owner: foreman
+  "opensteak::metadata":
+   foreman_admin: #Build from foreman::admin
+   foreman_password: #Build from foreman::password
+   foreman_fqdn: #Build from domain name
+
+controllersList:
+ controller1:
+  controllerName: 'controller1.infra.opensteak.fr'
+  operatingSystem: "Ubuntu 14.04.2 LTS"
+  macAddress: '40:f2:e9:2a:30:3b'
+  password: "password"
+  ipmiMacAddress: '40:f2:e9:2a:30:3e'
+  impiIpAddress: "192.168.1.198"
+  impiUser: 'user'
+  impiPassword: "password"
+  params:
+   ovs_config:
+    - "br-adm:em3:dhcp"
+    - "br-vm:em5:dhcp"
+    - "br-ex:em2:none"
+
+controllersAttributes:
+ cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
+ adminBridge: 'br-adm'
+
+computesList:
+ compute1:
+  name: "compute1.infra.opensteak.fr"
+  operatingSystem: "Ubuntu 14.04.2 LTS"
+  macAddress: "00:24:e8:d2:43:2a"
+  password: "password"
+  ipmiMacAddress: "40:f2:e9:2a:4d:e2"
+  impiIpAddress: "192.168.4.252"
+  impiUser: "user"
+  impiPassword: "password"
+  params:
+   ovs_config:
+    - "br-adm:eth2:dhcp"
+    - "br-vm:eth1:dhcp"
+    - "br-ex:eth0:none"
+
+opensteak:
+ vm_list:
+  - mysql
+  - rabbitmq
+  - keystone
+  - glance
+  - nova
+  - neutron
+  - cinder
+
+vm:
+ mysql:
+  puppet_classes:
+   - "opensteak::mysql"
+  description: "Opensteak infra MySQL"
+ rabbitmq:
+  puppet_classes:
+   - "opensteak::rabbitmq"
+  description: "Opensteak infra RabbitMQ"
+ keystone:
+  puppet_classes:
+   - "opensteak::keystone"
+   - "opensteak::key"
+  description: "Opensteak infra Keystone"
+ glance:
+  puppet_classes:
+   - "opensteak::glance"
+  description: "Opensteak infra Glance"
+ nova:
+  puppet_classes:
+   - "opensteak::nova"
+  description: "Opensteak infra Nova Controller"
+ neutron:
+  puppet_classes:
+   - "opensteak::neutron-controller"
+  description: "Opensteak infra Neutron Controller"
+ cinder:
+  puppet_classes:
+   - "opensteak::cinder"
+  description: "Opensteak infra Cinder"

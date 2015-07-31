@@ -1,0 +1,65 @@
+<domain type='kvm'>
+  <name>${name}</name>
+  <memory>${ram}</memory>
+  <currentMemory>${ram}</currentMemory>
+  <vcpu>${cpu}</vcpu>
+  <os>
+    <type arch='x86_64'>hvm</type>
+    <!-- uncomment to enable PXE boot
+    <boot dev='network'/>
+    -->
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>preserve</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/${name}'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source file='/var/lib/libvirt/images/${name}-configuration.iso'/>
+      <target dev='vdb' bus='virtio'/>
+    </disk>
+    <input type='mouse' bus='ps2'/>
+    <!-- uncomment to allow virsh console
+    <console type='pty'/>
+    <!- - end -->
+    <!-- uncomment to allow console to a log file -->
+    <serial type='file'>
+      <source path='/var/log/libvirt/qemu/${name}-serial.log'/>
+      <target port='0'/>
+      <alias name='serial0'/>
+    </serial>
+    <serial type='pty'>
+      <source path='/dev/pts/1'/>
+      <target port='1'/>
+      <alias name='serial1'/>
+    </serial>
+    <console type='file'>
+      <source path='/var/log/libvirt/qemu/${name}-serial.log'/>
+      <target type='serial' port='0'/>
+      <alias name='serial0'/>
+    </console>
+    <!-- end -->
+    <graphics type='spice' port='-1' autoport='no'/>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' heads='1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </video>
+    <memballoon model='virtio'/>
+    <interface type='bridge'>
+      <source bridge='${bridge}'/>
+      ${bridgeconfig}
+      <model type='virtio'/>
+    </interface>
+  </devices>
+</domain>

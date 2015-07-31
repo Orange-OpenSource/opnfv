@@ -1,0 +1,11 @@
+--- openstack.rb.ori    2015-01-22 13:35:39.375910000 +0000
++++ openstack.rb        2015-01-22 13:36:12.139910000 +0000
+@@ -1,6 +1,7 @@
+ # TODO: This needs to be extracted out into openstacklib in the Kilo cycle
+ require 'csv'
+ require 'puppet'
++require 'json'
+
+ class Puppet::Error::OpenstackAuthInputError < Puppet::Error
+ end
+

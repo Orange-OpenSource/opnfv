@@ -1,0 +1,28 @@
+#!/bin/bash
+PRGNAME=$(basename $0)
+PATCHES="/usr/local/opensteak/infra/puppet_master/patches"
+
+# Check if we are root
+if [ "Z$USER" != "Zroot" ] ; then
+  echo "You need to execute this script as root:"
+  echo "sudo $PRGNAME"
+  exit 1
+fi
+
+# Run r10k
+r10k deploy environment -pv
+
+# Apply the patches
+echo " * Applying some patches"
+
+# COMMENTED ON 2015/06/17 as seems to be patched upstream. TO BE CONFIRMED.
+# add_require_json_openstack.rb.patch
+#echo "  -> add_require_json_openstack.rb.patch"
+#cd /etc/puppet/environments/production/modules/keystone/lib/puppet/provider/
+#patch < $PATCHES/add_require_json_openstack.rb.patch
+
+# COMMENTED ON 2015/03/31 as seems to be patched upstream. TO BE CONFIRMED.
+# check_virsh_secret_using_secret_get_value.patch
+#echo "  -> check_virsh_secret_using_secret_get_value.patch"
+#cd /etc/puppet/environments/production/modules/nova/
+#patch -p1 < $PATCHES/check_virsh_secret_using_secret_get_value.patch
