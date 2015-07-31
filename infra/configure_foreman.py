@@ -432,6 +432,97 @@ for c in conf['controllersList']:
             'Add image "UbuntuCloudImage" in the compute '
             'ressource {}'.format(hostName))
 
+##############################################
+p.header("Add compute nodes")
+##############################################
+
+for c in conf['computesList']:
+
+    # Create the compute
+    cConf = conf['computesList'][c]
+    hostName = cConf['name']
+    payload = {
+        "host": {
+            "name": hostName,
+            "environment_id": foreman.environments[conf['environments']]['id'],
+            "mac": cConf['macAddress'],
+            "domain_id": foreman.domains[conf['domains']]['id'],
+            "subnet_id": foreman.subnets[conf['subnets']]['id'],
+            "ptable_id": foreman.ptables[conf['ptables']]['id'],
+            "medium_id": foreman.media[conf['media']]['id'],
+            "architecture_id": foreman.architectures[
+                conf['architectures']]['id'],
+            "operatingsystem_id": foreman.operatingSystems[
+                cConf['operatingSystem']]['id'],
+            "puppet_proxy_id": foreman.smartProxies[
+                conf['smart_proxies']]['id'],
+            "hostgroup_id": foreman.hostgroups['{}_{}'.format(
+                conf['hostgroupTop']['name'],
+                conf['hostgroupsList']['hostgroupCompute']['name'])]['id'],
+            "root_pass": cConf['password']
+            }
+    }
+    payloadBMC = {"ip": cConf['impiIpAddress'],
+                  "mac": cConf['ipmiMacAddress'],
+                  "type": "bmc",
+                  "managed": False,
+                  "identifier": "ipmi",
+                  "username": cConf['impiUser'],
+                  "password": cConf['impiPassword'],
+                  "provider": "IPMI",
+                  "virtual": False}
+    computeId = foreman.hosts.createController( hostName,
+                                                payload, payloadBMC)
+    p.status(bool(computeId), "Create compute {}".format(hostName))
+
+#    # Configure OVS - for opensteak::base-network
+#    ovs_config = cConf['params']['ovs_config']
+#    pClass = 'opensteak::base-network'
+#    scp = foreman.puppetClasses[pClass].smartClassParametersList()
+#    scp_id = scp['ovs_config']
+#    res = foreman.smartClassParameters[scp_id].setOverrideValue(ovs_config,
+#                                                                hostName)
+#    p.status(bool(res),
+#             "Configure {} for the controller {}".format(pClass, hostName))
+
+    # Configure Neutron compute
+    bridge_uplinks = cConf['params']['bridge_uplinks']
+    pClass = 'opensteak::neutron-compute'
+    scp = foreman.puppetClasses[pClass].smartClassParametersList()
+    scp_id = scp['bridge_uplinks']
+    res = foreman.smartClassParameters[scp_id].setOverrideValue(bridge_uplinks,
+                                                                hostName)
+    p.status(bool(res),
+             "Configure {} for the controller {}".format(pClass, hostName))
+
+#    # Add the controller to the list of computeRessources
+#    res = foreman.computeResources.checkAndCreate(
+#        hostName,
+#        {'description': 'OpenSteak compute ressource',
+#         'display_type': 'SPICE',
+#         'name': hostName,
+#         'provider': 'Libvirt',
+#         'set_console_password': True,
+#         'url': 'qemu+ssh://ubuntu@{}/system'.format(hostName)})
+#    p.status(bool(res),
+#             'Set {} as a compute ressource'.format(hostName))
+#
+#    computeRessourcesId = foreman.computeResources[hostName]['id']
+#    # Declare the cloud image to the controller
+#    if 'UbuntuCloudImage' not in foreman.computeResources[
+#            computeRessourcesId]['images'].keys():
+#        image = {'architecture_id': foreman.architectures[
+#                 conf['architectures']]['id'],
+#                 'compute_resource_id': computeRessourcesId,
+#                 'name': 'UbuntuCloudImage',
+#                 'operatingsystem_id': foreman.operatingSystems[
+#                 conf['operatingsystems']]['id'],
+#                 'username': 'ubuntu',
+#                 'uuid': conf['controllersAttributes']['cloudImagePath']}
+#        p.status(bool(foreman.computeResources[foreman.computeResources[
+#            hostName]['id']]['images'].append(image)),
+#            'Add image "UbuntuCloudImage" in the compute '
+#            'ressource {}'.format(hostName))
 
 # #############################################
 # p.header("Clean")
