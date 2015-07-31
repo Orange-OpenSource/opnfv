@@ -56,7 +56,7 @@ hostgroupTop:
   - "opensteak::puppet"
  subnet: "Admin"
  params:
-  password: 'password'
+  password: "password"
 
 hostgroupsList:
  hostgroupController:
@@ -72,7 +72,7 @@ hostgroupsList:
    - "opensteak::apt"
   params:
    global_sshkey: #Build in the configure_foreman.py
-   password: 'password'
+   password: "password"
  hostgroupCompute:
   name: 'compute'
   classes:
@@ -117,7 +117,7 @@ subnetsList:
    boot_mode: "DHCP"
 
 foreman:
- ip: "192.168.1.4"
+ ip: "192.168.1.5"
  admin: "admin"
  password: "password"
  cpu: "2"
@@ -137,7 +137,6 @@ foreman:
     - "eth0"
     - "eth1"
     - "eth2"
-   # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
    pools: #Build with the other parameters
   "opensteak::known-hosts":
    known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"
@@ -224,4 +223,3 @@ vm:
   puppet_classes:
    - "opensteak::cinder"
   description: "Opensteak infra Cinder"
-

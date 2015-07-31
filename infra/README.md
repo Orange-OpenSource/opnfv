@@ -105,7 +105,7 @@ ubuntu@jumphost:~/opnfv/infra$ sudo python3 create_foreman.py
 
 When done, you can check the creation process with:
 
-```sudo tail /var/log/libvirt/qemu/foreman-serial.log```
+```sudo tail -f /var/log/libvirt/qemu/foreman-serial.log```
 
 
 ## Configure Foreman
