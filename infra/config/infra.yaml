@@ -50,9 +50,9 @@ configTemplatesList:
  Preseed default PXELinux: "foreman/provisioning_templates/preseed_default_pxelinux.tpl"
 
 hostgroupTop:
- name: 'test'
+ name: 'opensteak'
  classes:
- - "ntp"
+  - "ntp"
  subnet: "Admin"
  params:
   password: 'password'
@@ -170,12 +170,12 @@ controllersAttributes:
 opensteak:
  vm_list:
   - mysql
-#  - rabbitmq
-#  - keystone
-#  - glance
-#  - nova
-#  - neutron
-#  - cinder
+  - rabbitmq
+  - keystone
+  - glance
+  - nova
+  - neutron
+  - cinder
 
 vm:
  mysql:
@@ -217,4 +217,3 @@ vm:
  foreman2:
   puppet_classes:
   description: "Foreman test"
-

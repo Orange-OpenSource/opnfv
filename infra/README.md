@@ -10,7 +10,7 @@
 * Install dependancies:
 
 ```
-sudo aptitude install libvirt-bin git qemu-kvm genisoimage
+sudo aptitude install libvirt-bin git qemu-kvm genisoimage bridge-utils
 sudo service libvirt-bin restart
 ```
 
@@ -44,6 +44,21 @@ ubuntu@jumphost:~$ sudo ip a a 192.168.1.4/24 dev virbr0
 ubuntu@jumphost:~$ sudo ip a d 192.168.1.4/24 dev eth0 && sudo brctl addif virbr0 eth0
 ubuntu@jumphost:~$ sudo ip r a default dev virbr0 via 192.168.1.1
 ```
+
+Save the config, edit ```/etc/network/interfaces``` and set changed interfaces:
+```
+# Set up interfaces manually, avoiding conflicts with, e.g., network manager
+iface eth0 inet manual
+# Bridge setup
+iface virbr0 inet static
+        bridge_ports eth0
+        address 192.168.1.4
+        broadcast 192.168.1.255
+        netmask 255.255.255.0
+        gateway 192.168.1.1
+
+```
+
 
 ### Issue #9
 * Create the default_pool.xml file:
