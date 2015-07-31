@@ -4,4 +4,4 @@
 * David Blaisonneau (davidblaisonneau-orange)- Orange <david.blaisonneau@orange.com>
 * Valentin Boucher (boucherv) - Orange <valentin.boucher@orange.com>
 * Pawel Chomicki (pchomik) - Nokia <pawel.chomicki@nokia.com>
-* Juan Antonio Osorio (JAORMX) - <osorior@gmail.com>
+* Juan Antonio Osorio (JAORMX) - Ericsson <osorior@gmail.com>
