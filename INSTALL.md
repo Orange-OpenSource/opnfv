@@ -2,15 +2,15 @@
 
 ## Pre-requisite
 
-1 medium server installed with > ubuntu 14.04 connected to the admin network
-1 controller server at least that will contain the Openstack VM
+* 1 medium server installed with ubuntu 14.04 connected to the admin network
+* 1 controller server at least that will contain the Openstack VM
 
 ## Get the code and configure
 
 * Install dependancies:
 
 ```
-sudo aptitude install libvirt-bin git qemu-kvm genisoimage bridge-utils
+sudo apt-get install libvirt-bin git qemu-kvm genisoimage bridge-utils
 sudo service libvirt-bin restart
 ```
 
@@ -21,14 +21,18 @@ git clone https://github.com/Orange-OpenSource/opnfv.git
 ```
 
 * Configure, check the config, and check again
-Edit the file ```~/opnfv/infra/config/infra.yaml```
+Edit both files: 
+ * ```~/opnfv/infra/config/infra.yaml```
+ * ```~/opnfv/infra/foreman/templates/common.yaml```
+
 
 * Check again the config file...
 
 ## Prepare libvirt
 
-This part will be added in the script in the future release
-Set default pool for libvirt during the install not before
+This part will be added in the script in the future release.
+
+Set default pool for libvirt during the install not before.
 
 ### Set the network
 

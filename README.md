@@ -1,38 +1,40 @@
-# Openstack Get Starting Installation
+# Opensteak Get Starting Installation
 
 [![Join the chat at https://gitter.im/Orange-OpenSource/opnfv](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Orange-OpenSource/opnfv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Openstack installation and configuration by Orange Labs.
 
 ## Introduction
-This repo contains the tools and the scripts to install a full Openstack Juno over Ubuntu 14.04 with OpenDayLight Helium as SDN controller.
+This repo contains the tools and the scripts to install a full Openstack Juno over Ubuntu 14.04.
 
 It aims to propose an **High Availability** deployment with **Bare Metal** provisioning.
 
-The configuration is automatically done with **Puppet**, based on specific modules that rely on stackforge modules (see https://github.com/stackforge/?query=puppet).
+The configuration is automatically done with **Puppet**, **Python scripts** and **Foreman**.
 
 To keep the module dependencies up to date (and to download modules automatically), we use **r10k**.
 
 The storage is handled by **Ceph**.
 
-The only thing you should do is to provide a valid **Hiera** configuration file.
+The only thing you should do is to provide a valid **YAML** configuration file.
+
+### Puppet modules
+
+We use pure **Puppet modules from OpenStack**:
+
+ https://wiki.openstack.org/wiki/Puppet#Puppet_Modules
+
+We also use an **OpenSteak Puppet module** to superseed the OpenStack modules:
+
+ https://github.com/Orange-OpenSource/opnfv-puppet
+
+All dependencies between puppet modules are managed by **r10k**:
+
+ https://github.com/Orange-OpenSource/opnfv-r10k
 
 
-## Status
-* Puppet modules:
- * Mysql: OK,
- * Rabbit: OK,
- * Keystone: OK,
- * Glance: OK,
-   * with ceph: OK,
- * Cinder: OK,
-   * with ceph: OK,
- * Nova: OK,
-   * with ceph: OK,
- * Neutron: OK,
-* Bare metal provisioning: OK with Foreman)
-* OpenDayLight: WiP
-* High Availability: WiP
+## Installation
+
+see [INSTALL](INSTALL.md)
 
 ## Architecture
 ### Basic setup
@@ -72,8 +74,19 @@ The work is still in progress, but we plan to use HAProxy in front of nodes, wit
 
 ![Image of HA](https://raw.githubusercontent.com/Orange-OpenSource/opnfv/master/docs/opensteak_ha.png)
 
+## Status
+* Puppet modules:
+ * Mysql: OK,
+ * Rabbit: OK,
+ * Keystone: OK,
+ * Glance: OK,
+   * with ceph: OK,
+ * Cinder: OK,
+   * with ceph: OK,
+ * Nova: OK,
+   * with ceph: OK,
+ * Neutron: OK,
+* Bare metal provisioning: OK with Foreman
+* OpenDayLight: WiP
+* High Availability: WiP
 
-## Installation
-
-### Steps
-TO BE DONE

@@ -52,7 +52,8 @@ configTemplatesList:
 hostgroupTop:
  name: 'test'
  classes:
- - "ntp"
+  - "ntp"
+  - "opensteak::puppet"
  subnet: "Admin"
  params:
   password: 'password'
@@ -77,6 +78,10 @@ hostgroupsList:
   classes:
    - "opensteak::neutron-compute"
    - "opensteak::nova-compute"
+ hostgroupNetwork:
+  name: 'network'
+  classes:
+   - "opensteak::neutron-network"
 
 subnetsList:
  Admin:
@@ -141,7 +146,9 @@ foreman:
    hosts: #Build with the controller list
    owner: foreman
   "opensteak::metadata":
-   #todo
+   foreman_admin: #Build from foreman::admin
+   foreman_password: #Build from foreman::password
+   foreman_fqdn: #Build from domain name
 
 controllersList:
  controller1:
@@ -163,47 +170,58 @@ controllersAttributes:
  cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
  adminBridge: 'br-adm'
 
+computesList:
+ compute1:
+  name: "compute1.infra.opensteak.fr"
+  operatingSystem: "Ubuntu 14.04.2 LTS"
+  macAddress: "00:24:e8:d2:43:2a"
+  password: "password"
+  ipmiMacAddress: "40:f2:e9:2a:4d:e2"
+  impiIpAddress: "192.168.4.252"
+  impiUser: "user"
+  impiPassword: "password"
+  params:
+   bridge_uplinks:
+    - "br-vm:wlan0"
+
 opensteak:
  vm_list:
   - mysql
-#  - rabbitmq
-#  - keystone
-#  - glance
-#  - nova
-#  - neutron
-#  - cinder
+  - rabbitmq
+  - keystone
+  - glance
+  - nova
+  - neutron
+  - cinder
 
 vm:
  mysql:
   puppet_classes:
-   - opensteak::mysql
+   - "opensteak::mysql"
   description: "Opensteak infra MySQL"
  rabbitmq:
   puppet_classes:
-   - opensteak::rabbitmq
+   - "opensteak::rabbitmq"
   description: "Opensteak infra RabbitMQ"
  keystone:
   puppet_classes:
-   - opensteak::keystone
-   - opensteak::key
+   - "opensteak::keystone"
+   - "opensteak::key"
   description: "Opensteak infra Keystone"
  glance:
   puppet_classes:
-   - opensteak::glance
+   - "opensteak::glance"
   description: "Opensteak infra Glance"
  nova:
   puppet_classes:
-   - opensteak::nova
+   - "opensteak::nova"
   description: "Opensteak infra Nova Controller"
  neutron:
   puppet_classes:
-   - opensteak::neutron-controller
+   - "opensteak::neutron-controller"
   description: "Opensteak infra Neutron Controller"
  cinder:
   puppet_classes:
-   - opensteak::cinder
+   - "opensteak::cinder"
   description: "Opensteak infra Cinder"
- foreman2:
-  puppet_classes:
-  description: "Foreman test"
 
