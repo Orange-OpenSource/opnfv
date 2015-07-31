@@ -53,6 +53,7 @@ hostgroupTop:
  name: 'opensteak'
  classes:
   - "ntp"
+  - "opensteak::puppet"
  subnet: "Admin"
  params:
   password: 'password'
@@ -167,6 +168,22 @@ controllersAttributes:
  cloudImagePath: '/var/lib/libvirt/images/trusty-server-cloudimg-amd64-disk1.img'
  adminBridge: 'br-adm'
 
+computesList:
+ compute1:
+  name: "compute1.infra.opensteak.fr"
+  operatingSystem: "Ubuntu 14.04.2 LTS"
+  macAddress: "00:24:e8:d2:43:2a"
+  password: "password"
+  ipmiMacAddress: "40:f2:e9:2a:4d:e2"
+  impiIpAddress: "192.168.4.252"
+  impiUser: "user"
+  impiPassword: "password"
+  params:
+   ovs_config:
+    - "br-adm:eth2:dhcp"
+    - "br-vm:eth1:dhcp"
+    - "br-ex:eth0:none"
+
 opensteak:
  vm_list:
   - mysql
@@ -180,40 +197,31 @@ opensteak:
 vm:
  mysql:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::mysql
+   - "opensteak::mysql"
   description: "Opensteak infra MySQL"
  rabbitmq:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::rabbitmq
+   - "opensteak::rabbitmq"
   description: "Opensteak infra RabbitMQ"
  keystone:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::keystone
-   - opensteak::key
+   - "opensteak::keystone"
+   - "opensteak::key"
   description: "Opensteak infra Keystone"
  glance:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::glance
+   - "opensteak::glance"
   description: "Opensteak infra Glance"
  nova:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::nova
+   - "opensteak::nova"
   description: "Opensteak infra Nova Controller"
  neutron:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::neutron-controller
+   - "opensteak::neutron-controller"
   description: "Opensteak infra Neutron Controller"
  cinder:
   puppet_classes:
-   - opensteak::puppet
-   - opensteak::cinder
+   - "opensteak::cinder"
   description: "Opensteak infra Cinder"
- foreman2:
-  puppet_classes:
-  description: "Foreman test"
+
