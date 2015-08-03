@@ -125,7 +125,7 @@ foreman:
  iso: "trusty-server-cloudimg-amd64-disk1.img"
  disksize: "5G"
  force: True
- dns: "8.8.8.8"
+ dns: "127.0.0.1 8.8.8.8" # do not remove 127.0.0.1 from the list
  bridge: "virbr0"
  bridge_type: "linuxbridge" # set to openvswitch if you are Arnaud
  templatesFolder: "foreman/templates"
