@@ -139,7 +139,8 @@ foreman:
    dnsdomain: #Build with the other parameters
    interfaces:
     - "eth0"
-   # We remove pools for the foreman 1.7, see bug 9240 corrected for 1.8.1
+#    - "eth1"
+#    - "eth2"
    pools: #Build with the other parameters
   "opensteak::known-hosts":
    known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"

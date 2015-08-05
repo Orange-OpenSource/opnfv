@@ -78,6 +78,10 @@ hostgroupsList:
   classes:
    - "opensteak::neutron-compute"
    - "opensteak::nova-compute"
+ hostgroupNetwork:
+  name: 'network'
+  classes:
+   - "opensteak::neutron-network"
 
 subnetsList:
  Admin:
@@ -135,8 +139,8 @@ foreman:
    dnsdomain: #Build with the other parameters
    interfaces:
     - "eth0"
-    - "eth1"
-    - "eth2"
+#    - "eth1"
+#    - "eth2"
    pools: #Build with the other parameters
   "opensteak::known-hosts":
    known_hosts_file: "/usr/share/foreman/.ssh/known_hosts"
@@ -148,14 +152,14 @@ foreman:
    foreman_fqdn: #Build from domain name
 
 controllersList:
- controller1:
-  controllerName: 'controller1.infra.opensteak.fr'
+ controller98:
+  controllerName: "controller98.infra.opensteak.fr"
   operatingSystem: "Ubuntu 14.04.2 LTS"
-  macAddress: '40:f2:e9:2a:30:3b'
+  macAddress: "40:f2:e9:2a:30:3b"
   password: "password"
-  ipmiMacAddress: '40:f2:e9:2a:30:3e'
+  ipmiMacAddress: "40:f2:e9:2a:30:3e"
   impiIpAddress: "192.168.1.198"
-  impiUser: 'user'
+  impiUser: "user"
   impiPassword: "password"
   params:
    ovs_config:
@@ -168,20 +172,19 @@ controllersAttributes:
  adminBridge: 'br-adm'
 
 computesList:
- compute1:
-  name: "compute1.infra.opensteak.fr"
+ compute99:
+  name: "compute99.infra.opensteak.fr"
   operatingSystem: "Ubuntu 14.04.2 LTS"
   macAddress: "00:24:e8:d2:43:2a"
   password: "password"
-  ipmiMacAddress: "40:f2:e9:2a:4d:e2"
-  impiIpAddress: "192.168.4.252"
+  ipmiMacAddress: "40:f2:e9:2a:4d:e6"
+  impiIpAddress: "192.168.1.199"
   impiUser: "user"
   impiPassword: "password"
   params:
-   ovs_config:
-    - "br-adm:eth2:dhcp"
-    - "br-vm:eth1:dhcp"
-    - "br-ex:eth0:none"
+   bridge_uplinks:
+    - "br-vm:em5"
+    - "br-ex:em2"
 
 opensteak:
  vm_list:
@@ -223,3 +226,4 @@ vm:
   puppet_classes:
    - "opensteak::cinder"
   description: "Opensteak infra Cinder"
+
