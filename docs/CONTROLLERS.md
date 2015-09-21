@@ -135,7 +135,7 @@ glance image-create \
  --file cirros-0.3.3-x86_64-disk.img \
 --disk-format qcow2 \
 --container-format bare \
---is-public True \
+--visibility public \
 --progress
 ```
 
