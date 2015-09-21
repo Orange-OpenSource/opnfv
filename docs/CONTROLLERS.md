@@ -148,7 +148,7 @@ glance image-create \
  --file trusty-server-cloudimg-amd64-disk1.img \
 --disk-format qcow2 \
 --container-format bare \
---is-public True \
+--visibility public \
 --progress
 ```
 
