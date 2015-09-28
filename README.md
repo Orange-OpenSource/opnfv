@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/Orange-OpenSource/opnfv](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Orange-OpenSource/opnfv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Openstack installation and configuration by Orange Labs.
+Openstack installer and configuration by Orange Labs (Project code name: OpenSteak)
 
 ## Introduction
 This repo contains the tools and the scripts to install a full Openstack Juno over Ubuntu 14.04.
